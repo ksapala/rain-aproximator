@@ -6,17 +6,18 @@ package org.ksapala.rainaproximator.aproximation.cloud;
 import com.sun.scenario.Settings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ksapala.rainaproximator.aproximation.map.Scan;
-import org.ksapala.rainaproximator.aproximation.map.converter.CoordinatesConverter;
-import org.ksapala.rainaproximator.aproximation.map.imageoperator.ImageCalculator;
-import org.ksapala.rainaproximator.aproximation.map.imageoperator.ImageIterator;
-import org.ksapala.rainaproximator.aproximation.map.imageoperator.ImageOperator;
+import org.ksapala.rainaproximator.aproximation.scan.LastRadarMapDateParser;
+import org.ksapala.rainaproximator.aproximation.scan.Scan;
+import org.ksapala.rainaproximator.aproximation.scan.ScannedMap;
+import org.ksapala.rainaproximator.aproximation.scan.converter.CoordinatesConverter;
+import org.ksapala.rainaproximator.aproximation.scan.imageoperator.ImageCalculator;
+import org.ksapala.rainaproximator.aproximation.scan.imageoperator.ImageIterator;
+import org.ksapala.rainaproximator.aproximation.scan.imageoperator.ImageOperator;
+import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.exception.AproximationException;
-import org.ksapala.rainaproximator.aproximation.map.LastRadarMapDateParser;
 import org.ksapala.rainaproximator.settings.Property;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,13 +35,14 @@ public class CloudLineBuilder {
     private int IMAGE_WIDTH = CoordinatesConverter.IMAGE_WIDTH;
     private int IMAGE_HEIGHT = CoordinatesConverter.IMAGE_HEIGHT;
 
-	private LastRadarMapDateParser lastRadarMapDateParser;
+    private Configuration.Algorithm.Cloud cloudConfiguration;
 
-	/**
+    /**
 	 *
-	 */
-	public CloudLineBuilder() {
-		this.lastRadarMapDateParser = new LastRadarMapDateParser();
+     * @param cloudConfiguration
+     */
+	public CloudLineBuilder(Configuration.Algorithm.Cloud cloudConfiguration) {
+        this.cloudConfiguration = cloudConfiguration;
 	}
 
 	/**
@@ -52,7 +54,6 @@ public class CloudLineBuilder {
 	 */
 	public List<CloudLine> createCloudLines(Scan scan, double x, double y, double alpha) throws AproximationException {
 		List<CloudLine> cloudLines = parseToCloudLines(scan, x, y, alpha);
-		fillDates(cloudLines);
 		logCloudLines("Created cloud lines bellow:", cloudLines); //$NON-NLS-1$
 		return cloudLines;
 	}
@@ -67,33 +68,6 @@ public class CloudLineBuilder {
         }
     }
 
-//	/**
-//	 * @param cloudLines
-//	 * @throws AproximationException
-//	 */
-//	public void fillDates(List<CloudLine> cloudLines) throws AproximationException {
-//	    Date lastScanDateFromFile = this.lastRadarMapDateParser.readLastScanDateFromFile();
-//		if (lastScanDateFromFile == null) {
-//			throw new NullPointerException("lastScanDateFromFile is null."); //$NON-NLS-1$
-//		}
-//
-//		checkLastScanDateVitality(lastScanDateFromFile);
-//
-//		Date date = lastScanDateFromFile;
-//		long lastScanDateIntervalMiliseconds = Settings.getLong(Property.LAST_SCAN_DATE_INTERVAL_MILISECONDS);
-//
-//		for (int i = cloudLines.size() - 1; i >= 0; i--) {
-//	        CloudLine cloudLine = cloudLines.get(i);
-//	        cloudLine.setDate(date);
-//	        date = new Date(date.getTime() - lastScanDateIntervalMiliseconds);
-//        }
-//    }
-
-
-	public void setLastRadarMapDateParser(LastRadarMapDateParser lastRadarMapDateParser) {
-		this.lastRadarMapDateParser = lastRadarMapDateParser;
-	}
-
     /**
      * @param x
      * @param y
@@ -107,29 +81,29 @@ public class CloudLineBuilder {
     }
 
     /**
-     * @param radarMap
+     * @param scannedMap
      * @param x
      * @param y
      * @param alpha
      * @return
      */
-    public CloudLine parseToCloudLine(BufferedImage radarMap, double x, double y, double alpha) {
-        LOGGER.debug("Trying to parse radar map file:" + radarMap);
+    public CloudLine parseToCloudLine(ScannedMap scannedMap, double x, double y, double alpha) {
+        LOGGER.debug("Trying to parse radar map file:" + scannedMap.getImage());
         List<Point> imagePoints = getImagePoints(x, y, alpha);
-        CloudLine cloudLine = getCloudLine(radarMap, imagePoints);
+        CloudLine cloudLine = buildCloudLine(scannedMap, imagePoints);
         return cloudLine;
     }
 
     /**
-     * @param mapImage
+     * @param scannedMap
      * @param imagePoints
      * @return
      */
-    private CloudLine getCloudLine(BufferedImage mapImage, List<Point> imagePoints) {
-        CloudLine cloudLine = new CloudLine(imagePoints.size());
+    private CloudLine buildCloudLine(ScannedMap scannedMap, List<Point> imagePoints) {
+        CloudLine cloudLine = new CloudLine(cloudConfiguration, new boolean[imagePoints.size()], scannedMap.getTime());
         for (int i = 0; i < imagePoints.size(); i++) {
             Point point = imagePoints.get(i);
-            int rgb = mapImage.getRGB(point.x, point.y);
+            int rgb = scannedMap.getImage().getRGB(point.x, point.y);
             cloudLine.addRgb(rgb, i);
         }
         return cloudLine;
@@ -165,7 +139,7 @@ public class CloudLineBuilder {
     }
 
     private ImageOperator getImageOperator(double alpha) {
-        return new ImageOperator(alpha, Settings.getInt(Property.IMAGE_SAMPLES_COUNT));
+        return new ImageOperator(alpha, cloudConfiguration.getCloudLineLength());
     }
 
     private boolean imageContains(Point point) {

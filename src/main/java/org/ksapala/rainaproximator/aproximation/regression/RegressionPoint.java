@@ -1,25 +1,16 @@
 package org.ksapala.rainaproximator.aproximation.regression;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.ksapala.rainaproximator.aproximation.cloud.Distance;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
+@AllArgsConstructor
+@Getter
 public class RegressionPoint {
 	
 	private Distance distance;
-	private Date date;
-	
-	public RegressionPoint(Distance distance, Date date) {
-		this.distance = distance;
-		this.date = date;
-	}
-	
-	public Distance getDistance() {
-		return this.distance;
-	}
-
-	public Date getDate() {
-		return this.date;
-	}
+	private LocalDateTime time;
 
 }

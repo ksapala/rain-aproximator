@@ -3,14 +3,20 @@ package org.ksapala.rainaproximator.configuration;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @ConfigurationProperties
 @Getter
 @Setter
+@Validated
 public class Configuration {
+
+    @NotBlank private String userTimeFormat;
 
     private Wind wind = new Wind();
     private Algorithm algorithm = new Algorithm();
@@ -19,39 +25,42 @@ public class Configuration {
     @Getter
     @Setter
     public class Wind {
-        private String url;
-        private int retries;
+
+        @NotBlank private String url;
+        @NotNull private int retries;
     }
 
     @Getter
     @Setter
     public class Algorithm {
-        private boolean useSideScans;
-        private int[] sideScansAngles;
-        private Cloud cloud;
+
+        @NotNull private boolean useSideScans;
+        @NotEmpty private int[] sideScansAngles;
+        private Cloud cloud = new Cloud();
 
         @Getter
         @Setter
-        @NotBlank
         public class Cloud {
-            private int replaceHolesMin;
-            private int replaceHolesMax;
-            private int replaceHolesStartMin;
-            private int replaceHolesStartMax;
+
+            @NotNull private int replaceHolesMin;
+            @NotNull private int replaceHolesMax;
+            @NotNull private int replaceHolesStartMin;
+            @NotNull private int replaceHolesStartMax;
+            @NotNull private int cloudLineLength;
         }
     }
 
     @Getter
     @Setter
-    @NotBlank
     public class Scanner {
-        private String radarUrl;
-        private String radarMainPage;
-        private List<String> radarImageIdentifiers;
-        private String lastRadarMapDateFormat;
-        private String lastRadarMapDateZone;
-        private String lastRadarMapDateElementId;
-        private int radarMapTimeIntevalMinutes;
+
+        @NotBlank private String radarUrl;
+        @NotBlank private String radarMainPage;
+        @NotEmpty private List<String> radarImageIdentifiers;
+        @NotBlank private String lastRadarMapDateFormat;
+        @NotBlank private String lastRadarMapDateZone;
+        @NotBlank private String lastRadarMapDateElementId;
+        @NotNull private int radarMapTimeIntevalMinutes;
     }
 
 }

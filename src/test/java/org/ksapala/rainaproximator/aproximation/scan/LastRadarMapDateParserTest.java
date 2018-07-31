@@ -1,4 +1,4 @@
-package org.ksapala.rainaproximator.aproximation.map;
+package org.ksapala.rainaproximator.aproximation.scan;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,19 +20,16 @@ public class LastRadarMapDateParserTest {
 
 
     @Autowired
-    private Configuration configuration;
-
 	private LastRadarMapDateParser lastRadarMapDateParser;
 
 
 	@Before
 	public void setUp() {
-		this.lastRadarMapDateParser = new LastRadarMapDateParser(configuration.getScanner());
 	}
 	
 	@Test
-	public void testDoParseLastScanDate() throws IOException, ParseException {
-		LocalDateTime lastRadarMapDate = this.lastRadarMapDateParser.doParseLastRadarMapDate();
+	public void testDoParseLastScanDate() throws IOException {
+		LocalDateTime lastRadarMapDate = this.lastRadarMapDateParser.parseLastRadarMapDate();
 		
 		assertNotNull(lastRadarMapDate);
 		System.out.println("lastRadarMapDate: " + lastRadarMapDate);

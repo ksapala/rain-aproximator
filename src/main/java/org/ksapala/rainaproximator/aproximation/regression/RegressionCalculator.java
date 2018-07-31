@@ -8,6 +8,7 @@ import org.apache.commons.math3.stat.regression.SimpleRegression;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ksapala.rainaproximator.aproximation.cloud.Distance;
+import org.ksapala.rainaproximator.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,7 @@ public class RegressionCalculator {
 		for (int i = 0; i < regressionPoints.size(); i++) {
 			RegressionPoint regressionPoint = regressionPoints.get(i);
 			data[i][0] = regressionPoint.getDistance().getValue();
-			data[i][1] = regressionPoint.getDate().getTime();
+			data[i][1] = Utils.localDateAndTimeToMillis(regressionPoint.getTime());
 		}
 		return data;
 	}
@@ -69,7 +70,7 @@ public class RegressionCalculator {
 	private void logRegressionPoints(String message, List<RegressionPoint> regressionPoints) {
 		LOGGER.debug(message);
 		for (RegressionPoint regressionPoint : regressionPoints) {
-			LOGGER.debug("Point distance={}, date={}", regressionPoint.getDistance().getValue(), regressionPoint.getDate());
+			LOGGER.debug("Point distance={}, date={}", regressionPoint.getDistance().getValue(), regressionPoint.getTime());
 		}
 	}
 
@@ -86,7 +87,7 @@ public class RegressionCalculator {
 		
 		double median = getMedian(differences);
 		double borderValue = regressionPoints.get(0).getDistance().getValue() - 2 * median;
-		boolean add = true;
+		boolean add;
 		
 		for (RegressionPoint regressionPoint : regressionPoints) {
 			Distance distance = regressionPoint.getDistance();
@@ -101,7 +102,6 @@ public class RegressionCalculator {
 			if (add) {
 				result.add(regressionPoint);
 			}
-
 			borderValue = borderValue + median;
 			
 		}

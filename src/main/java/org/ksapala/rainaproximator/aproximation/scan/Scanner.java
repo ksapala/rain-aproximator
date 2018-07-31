@@ -1,9 +1,11 @@
-package org.ksapala.rainaproximator.aproximation.map;
+package org.ksapala.rainaproximator.aproximation.scan;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.exception.AproximationException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -14,17 +16,18 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class Scanner {
 
     private final static Logger LOGGER = LogManager.getLogger(Scanner.class);
 
-    private Configuration.Scanner scannerConfiguration;
+    @Autowired
+    private Configuration configuration;
 
+    @Autowired
     private LastRadarMapDateParser lastRadarMapDateParser;
 
-    public Scanner(Configuration.Scanner scannerConfiguration) {
-        this.scannerConfiguration = scannerConfiguration;
-        this.lastRadarMapDateParser = new LastRadarMapDateParser(scannerConfiguration);
+    public Scanner() {
     }
 
     /**
@@ -50,15 +53,15 @@ public class Scanner {
         List<ScannedMap> maps = new ArrayList<>(images.size());
         for (int i = images.size() - 1; i >= 0; i--) {
             maps.add(new ScannedMap(images.get(i), mapTime));
-            mapTime = mapTime.minusMinutes(scannerConfiguration.getRadarMapTimeIntevalMinutes());
+            mapTime = mapTime.minusMinutes(configuration.getScanner().getRadarMapTimeIntevalMinutes());
         }
 
         return new Scan(maps, lastRadarMapTime);
     }
 
     private List<BufferedImage> getImages() throws IOException {
-        List<BufferedImage> images = new ArrayList<>(scannerConfiguration.getRadarImageIdentifiers().size());
-        for (String radarImageIdentifier : scannerConfiguration.getRadarImageIdentifiers()) {
+        List<BufferedImage> images = new ArrayList<>(configuration.getScanner().getRadarImageIdentifiers().size());
+        for (String radarImageIdentifier : configuration.getScanner().getRadarImageIdentifiers()) {
             BufferedImage image = getImage(radarImageIdentifier);
             images.add(image);
         }
@@ -66,7 +69,7 @@ public class Scanner {
     }
 
     private BufferedImage getImage(String radarImageIdentifier) throws IOException {
-        String urlString = MessageFormat.format(scannerConfiguration.getRadarUrl(), radarImageIdentifier);
+        String urlString = MessageFormat.format(configuration.getScanner().getRadarUrl(), radarImageIdentifier);
         URL url = new URL(urlString);
         BufferedImage bufferedImage = ImageIO.read(url);
         return bufferedImage;

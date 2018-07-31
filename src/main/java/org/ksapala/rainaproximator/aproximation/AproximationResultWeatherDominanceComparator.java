@@ -3,6 +3,7 @@
  */
 package org.ksapala.rainaproximator.aproximation;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -26,8 +27,8 @@ public class AproximationResultWeatherDominanceComparator implements Comparator<
 			if (AproximationResultType.RAIN_AT_TIME.equals(result1.getType()) ||
 					AproximationResultType.SUN_AT_TIME.equals(result1.getType())) {
 				
-				Date predictTime1 = result1.getPredictTime();
-				Date predictTime2 = result2.getPredictTime();
+				LocalDateTime predictTime1 = result1.getPredictTime();
+                LocalDateTime predictTime2 = result2.getPredictTime();
 				return predictTime1.compareTo(predictTime2);
 			}
 			return 0;

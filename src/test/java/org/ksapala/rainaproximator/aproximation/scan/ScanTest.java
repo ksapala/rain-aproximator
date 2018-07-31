@@ -1,4 +1,4 @@
-package org.ksapala.rainaproximator.aproximation.map;
+package org.ksapala.rainaproximator.aproximation.scan;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

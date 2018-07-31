@@ -1,52 +1,44 @@
 package org.ksapala.rainaproximator.aproximation;
 
-import org.ksapala.rainaproximator.util.Utils;
+import lombok.Getter;
+import lombok.Setter;
+import org.ksapala.rainaproximator.utils.Utils;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
+@Getter
 public class AproximationResult {
 
+    private final String TO_STRING_PATTERN = "dd/MM/yyyy HH:mm";
+
 	private AproximationResultType type;
-	private Date predictTime;
+	private LocalDateTime predictTime;
+	@Setter
 	private String remark;
 	
-	public AproximationResult(AproximationResultType type, Date predictTime) {
+	public AproximationResult(AproximationResultType type, LocalDateTime predictTime) {
 		 this.type = type;
 		 this.predictTime = predictTime;
 	}
 	
 	public AproximationResult(AproximationResultType type, double predictTime) {
-	   this(type, new Date((long) predictTime));
+	    this(type, Utils.millisToLocalDateAndTime((long) predictTime));
     }
 	
 	public AproximationResult(AproximationResultType type) {
 	    this(type, null);
     }
-	
-	public AproximationResultType getType() {
-		return this.type;
-	}
-	
-	public Date getPredictTime() {
-		return this.predictTime;
-	}
-
-    public String getRemark() {
-        return this.remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
 
 	@Override
 	public String toString() {
-		String dateString = Utils.format(this.predictTime);
-		return "Type: " + this.type.toString() + ", date: " + dateString + ", remark: " + this.remark;
+		String timeString = this.predictTime.format(DateTimeFormatter.ofPattern(TO_STRING_PATTERN));
+		return "Type: " + this.type.toString() + ", time: " + timeString + ", remark: " + this.remark;
 	}
 	
 	public String toFriendlyString() {
-		return this.type.getUserFriendlyInfo() + ", date: " + Utils.format(this.predictTime);
+        String timeString = this.predictTime.format(DateTimeFormatter.ofPattern(TO_STRING_PATTERN));
+		return this.type.getUserFriendlyInfo() + ", time: " + timeString;
 	}
 	
 	/* (non-Javadoc)

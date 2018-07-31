@@ -3,14 +3,15 @@
  */
 package org.ksapala.rainaproximator.aproximation.wind;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-
 import org.junit.Test;
-import org.ksapala.rainaproximator.BaseTest;
+import org.junit.runner.RunWith;
+import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.exception.AproximationException;
-import org.ksapala.rainaproximator.aproximation.wind.WindGetter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author krzysztof
@@ -18,11 +19,16 @@ import org.ksapala.rainaproximator.aproximation.wind.WindGetter;
  * contact: krzysztof.sapala@gmail.com
  *
  */
-public class WindGetterTest extends BaseTest {
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class WindGetterTest {
 
-	@Test
-	public void testGetWindDirection() throws IOException, AproximationException {
-		WindGetter windGetter = new WindGetter();
+    @Autowired
+    private Configuration configuration;
+
+    @Test
+	public void testGetWindDirection() throws AproximationException {
+		WindGetter windGetter = new WindGetter(configuration.getWind());
 		
 		double windDirection = windGetter.getWindDirection(20, 50);
 		

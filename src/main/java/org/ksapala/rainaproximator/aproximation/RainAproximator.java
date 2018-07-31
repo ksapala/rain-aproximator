@@ -4,9 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ksapala.rainaproximator.aproximation.cloud.CloudLineBuilder;
 import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
-import org.ksapala.rainaproximator.aproximation.map.Scan;
+import org.ksapala.rainaproximator.aproximation.scan.Scan;
 import org.ksapala.rainaproximator.configuration.Configuration;
-import org.ksapala.rainaproximator.aproximation.map.converter.CoordinatesConverter;
+import org.ksapala.rainaproximator.aproximation.scan.converter.CoordinatesConverter;
 import org.ksapala.rainaproximator.exception.AproximationException;
 import org.ksapala.rainaproximator.aproximation.wind.WindGetter;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionState;
@@ -28,7 +28,7 @@ public class RainAproximator {
 	public RainAproximator(Configuration configuration) {
 		this.algorithmConfiguration = configuration.getAlgorithm();
 		this.coordinatesConverter = new CoordinatesConverter();
-		this.cloudLineBuilder = new CloudLineBuilder();
+		this.cloudLineBuilder = new CloudLineBuilder(algorithmConfiguration.getCloud());
 		this.windGetter = new WindGetter(configuration.getWind());
 	}
 	
@@ -157,7 +157,7 @@ public class RainAproximator {
 	 */
 	public void smoothCloudLines(List<CloudLine> cloudLines) {
 	    for (CloudLine cloudLine : cloudLines) {
-	        cloudLine.smoothLine(algorithmConfiguration.getCloud());
+	        cloudLine.smoothLine();
         }
 	    CloudLineBuilder.logCloudLines("Cloud lines after smooth bellow: ", cloudLines);
     }

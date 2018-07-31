@@ -6,15 +6,22 @@ package org.ksapala.rainaproximator.rest.factory;
 import org.ksapala.rainaproximator.aproximation.AproximationResult;
 import org.ksapala.rainaproximator.messages.Messages;
 import org.ksapala.rainaproximator.rest.bean.AproximationResultBean;
+import org.ksapala.rainaproximator.utils.TimeComponent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 /**
  * @author krzysztof
  *
  */
+@Component
 public class AproximationResultBeanFactory {
 
-    public final static AproximationResultBean FRIENDLY_EXCEPTION_RESULT = new AproximationResultBean("", null,
-            Messages.getString("AproximationResultBeanFactory.there.was.error"));
+    @Autowired
+    private TimeComponent timeComponent;
+
     /**
 	 * 
 	 */
@@ -25,11 +32,18 @@ public class AproximationResultBeanFactory {
 	 * @param aproximationResult
 	 * @return
 	 */
-	public static AproximationResultBean createBean(AproximationResult aproximationResult) {
-		AproximationResultBean bean = new AproximationResultBean(aproximationResult.getType().getUserFriendlyInfo(), 
-				aproximationResult.getPredictTime(), aproximationResult.getRemark());
+	public AproximationResultBean createBean(AproximationResult aproximationResult) {
+        LocalDateTime predictTime = aproximationResult.getPredictTime();
+        String predictTimeString = predictTime.format(timeComponent.getFormatter());
+
+		AproximationResultBean bean = new AproximationResultBean(aproximationResult.getType().getUserFriendlyInfo(),
+                predictTimeString, aproximationResult.getRemark());
 		return bean;
 	}
+
+	public AproximationResultBean createFriendlyErrorBean() {
+        return new AproximationResultBean("", null, Messages.getString("AproximationResultBeanFactory.there.was.error"));
+    }
 
 
 }

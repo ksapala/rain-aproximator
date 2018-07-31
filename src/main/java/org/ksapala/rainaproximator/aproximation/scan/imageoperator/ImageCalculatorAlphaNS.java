@@ -1,4 +1,4 @@
-package org.ksapala.rainaproximator.aproximation.map.imageoperator;
+package org.ksapala.rainaproximator.aproximation.scan.imageoperator;
 
 public class ImageCalculatorAlphaNS extends ImageCalculator {
 

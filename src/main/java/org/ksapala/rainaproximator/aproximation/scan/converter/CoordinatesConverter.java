@@ -1,4 +1,4 @@
-package org.ksapala.rainaproximator.aproximation.map.converter;
+package org.ksapala.rainaproximator.aproximation.scan.converter;
 
 
 public class CoordinatesConverter {

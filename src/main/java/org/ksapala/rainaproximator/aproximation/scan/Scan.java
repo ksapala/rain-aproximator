@@ -1,4 +1,4 @@
-package org.ksapala.rainaproximator.aproximation.map;
+package org.ksapala.rainaproximator.aproximation.scan;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

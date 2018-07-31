@@ -1,4 +1,4 @@
-package org.ksapala.rainaproximator.aproximation.map.imageoperator;
+package org.ksapala.rainaproximator.aproximation.scan.imageoperator;
 
 import java.util.Iterator;
 import java.util.function.Consumer;

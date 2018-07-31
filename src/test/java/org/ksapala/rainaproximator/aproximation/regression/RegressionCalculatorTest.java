@@ -3,21 +3,25 @@
  */
 package org.ksapala.rainaproximator.aproximation.regression;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.ksapala.rainaproximator.aproximation.cloud.Distance;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.junit.Test;
-import org.ksapala.rainaproximator.BaseTest;
-import org.ksapala.rainaproximator.aproximation.cloud.Distance;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author krzysztof
  *
  */
-public class RegressionCalculatorTest extends BaseTest {
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class RegressionCalculatorTest {
 
 	private RegressionCalculator calculator;
 	
@@ -28,13 +32,13 @@ public class RegressionCalculatorTest extends BaseTest {
 	@Test
 	public void testRemoveOutliersDifferenceMinusMedianThreeRemoved() {
 		List<RegressionPoint> points = new ArrayList<RegressionPoint>();
-		points.add(new RegressionPoint(new Distance(7), new Date()));
-		points.add(new RegressionPoint(new Distance(6), new Date()));
-		points.add(new RegressionPoint(new Distance(5), new Date()));
-		points.add(new RegressionPoint(new Distance(12), new Date()));
-		points.add(new RegressionPoint(new Distance(11), new Date()));
-		points.add(new RegressionPoint(new Distance(10), new Date()));
-		points.add(new RegressionPoint(new Distance(1), new Date()));
+		points.add(new RegressionPoint(new Distance(7), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(6), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(5), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(12), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(11), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(10), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(1), LocalDateTime.now()));
 		
 		List<RegressionPoint> removed = this.calculator.removeOutliersDifference(points);
 		
@@ -44,11 +48,11 @@ public class RegressionCalculatorTest extends BaseTest {
 	@Test
 	public void testRemoveOutliersDifferenceMinusMedianNoRemove() {
 		List<RegressionPoint> points = new ArrayList<RegressionPoint>();
-		points.add(new RegressionPoint(new Distance(7), new Date()));
-		points.add(new RegressionPoint(new Distance(6), new Date()));
-		points.add(new RegressionPoint(new Distance(5), new Date()));
-		points.add(new RegressionPoint(new Distance(6), new Date()));
-		points.add(new RegressionPoint(new Distance(3), new Date()));
+		points.add(new RegressionPoint(new Distance(7), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(6), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(5), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(6), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(3), LocalDateTime.now()));
 		
 		List<RegressionPoint> removed = this.calculator.removeOutliersDifference(points);
 		
@@ -58,13 +62,13 @@ public class RegressionCalculatorTest extends BaseTest {
 	@Test
 	public void testRemoveOutliersDifferenceThreeRemoved() {
 		List<RegressionPoint> points = new ArrayList<RegressionPoint>();
-		points.add(new RegressionPoint(new Distance(3), new Date()));
-		points.add(new RegressionPoint(new Distance(4), new Date()));
-		points.add(new RegressionPoint(new Distance(5), new Date()));
-		points.add(new RegressionPoint(new Distance(2), new Date()));
-		points.add(new RegressionPoint(new Distance(3), new Date()));
-		points.add(new RegressionPoint(new Distance(4), new Date()));
-		points.add(new RegressionPoint(new Distance(9), new Date()));
+		points.add(new RegressionPoint(new Distance(3), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(4), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(5), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(2), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(3), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(4), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(9), LocalDateTime.now()));
 		
 		List<RegressionPoint> removed = this.calculator.removeOutliersDifference(points);
 		
@@ -74,45 +78,45 @@ public class RegressionCalculatorTest extends BaseTest {
 	@Test
 	public void testRemoveOutliersDifferenceNoRemove() {
 		List<RegressionPoint> points = new ArrayList<RegressionPoint>();
-		points.add(new RegressionPoint(new Distance(3), new Date()));
-		points.add(new RegressionPoint(new Distance(4), new Date()));
-		points.add(new RegressionPoint(new Distance(5), new Date()));
-		points.add(new RegressionPoint(new Distance(4), new Date()));
-		points.add(new RegressionPoint(new Distance(7), new Date()));
+		points.add(new RegressionPoint(new Distance(3), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(4), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(5), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(4), LocalDateTime.now()));
+		points.add(new RegressionPoint(new Distance(7), LocalDateTime.now()));
 		
 		List<RegressionPoint> removed = this.calculator.removeOutliersDifference(points);
 		
 		assertEquals(points.size(), removed.size());
 	}
-	
-	/**
-	 * Test method for {@link RegressionCalculator#removeOutliers(java.util.List)}.
-	 */
+
+//	/**
+//	 * Test method for {@link RegressionCalculator#removeOutliers(java.util.List)}.
+//	 */
 //	@Test
 //	public void testRemoveOutliersOneRemoved() {
 //		List<RegressionPoint> points = new ArrayList<RegressionPoint>();
-//		points.add(new RegressionPoint(new Distance(3), new Date()));
-//		points.add(new RegressionPoint(new Distance(4), new Date()));
-//		points.add(new RegressionPoint(new Distance(5), new Date()));
-//		points.add(new RegressionPoint(new Distance(6), new Date()));
-//		points.add(new RegressionPoint(new Distance(12), new Date()));
+//		points.add(new RegressionPoint(new Distance(3), LocalDateTime.now()));
+//		points.add(new RegressionPoint(new Distance(4), LocalDateTime.now()));
+//		points.add(new RegressionPoint(new Distance(5), LocalDateTime.now()));
+//		points.add(new RegressionPoint(new Distance(6), LocalDateTime.now()));
+//		points.add(new RegressionPoint(new Distance(12), LocalDateTime.now()));
 //		
 //		List<RegressionPoint> removed = RegressionCalculator.removeOutliers(points);
 //		
 //		assertEquals(points.size() - 1, removed.size());
 //	}
 	
-	/**
-	 * Test method for {@link RegressionCalculator#removeOutliers(java.util.List)}.
-	 */
+//	/**
+//	 * Test method for {@link RegressionCalculator#removeOutliers(java.util.List)}.
+//	 */
 //	@Test
 //	public void testRemoveOutliersNoRemove() {
 //		List<RegressionPoint> points = new ArrayList<RegressionPoint>();
-//		points.add(new RegressionPoint(new Distance(3), new Date()));
-//		points.add(new RegressionPoint(new Distance(4), new Date()));
-//		points.add(new RegressionPoint(new Distance(5), new Date()));
-//		points.add(new RegressionPoint(new Distance(6), new Date()));
-//		points.add(new RegressionPoint(new Distance(8), new Date()));
+//		points.add(new RegressionPoint(new Distance(3), LocalDateTime.now()));
+//		points.add(new RegressionPoint(new Distance(4), LocalDateTime.now()));
+//		points.add(new RegressionPoint(new Distance(5), LocalDateTime.now()));
+//		points.add(new RegressionPoint(new Distance(6), LocalDateTime.now()));
+//		points.add(new RegressionPoint(new Distance(8), LocalDateTime.now()));
 //		
 //		List<RegressionPoint> removed = RegressionCalculator.removeOutliers(points);
 //		
@@ -122,11 +126,11 @@ public class RegressionCalculatorTest extends BaseTest {
 //	@Test
 //	public void testRemoveOutliersZeroDistance() {
 //		List<RegressionPoint> points = new ArrayList<RegressionPoint>();
-//		points.add(new RegressionPoint(new Distance(0), new Date()));
-//		points.add(new RegressionPoint(new Distance(0), new Date()));
-//		points.add(new RegressionPoint(new Distance(0), new Date()));
-//		points.add(new RegressionPoint(new Distance(7), new Date()));
-//		points.add(new RegressionPoint(new Distance(8), new Date()));
+//		points.add(new RegressionPoint(new Distance(0), LocalDateTime.now()));
+//		points.add(new RegressionPoint(new Distance(0), LocalDateTime.now()));
+//		points.add(new RegressionPoint(new Distance(0), LocalDateTime.now()));
+//		points.add(new RegressionPoint(new Distance(7), LocalDateTime.now()));
+//		points.add(new RegressionPoint(new Distance(8), LocalDateTime.now()));
 //		
 //		List<RegressionPoint> removed = RegressionCalculator.removeOutliers(points);
 //		
@@ -136,11 +140,11 @@ public class RegressionCalculatorTest extends BaseTest {
 //	@Test
 //	public void testRemoveOutliersSomeRemoved() {
 //		List<RegressionPoint> points = new ArrayList<RegressionPoint>();
-//		points.add(new RegressionPoint(new Distance(100), new Date()));
-//		points.add(new RegressionPoint(new Distance(100), new Date()));
-//		points.add(new RegressionPoint(new Distance(100), new Date()));
-//		points.add(new RegressionPoint(new Distance(100), new Date()));
-//		points.add(new RegressionPoint(new Distance(165), new Date()));
+//		points.add(new RegressionPoint(new Distance(100), LocalDateTime.now()));
+//		points.add(new RegressionPoint(new Distance(100), LocalDateTime.now()));
+//		points.add(new RegressionPoint(new Distance(100), LocalDateTime.now()));
+//		points.add(new RegressionPoint(new Distance(100), LocalDateTime.now()));
+//		points.add(new RegressionPoint(new Distance(165), LocalDateTime.now()));
 //		
 //		List<RegressionPoint> removed = RegressionCalculator.removeOutliers(points);
 //		

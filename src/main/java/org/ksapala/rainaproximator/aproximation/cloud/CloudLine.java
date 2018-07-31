@@ -1,41 +1,41 @@
 package org.ksapala.rainaproximator.aproximation.cloud;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.ksapala.rainaproximator.configuration.Configuration;
-import org.ksapala.rainaproximator.settings.Property;
-import org.ksapala.rainaproximator.settings.Settings;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class CloudLine {
 
-	private static final String SUN_SYMBOL = ".";
-	private static final String RAIN_SYMBOL = "#";
+    // constants
+    public static final String SUN_SYMBOL = ".";
+	public static final String RAIN_SYMBOL = "#";
 	private static final int RGB_TRANSPARENT_GIF_BLACK = 0;
 	private static final int RGB_TRANSPARENT_GIF_WHITE = 16777215;
 
-    private final Configuration.Algorithm.Cloud cloudConfiguration;
+	// fields
     private boolean[] line;
-	private Date date;
-	
+    @Getter
+    @Setter
+	private LocalDateTime time;
+    private final Configuration.Algorithm.Cloud cloudConfiguration;
+
+    // algorithm members
 	private Distance rainDistance = null;
 	private Distance sunDistance = null;
-	
 	private PatternBuilder patternBuilder;
 
-	public CloudLine(Configuration.Algorithm.Cloud cloudConfiguration, boolean[] line, Date date) {
+	public CloudLine(Configuration.Algorithm.Cloud cloudConfiguration, boolean[] line, LocalDateTime time) {
         this.cloudConfiguration = cloudConfiguration;
         this.line = line;
-		this.date = date;
+		this.time = time;
 		this.patternBuilder = new PatternBuilder();
 	}
 
-	public CloudLine(Configuration.Algorithm.Cloud cloudConfiguration, int length) {
-		this(cloudConfiguration, new boolean[length]);
-	}
-		
-	public CloudLine(Configuration.Algorithm.Cloud cloudConfiguration, boolean[] line) {
-		this(cloudConfiguration, line, null);
-	}
+//	public CloudLine(Configuration.Algorithm.Cloud cloudConfiguration, boolean[] line) {
+//		this(cloudConfiguration, line, null);
+//	}
 	
 	
 	public void addRgb(int rgb, int index) {
@@ -51,7 +51,7 @@ public class CloudLine {
     }
 	
 	public String toString() {
-		return getLineAsString() + " date: " + getDate();
+		return getLineAsString() + " date: " + getTime();
 	}
 	
 	public String getLineAsString() {
@@ -83,12 +83,12 @@ public class CloudLine {
 	 */
 	private void smoothStart() {
 		for (int i = cloudConfiguration.getReplaceHolesStartMin(); i < cloudConfiguration.getReplaceHolesStartMax(); i++) {
-			boolean[] startTruePattern = this.patternBuilder.buildStartTrue(i);
-			boolean[] allFalsePattern = this.patternBuilder.buildAllFalse(i);
+			boolean[] startTruePattern = this.patternBuilder.buildStartTrue(i + 1);
+			boolean[] allFalsePattern = this.patternBuilder.buildAllFalse(i + 1);
 			replaceStart(startTruePattern, allFalsePattern);
 			
-			boolean[] startFalsePattern = this.patternBuilder.buildStartFalse(i);
-			boolean[] allTruePattern = this.patternBuilder.buildAllTrue(i);
+			boolean[] startFalsePattern = this.patternBuilder.buildStartFalse(i + 1);
+			boolean[] allTruePattern = this.patternBuilder.buildAllTrue(i + 1);
 			replaceStart(startFalsePattern, allTruePattern);
 		}
     }
@@ -98,12 +98,12 @@ public class CloudLine {
 	 */
 	private void smoothMiddle() {
 		for (int i = cloudConfiguration.getReplaceHolesMin(); i <= cloudConfiguration.getReplaceHolesMax(); i++) {
-			boolean[] middleFalsePattern = this.patternBuilder.buildMiddleFalse(i);
-			boolean[] allTruePattern = this.patternBuilder.buildAllTrue(i);
+			boolean[] middleFalsePattern = this.patternBuilder.buildMiddleFalse(i + 2);
+			boolean[] allTruePattern = this.patternBuilder.buildAllTrue(i + 2);
 			replacePattern(middleFalsePattern, allTruePattern);
 			
-			boolean[] middleTruePattern = this.patternBuilder.buildMiddleTrue(i);
-			boolean[] allFalsePattern = this.patternBuilder.buildAllFalse(i);
+			boolean[] middleTruePattern = this.patternBuilder.buildMiddleTrue(i + 2);
+			boolean[] allFalsePattern = this.patternBuilder.buildAllFalse(i + 2);
 			replacePattern(middleTruePattern, allFalsePattern);
         }
     }
@@ -156,14 +156,6 @@ public class CloudLine {
         }
 		return true;
     }
-	
-	public Date getDate() {
-		return this.date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
 
 	/**
 	 * @return
@@ -196,27 +188,6 @@ public class CloudLine {
 	        }
         }
 	    return Distance.INFINITY;
-	}
-	
-	/**
-	 * @param stringCloudLine
-	 * @return
-	 */
-	public static CloudLine fromString(Configuration.Algorithm.Cloud cloudConfiguration, String stringCloudLine) {
-		boolean[] line = fromStringToBoolean(stringCloudLine);
-		CloudLine cloudLine = new CloudLine(cloudConfiguration, line);
-		return cloudLine;
-    }
-	
-	public static boolean[] fromStringToBoolean(String stringCloudLine) {
-		boolean[] line = new boolean[stringCloudLine.length()];
-		for (int i = 0; i < stringCloudLine.length(); i++) {
-	        char rainSymbol = stringCloudLine.charAt(i);
-	        String rainSymbolString = String.valueOf(rainSymbol);
-	        boolean isRain = RAIN_SYMBOL.equals(rainSymbolString);
-			line[i] = isRain;
-        }
-		return line;
 	}
 
 }
