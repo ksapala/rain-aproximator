@@ -2,30 +2,38 @@ package org.ksapala.rainaproximator.aproximation;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ksapala.rainaproximator.aproximation.cloud.CloudLineBuilder;
 import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
-import org.ksapala.rainaproximator.aproximation.scan.Scan;
-import org.ksapala.rainaproximator.configuration.Configuration;
-import org.ksapala.rainaproximator.aproximation.scan.converter.CoordinatesConverter;
-import org.ksapala.rainaproximator.exception.AproximationException;
-import org.ksapala.rainaproximator.aproximation.wind.WindGetter;
+import org.ksapala.rainaproximator.aproximation.cloud.CloudLineBuilder;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionState;
-import org.ksapala.rainaproximator.messages.Messages;
+import org.ksapala.rainaproximator.aproximation.scan.Scan;
+import org.ksapala.rainaproximator.aproximation.scan.converter.CoordinatesConverter;
+import org.ksapala.rainaproximator.aproximation.wind.WindGetter;
+import org.ksapala.rainaproximator.configuration.Configuration;
+import org.ksapala.rainaproximator.exception.AproximationException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+@Component
 public class RainAproximator {
 	
 	private final static Logger LOGGER = LogManager.getLogger(RainAproximator.class);
+
+	@Autowired
+    private MessageSource messageSource;
 
 	private final Configuration.Algorithm algorithmConfiguration;
 	private CoordinatesConverter coordinatesConverter;
 	private CloudLineBuilder cloudLineBuilder;
 	private WindGetter windGetter;
 
-	public RainAproximator(Configuration configuration) {
+    @Autowired
+    public RainAproximator(Configuration configuration) {
 		this.algorithmConfiguration = configuration.getAlgorithm();
 		this.coordinatesConverter = new CoordinatesConverter();
 		this.cloudLineBuilder = new CloudLineBuilder(algorithmConfiguration.getCloud());
@@ -57,7 +65,8 @@ public class RainAproximator {
 		}
 
         if (!scan.isCurrentMoment()) {
-            aproximatorResult.setRemark(Messages.getString("RainAproximator.radars.not.current"));
+            aproximatorResult.setRemark(messageSource.getMessage("RainAproximator.radars.not.current",
+                    new Object[0], Locale.getDefault()));
         }
 
 		LOGGER.debug("[performance] Aproximation time: " + (System.currentTimeMillis() - startTime));

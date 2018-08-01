@@ -129,29 +129,6 @@ public class RegressionCalculator {
 		return differences;
 	}
 
-//	/**
-//	 * @param regressionPoints
-//	 * @return
-//	 */
-//	@Deprecated
-//	public static List<RegressionPoint> removeOutliers(List<RegressionPoint> regressionPoints) {
-//		List<RegressionPoint> result = new ArrayList<RegressionPoint>();
-//
-//		double median = getMedian(regressionPoints);
-//		int outliersRange = Settings.getInt(Property.OUTLIERS_RANGE);
-//
-//		for (RegressionPoint regressionPoint : regressionPoints) {
-//			Distance distance = regressionPoint.getDistance();
-//			int value = distance.getValue();
-//			int divide = (int) (value/median * 100);
-//			int outlierDistance = Math.abs(divide - 100);
-//			if (outlierDistance < outliersRange) { // outlier in range
-//				result.add(regressionPoint);
-//			}
-//		}
-//		return result;
-//	}
-
 	private double getMedian(double[] numbers) {
 		DescriptiveStatistics statistics = new DescriptiveStatistics();
 		for (Double number : numbers) {

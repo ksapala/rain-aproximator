@@ -36,10 +36,10 @@ public class AproximationResult {
 		return "Type: " + this.type.toString() + ", time: " + timeString + ", remark: " + this.remark;
 	}
 	
-	public String toFriendlyString() {
-        String timeString = this.predictTime.format(DateTimeFormatter.ofPattern(TO_STRING_PATTERN));
-		return this.type.getUserFriendlyInfo() + ", time: " + timeString;
-	}
+//	public String toFriendlyString() {
+//        String timeString = this.predictTime.format(DateTimeFormatter.ofPattern(TO_STRING_PATTERN));
+//		return this.type.getInfo() + ", time: " + timeString;
+//	}
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)

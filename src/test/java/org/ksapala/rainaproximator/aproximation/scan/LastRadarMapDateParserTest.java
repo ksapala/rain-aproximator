@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
@@ -22,6 +23,8 @@ public class LastRadarMapDateParserTest {
     @Autowired
 	private LastRadarMapDateParser lastRadarMapDateParser;
 
+    @MockBean
+    private Scanner scanner;
 
 	@Before
 	public void setUp() {

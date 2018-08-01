@@ -1,30 +1,28 @@
 package org.ksapala.rainaproximator.aproximation;
 
-import org.ksapala.rainaproximator.messages.Messages;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.springframework.context.MessageSource;
 
+import java.util.Locale;
+
+@AllArgsConstructor
 public enum AproximationResultType {
-    ERROR(Messages.getString("AproximationResult.0"), 5),  //$NON-NLS-1$
-	RAIN_AT_TIME(Messages.getString("AproximationResult.0"), 5),  //$NON-NLS-1$
-	SUN_AT_TIME(Messages.getString("AproximationResult.1"), 4),  //$NON-NLS-1$
-	RAIN_UNSURE(Messages.getString("AproximationResult.2"), 3), //$NON-NLS-1$
-	SUN_UNSURE(Messages.getString("AproximationResult.3"), 2), //$NON-NLS-1$
-	RAIN_UNKNOWN(Messages.getString("AproximationResult.4"), 1),  //$NON-NLS-1$
-	SUN_UNKNOWN(Messages.getString("AproximationResult.5"), 0);  //$NON-NLS-1$
 
-	private String info;
+	RAIN_AT_TIME("AproximationResult.code.rain.at", 5),
+	SUN_AT_TIME("AproximationResult.code.sun.at", 4),
+	RAIN_UNSURE("AproximationResult.code.rain.unsure", 3),
+	SUN_UNSURE("AproximationResult.code.sun.unsure", 2),
+	RAIN_UNKNOWN("AproximationResult.code.rain.unknown", 1),
+	SUN_UNKNOWN("AproximationResult.code.sun.unknown", 0);
+
+	private String code;
+	@Getter
 	private int weatherDominance;
 
-	private AproximationResultType(String info, int weatherDominance) {
-		this.info = info;
-		this.weatherDominance = weatherDominance;
+
+	public String getInfo(MessageSource messageSource) {
+        return messageSource.getMessage(code, new Object[0], Locale.getDefault());
+
     }
-	
-	public String getUserFriendlyInfo() {
-		return this.info;
-	}
-
-	public int getWeatherDominance() {
-		return this.weatherDominance;
-	}
-
 }

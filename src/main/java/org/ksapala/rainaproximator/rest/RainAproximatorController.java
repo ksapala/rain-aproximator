@@ -16,10 +16,22 @@ public class RainAproximatorController {
     @Autowired
     private RainAproximatorService rainAproximatorService;
 
+    @Autowired
+    private HelloService helloService;
+
     @GetMapping(path = "/aproximate/{latitude}/{longitude}")
     public Object aproximate(@PathVariable double latitude, @PathVariable double longitude) {
-//        return AproximationResultBean.HELLO;
         return rainAproximatorService.aproximate(latitude, longitude);
+    }
+
+    @GetMapping(path = "/aproximateKrk")
+    public Object aproximateKrk() {
+        return rainAproximatorService.aproximate(50.077452, 19.981147);
+    }
+
+    @GetMapping(path = "/hello")
+    public Object hello() {
+        return helloService.hello();
     }
 
 }
