@@ -4,8 +4,9 @@
 package org.ksapala.rainaproximator.rest.factory;
 
 import org.ksapala.rainaproximator.aproximation.AproximationResult;
+import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.rest.bean.AproximationResultBean;
-import org.ksapala.rainaproximator.utils.TimeComponent;
+import org.ksapala.rainaproximator.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -20,11 +21,12 @@ import java.util.Locale;
 @Component
 public class AproximationResultBeanFactory {
 
-    @Autowired
-    private TimeComponent timeComponent;
 
     @Autowired
     private MessageSource messageSource;
+
+    @Autowired
+    private Configuration configuration;
 
     /**
 	 * 
@@ -38,7 +40,7 @@ public class AproximationResultBeanFactory {
 	 */
 	public AproximationResultBean createBean(AproximationResult aproximationResult) {
         LocalDateTime predictTime = aproximationResult.getPredictTime();
-        String predictTimeString = predictTime.format(timeComponent.getFormatter());
+        String predictTimeString = predictTime.format(TimeUtils.getFormatter(configuration));
 
 		AproximationResultBean bean = new AproximationResultBean(aproximationResult.getType().getInfo(messageSource),
                 predictTimeString, aproximationResult.getRemark());

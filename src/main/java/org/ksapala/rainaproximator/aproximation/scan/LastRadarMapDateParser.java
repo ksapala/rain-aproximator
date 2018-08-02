@@ -3,12 +3,14 @@
  */
 package org.ksapala.rainaproximator.aproximation.scan;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.machinepublishers.jbrowserdriver.JBrowserDriver;
+import com.machinepublishers.jbrowserdriver.Settings;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.ksapala.rainaproximator.configuration.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +31,7 @@ import java.time.format.DateTimeFormatter;
 @Component
 public class LastRadarMapDateParser {
 
-	private final static Logger LOGGER = LogManager.getLogger(LastRadarMapDateParser.class);
+    private final Logger logger = LoggerFactory.getLogger(LastRadarMapDateParser.class);
 
 	@Autowired
 	private Configuration configuration;
@@ -40,21 +42,34 @@ public class LastRadarMapDateParser {
 	public LastRadarMapDateParser() {
 	}
 
-
 	/**
 	 * @return
 	 * @throws IOException
 	 * @throws ParseException
 	 */
 	public LocalDateTime parseLastRadarMapDate() throws IOException {
-		Document doc = Jsoup.connect(configuration.getScanner().getRadarMainPage()).get();
+//        webDriver.get(configuration.getScanner().getRadarMainPage());
+//        WebElement element = webDriver.findElement(By.id(configuration.getScanner().getLastRadarMapDateElementId()));
+//        String dateString = element.getText();
+
+
+        JBrowserDriver driver = new JBrowserDriver(Settings.builder().build());
+        driver.get(configuration.getScanner().getRadarMainPage());
+        String loadedPage = driver.getPageSource();
+
+        // JSoup parsing part
+        Document doc = Jsoup.parse(loadedPage);
+
+        driver.quit();
+
+//        Document doc = Jsoup.connect(configuration.getScanner().getRadarMainPage()).get();
 		Element tdWithLastRadarMapDateElement = doc.getElementById(configuration.getScanner().getLastRadarMapDateElementId());
 		String dateString = tdWithLastRadarMapDateElement.text();
 
 		LocalDateTime date = stringToDate(dateString);
 		date = utcToLocal(date);
 
-		LOGGER.debug("Last radar map date: " + date);
+		logger.debug("Last radar map date: " + date);
 
 		return date;
 	}

@@ -7,14 +7,16 @@ import org.junit.runners.Suite.SuiteClasses;
 import org.ksapala.rainaproximator.aproximation.cloud.CloudLineTest;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionCalculatorTest;
 import org.ksapala.rainaproximator.aproximation.scan.LastRadarMapDateParserTest;
-import org.ksapala.rainaproximator.utils.UtilsTests;
+import org.ksapala.rainaproximator.aproximation.wind.WindGetterTest;
+import org.ksapala.rainaproximator.utils.TimeUtilsTests;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-        UtilsTests.class,
+        TimeUtilsTests.class,
         CloudLineTest.class,
         RegressionCalculatorTest.class,
-        LastRadarMapDateParserTest.class})
+        LastRadarMapDateParserTest.class,
+        WindGetterTest.class})
 public class AllTests {
 
 	@BeforeClass

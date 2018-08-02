@@ -32,6 +32,7 @@ dependencies {
 	compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
 	compileOnly('org.projectlombok:lombok')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile 'com.machinepublishers:jbrowserdriver:1.0.0-RC1'
 
 
 }

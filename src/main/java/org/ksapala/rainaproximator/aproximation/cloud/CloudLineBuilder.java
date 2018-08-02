@@ -3,10 +3,6 @@
  */
 package org.ksapala.rainaproximator.aproximation.cloud;
 
-import com.sun.scenario.Settings;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.ksapala.rainaproximator.aproximation.scan.LastRadarMapDateParser;
 import org.ksapala.rainaproximator.aproximation.scan.Scan;
 import org.ksapala.rainaproximator.aproximation.scan.ScannedMap;
 import org.ksapala.rainaproximator.aproximation.scan.converter.CoordinatesConverter;
@@ -15,7 +11,8 @@ import org.ksapala.rainaproximator.aproximation.scan.imageoperator.ImageIterator
 import org.ksapala.rainaproximator.aproximation.scan.imageoperator.ImageOperator;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.exception.AproximationException;
-import org.ksapala.rainaproximator.settings.Property;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -30,7 +27,7 @@ import java.util.stream.Collectors;
  */
 public class CloudLineBuilder {
 
-	private final static Logger LOGGER = LogManager.getLogger(CloudLineBuilder.class);
+    private final Logger logger = LoggerFactory.getLogger(CloudLineBuilder.class);
 
     private int IMAGE_WIDTH = CoordinatesConverter.IMAGE_WIDTH;
     private int IMAGE_HEIGHT = CoordinatesConverter.IMAGE_HEIGHT;
@@ -54,17 +51,17 @@ public class CloudLineBuilder {
 	 */
 	public List<CloudLine> createCloudLines(Scan scan, double x, double y, double alpha) throws AproximationException {
 		List<CloudLine> cloudLines = parseToCloudLines(scan, x, y, alpha);
-		logCloudLines("Created cloud lines bellow:", cloudLines); //$NON-NLS-1$
+		logCloudLines(logger,"Created cloud lines bellow:", cloudLines); //$NON-NLS-1$
 		return cloudLines;
 	}
 
 	/**
 	 * @param cloudLines
 	 */
-	public static void logCloudLines(String info, List<CloudLine> cloudLines) {
-		LOGGER.info(info);
+	public static void logCloudLines(Logger logger, String info, List<CloudLine> cloudLines) {
+		logger.debug(info);
 		for (CloudLine cloudLine : cloudLines) {
-			LOGGER.info(cloudLine.toString());
+			logger.debug(cloudLine.toString());
         }
     }
 
@@ -88,7 +85,7 @@ public class CloudLineBuilder {
      * @return
      */
     public CloudLine parseToCloudLine(ScannedMap scannedMap, double x, double y, double alpha) {
-        LOGGER.debug("Trying to parse radar map file:" + scannedMap.getImage());
+        logger.debug("Trying to parse radar map file:" + scannedMap.getImage());
         List<Point> imagePoints = getImagePoints(x, y, alpha);
         CloudLine cloudLine = buildCloudLine(scannedMap, imagePoints);
         return cloudLine;

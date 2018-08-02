@@ -2,7 +2,7 @@ package org.ksapala.rainaproximator.aproximation;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.ksapala.rainaproximator.utils.Utils;
+import org.ksapala.rainaproximator.utils.TimeUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,7 +23,7 @@ public class AproximationResult {
 	}
 	
 	public AproximationResult(AproximationResultType type, double predictTime) {
-	    this(type, Utils.millisToLocalDateAndTime((long) predictTime));
+	    this(type, TimeUtils.millisToLocalDateAndTime((long) predictTime));
     }
 	
 	public AproximationResult(AproximationResultType type) {

@@ -5,10 +5,10 @@ package org.ksapala.rainaproximator.aproximation.regression;
 
 import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
 import org.ksapala.rainaproximator.aproximation.cloud.Distance;
-import org.ksapala.rainaproximator.settings.Settings;
+import org.ksapala.rainaproximator.utils.TimeUtils;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -143,9 +143,8 @@ public class RegressionState {
 	public boolean isRainRegressionForPast() {
 		if (this.rainRegressionForPast == null) {
 			double rainRegression = getRainRegression();
-			Date rainDate = new Date((long) rainRegression);
-			Date now = getNow();
-			this.rainRegressionForPast = rainDate.before(now);
+			LocalDateTime rainDate = TimeUtils.millisToLocalDateAndTime((long) rainRegression);
+			this.rainRegressionForPast = rainDate.isBefore(LocalDateTime.now());
 		}
 	    return this.rainRegressionForPast;
     }
@@ -156,9 +155,8 @@ public class RegressionState {
 	public boolean isSunRegressionForPast() {
 		if (this.sunRegressionForPast == null) {
 			double sunRegression = getSunRegression();
-			Date sunDate = new Date((long) sunRegression);
-			Date now = getNow();
-			this.sunRegressionForPast = sunDate.before(now);
+            LocalDateTime sunDate = TimeUtils.millisToLocalDateAndTime((long) sunRegression);
+			this.sunRegressionForPast = sunDate.isBefore(LocalDateTime.now());
 		}
 	    return this.sunRegressionForPast;
     }
@@ -178,11 +176,5 @@ public class RegressionState {
 		boolean sunDecrease = this.rainRegressionSlope > 0;
 		return sunDecrease;
 	}
-
-
-	private Date getNow() {
-	    return Settings.getNow();
-    }
-
 
 }

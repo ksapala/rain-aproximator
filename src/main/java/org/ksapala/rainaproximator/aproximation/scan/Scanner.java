@@ -1,9 +1,9 @@
 package org.ksapala.rainaproximator.aproximation.scan;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.exception.AproximationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +18,6 @@ import java.util.List;
 
 @Component
 public class Scanner {
-
-    private final static Logger LOGGER = LogManager.getLogger(Scanner.class);
 
     @Autowired
     private Configuration configuration;

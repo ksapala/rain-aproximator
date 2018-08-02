@@ -5,10 +5,10 @@ package org.ksapala.rainaproximator.aproximation.regression;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.ksapala.rainaproximator.aproximation.cloud.Distance;
-import org.ksapala.rainaproximator.utils.Utils;
+import org.ksapala.rainaproximator.utils.TimeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class RegressionCalculator {
 
-	private final static Logger LOGGER = LogManager.getLogger(RegressionCalculator.class);
+    private final Logger logger = LoggerFactory.getLogger(RegressionCalculator.class);
 	
 	private RegressionDataProvider dataProvider;
 
@@ -58,7 +58,7 @@ public class RegressionCalculator {
 		for (int i = 0; i < regressionPoints.size(); i++) {
 			RegressionPoint regressionPoint = regressionPoints.get(i);
 			data[i][0] = regressionPoint.getDistance().getValue();
-			data[i][1] = Utils.localDateAndTimeToMillis(regressionPoint.getTime());
+			data[i][1] = TimeUtils.localDateAndTimeToMillis(regressionPoint.getTime());
 		}
 		return data;
 	}
@@ -68,9 +68,9 @@ public class RegressionCalculator {
 	 * @param regressionPoints
 	 */
 	private void logRegressionPoints(String message, List<RegressionPoint> regressionPoints) {
-		LOGGER.debug(message);
+		logger.debug(message);
 		for (RegressionPoint regressionPoint : regressionPoints) {
-			LOGGER.debug("Point distance={}, date={}", regressionPoint.getDistance().getValue(), regressionPoint.getTime());
+			logger.debug("Point distance={}, date={}", regressionPoint.getDistance().getValue(), regressionPoint.getTime());
 		}
 	}
 
@@ -133,17 +133,6 @@ public class RegressionCalculator {
 		DescriptiveStatistics statistics = new DescriptiveStatistics();
 		for (Double number : numbers) {
 			statistics.addValue(number);
-		}
-		
-		double median = statistics.getPercentile(50);
-		return median;
-	}
-	
-	private static double getMedian(List<RegressionPoint> regressionPoints) {
-		DescriptiveStatistics statistics = new DescriptiveStatistics();
-		for (RegressionPoint regressionPoint : regressionPoints) {
-			Distance distance = regressionPoint.getDistance();
-			statistics.addValue(distance.getValue());
 		}
 		
 		double median = statistics.getPercentile(50);

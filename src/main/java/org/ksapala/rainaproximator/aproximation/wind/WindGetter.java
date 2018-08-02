@@ -3,18 +3,12 @@
  */
 package org.ksapala.rainaproximator.aproximation.wind;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.exception.AproximationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestTemplate;
 
-import javax.json.Json;
-import javax.json.JsonNumber;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.text.MessageFormat;
 
 /**
@@ -25,8 +19,8 @@ import java.text.MessageFormat;
  */
 public class WindGetter {
 
-	private final static Logger LOGGER = LogManager.getLogger(WindGetter.class);
-	
+    private final Logger logger = LoggerFactory.getLogger(WindGetter.class);
+
 	private static final String DEG = "deg";
 	private static final String WIND = "wind";
 
@@ -40,32 +34,15 @@ public class WindGetter {
 	}
 
 	/**
-	 *
 	 * @param latitude
 	 * @param longitude
 	 * @return
 	 * @throws AproximationException
 	 */
 	public double getWindDirection(double latitude, double longitude) throws AproximationException {
-		int windRetries = windConfiguration.getRetries();
-		return getWindDirection(latitude, longitude, windRetries);
-	}
-
-	/**
-	 * @param latitude
-	 * @param longitude
-	 * @param windRetries
-	 * @return
-	 * @throws AproximationException
-	 */
-	private double getWindDirection(double latitude, double longitude, int windRetries) throws AproximationException {
 		try {
 			return doGetWindDirection(latitude, longitude);
-		} catch (IOException e) {
-			if (windRetries > 1) {
-				LOGGER.warn(e + ". Exception occured while getting wind direction from http. Retrying...");
-				return getWindDirection(latitude, longitude,  windRetries - 1);
-			}
+		} catch (Exception e) {
 			throw new AproximationException("Error while getting wind direction.", e);
 		}
 	}
@@ -74,20 +51,16 @@ public class WindGetter {
 	 * @param latitude
 	 * @param longitude
 	 * @return
-	 * @throws IOException
 	 */
-	public double doGetWindDirection(double latitude, double longitude) throws IOException {
+	private double doGetWindDirection(double latitude, double longitude) {
 		String urlWithParameters = MessageFormat.format(windConfiguration.getUrl(), latitude, longitude);
-		URL url = new URL(urlWithParameters);
-		try (InputStream inputStream = url.openStream(); JsonReader jsonReader = Json.createReader(inputStream)) {
-			
-			JsonObject jsonObject = jsonReader.readObject();
-			JsonObject jsonObjectWind = jsonObject.getJsonObject(WIND);
-			JsonNumber jsonNumberDeg = jsonObjectWind.getJsonNumber(DEG);
-			double windDirection = jsonNumberDeg.doubleValue();
-			LOGGER.info("Wind direction from http: " + windDirection);
-			return windDirection;
-		}
+
+        RestTemplate restTemplate = new RestTemplate();
+        WeatherJson weatherJson = restTemplate.getForObject(urlWithParameters , WeatherJson.class);
+
+        double windDirection = weatherJson.getWind().getDeg();
+        logger.debug("Wind direction successfully get from http: " + windDirection);
+        return windDirection;
 	}
 
 }

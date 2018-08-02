@@ -5,16 +5,6 @@ package org.ksapala.rainaproximator.withmain;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.ksapala.rainaproximator.aproximation.AproximationResult;
-import org.ksapala.rainaproximator.aproximation.RainAproximator;
-import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
-import org.ksapala.rainaproximator.settings.Property;
-import org.ksapala.rainaproximator.settings.Settings;
-import org.ksapala.rainaproximator.settings.developer.DeveloperSettings;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author krzysztof

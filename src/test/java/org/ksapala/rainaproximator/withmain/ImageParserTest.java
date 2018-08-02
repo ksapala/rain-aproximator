@@ -1,12 +1,6 @@
 package org.ksapala.rainaproximator.withmain;
 
-import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
-import org.ksapala.rainaproximator.settings.Property;
-import org.ksapala.rainaproximator.settings.Settings;
-
-import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
 
 public class ImageParserTest {
 

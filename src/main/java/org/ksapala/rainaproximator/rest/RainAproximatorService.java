@@ -3,8 +3,6 @@
  */
 package org.ksapala.rainaproximator.rest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.ksapala.rainaproximator.aproximation.AproximationResult;
 import org.ksapala.rainaproximator.aproximation.RainAproximator;
 import org.ksapala.rainaproximator.aproximation.scan.Scan;
@@ -13,6 +11,8 @@ import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.exception.AproximationException;
 import org.ksapala.rainaproximator.rest.bean.AproximationResultBean;
 import org.ksapala.rainaproximator.rest.factory.AproximationResultBeanFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,8 +26,8 @@ import java.io.IOException;
  */
 @Component
 public class RainAproximatorService {
-	
-	private final static Logger LOGGER = LogManager.getLogger(RainAproximatorService.class);
+
+    private final Logger logger = LoggerFactory.getLogger(RainAproximatorService.class);
 
     @Autowired
     private Configuration configuration;
@@ -49,7 +49,7 @@ public class RainAproximatorService {
 		try {
 			return doAproximate(latitude, longitude);
 		} catch (Exception e) {
-			LOGGER.error("Exception while invoking Rain Aproximation Rest Service.", e);
+			logger.error("Exception while invoking Rain Aproximation Rest Service.", e);
 			return aproximationResultBeanFactory.createFriendlyErrorBean();
 		}
 	}

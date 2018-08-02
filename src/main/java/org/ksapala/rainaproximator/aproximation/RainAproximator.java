@@ -1,7 +1,5 @@
 package org.ksapala.rainaproximator.aproximation;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
 import org.ksapala.rainaproximator.aproximation.cloud.CloudLineBuilder;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionState;
@@ -10,6 +8,8 @@ import org.ksapala.rainaproximator.aproximation.scan.converter.CoordinatesConver
 import org.ksapala.rainaproximator.aproximation.wind.WindGetter;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.exception.AproximationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ import java.util.Locale;
 @Component
 public class RainAproximator {
 	
-	private final static Logger LOGGER = LogManager.getLogger(RainAproximator.class);
+    private final Logger logger = LoggerFactory.getLogger(RainAproximator.class);
 
 	@Autowired
     private MessageSource messageSource;
@@ -69,7 +69,7 @@ public class RainAproximator {
                     new Object[0], Locale.getDefault()));
         }
 
-		LOGGER.debug("[performance] Aproximation time: " + (System.currentTimeMillis() - startTime));
+		logger.debug("[performance] Aproximation time: " + (System.currentTimeMillis() - startTime));
 		return aproximatorResult;
     }
 
@@ -100,9 +100,9 @@ public class RainAproximator {
 	}
 
 	private void logAproximationResults(String message, List<AproximationResult> aproximationResults) {
-		LOGGER.debug(message);
+        logger.debug(message);
 		for (AproximationResult aproximationResult : aproximationResults) {
-			LOGGER.debug(aproximationResult.toString());
+            logger.debug(aproximationResult.toString());
 		}
 	}
 
@@ -114,7 +114,7 @@ public class RainAproximator {
 	 * @throws AproximationException
 	 */
 	private AproximationResult aproximateStraight(Scan scan, double x, double y, double windDirection) throws AproximationException {
-		LOGGER.debug("aproximateStraight for direction: " + windDirection);
+        logger.debug("aproximateStraight for direction: " + windDirection);
 		List<CloudLine> cloudLines = this.cloudLineBuilder.createCloudLines(scan, x, y, windDirection);
 		AproximationResult aproximatorResult = aproximate(cloudLines);
 		return aproximatorResult;
@@ -168,7 +168,7 @@ public class RainAproximator {
 	    for (CloudLine cloudLine : cloudLines) {
 	        cloudLine.smoothLine();
         }
-	    CloudLineBuilder.logCloudLines("Cloud lines after smooth bellow: ", cloudLines);
+	    CloudLineBuilder.logCloudLines(logger,"Cloud lines after smooth bellow: ", cloudLines);
     }
 
 }

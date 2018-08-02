@@ -1,17 +1,8 @@
 package org.ksapala.rainaproximator.withmain;
 
-import java.awt.Point;
-import java.awt.image.BufferedImage;
-import java.io.File;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 import org.ksapala.rainaproximator.aproximation.scan.converter.CoordinatesConverter;
-import org.ksapala.rainaproximator.settings.Property;
-import org.ksapala.rainaproximator.settings.Settings;
+
+import java.awt.*;
 
 public class RadarMapTest {
 	
