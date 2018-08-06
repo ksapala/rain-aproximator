@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -36,33 +35,23 @@ public class LastRadarMapDateParser {
 	@Autowired
 	private Configuration configuration;
 
+	private JBrowserDriver driver;
+
 	/**
 	 * 
 	 */
 	public LastRadarMapDateParser() {
+        driver = new JBrowserDriver(Settings.builder().build());
 	}
 
 	/**
 	 * @return
-	 * @throws IOException
-	 * @throws ParseException
 	 */
-	public LocalDateTime parseLastRadarMapDate() throws IOException {
-//        webDriver.get(configuration.getScanner().getRadarMainPage());
-//        WebElement element = webDriver.findElement(By.id(configuration.getScanner().getLastRadarMapDateElementId()));
-//        String dateString = element.getText();
-
-
-        JBrowserDriver driver = new JBrowserDriver(Settings.builder().build());
+	public LocalDateTime parseLastRadarMapDate() {
         driver.get(configuration.getScanner().getRadarMainPage());
         String loadedPage = driver.getPageSource();
 
-        // JSoup parsing part
         Document doc = Jsoup.parse(loadedPage);
-
-        driver.quit();
-
-//        Document doc = Jsoup.connect(configuration.getScanner().getRadarMainPage()).get();
 		Element tdWithLastRadarMapDateElement = doc.getElementById(configuration.getScanner().getLastRadarMapDateElementId());
 		String dateString = tdWithLastRadarMapDateElement.text();
 

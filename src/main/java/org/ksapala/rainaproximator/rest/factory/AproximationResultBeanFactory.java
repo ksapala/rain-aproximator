@@ -40,10 +40,13 @@ public class AproximationResultBeanFactory {
 	 */
 	public AproximationResultBean createBean(AproximationResult aproximationResult) {
         LocalDateTime predictTime = aproximationResult.getPredictTime();
-        String predictTimeString = predictTime.format(TimeUtils.getFormatter(configuration));
+        String predictTimeString = "";
+        if (aproximationResult.isPredict()) {
+            predictTimeString = predictTime.format(TimeUtils.getFormatter(configuration));
+        }
 
 		AproximationResultBean bean = new AproximationResultBean(aproximationResult.getType().getInfo(messageSource),
-                predictTimeString, aproximationResult.getRemark());
+                predictTimeString, aproximationResult.getRemark(), aproximationResult.getDebug());
 		return bean;
 	}
 
@@ -54,8 +57,16 @@ public class AproximationResultBeanFactory {
 	public AproximationResultBean createFriendlyErrorBean() {
         String info = messageSource.getMessage("AproximationResultBeanFactory.there.was.error", new Object[0],
                 Locale.getDefault());
-        return new AproximationResultBean("", null, info);
+        return new AproximationResultBean("", null, info, "");
     }
 
-
+    /**
+     *
+     * @return
+     */
+    public AproximationResultBean createEmptyScanBean() {
+        String info = messageSource.getMessage("AproximationResultBeanFactory.empty.scan", new Object[0],
+                Locale.getDefault());
+        return new AproximationResultBean("", null, info, "");
+    }
 }

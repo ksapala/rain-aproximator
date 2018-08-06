@@ -15,7 +15,8 @@ public class AproximationResult {
 	private AproximationResultType type;
 	private LocalDateTime predictTime;
 	@Setter
-	private String remark;
+    private String remark;
+    private String debug = "";
 	
 	public AproximationResult(AproximationResultType type, LocalDateTime predictTime) {
 		 this.type = type;
@@ -30,9 +31,19 @@ public class AproximationResult {
 	    this(type, null);
     }
 
+    public boolean isPredict() {
+	    return this.predictTime != null;
+    }
+    public void debug(String debug) {
+        this.debug += debug + " ";
+    }
+
 	@Override
 	public String toString() {
-		String timeString = this.predictTime.format(DateTimeFormatter.ofPattern(TO_STRING_PATTERN));
+        String timeString = "";
+        if (isPredict()) {
+            timeString = this.predictTime.format(DateTimeFormatter.ofPattern(TO_STRING_PATTERN));
+        }
 		return "Type: " + this.type.toString() + ", time: " + timeString + ", remark: " + this.remark;
 	}
 	

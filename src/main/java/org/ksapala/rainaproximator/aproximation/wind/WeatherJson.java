@@ -16,6 +16,6 @@ public class WeatherJson {
 
         @Getter
         @Setter
-        private double deg;
+        private Double deg;
     }
 }

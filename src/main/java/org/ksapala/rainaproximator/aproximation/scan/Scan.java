@@ -20,4 +20,12 @@ public class Scan {
     public boolean isCurrentMoment() {
         return lastMapTime.isAfter(LocalDateTime.now().minusHours(2));
     }
+
+    @Override
+    public String toString() {
+        return "Scan{" +
+                "maps size: " + maps.size() +
+                ", lastMapTime: " + lastMapTime +
+                '}';
+    }
 }

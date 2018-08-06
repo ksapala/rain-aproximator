@@ -44,9 +44,9 @@ public class RegressionCalculator {
 
 		double regression = simpleRegression.predict(x);
 		double regressionSlope  = simpleRegression.getSlope();
-		
-    	RegressionResult result = new RegressionResult(regression, regressionSlope);
-		return result;
+
+        RegressionResult result = new RegressionResult(regression, regressionSlope);
+        return result;
 	}
 	
 	/**

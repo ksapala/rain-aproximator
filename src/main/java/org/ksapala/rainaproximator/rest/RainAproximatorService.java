@@ -30,13 +30,14 @@ public class RainAproximatorService {
     private final Logger logger = LoggerFactory.getLogger(RainAproximatorService.class);
 
     @Autowired
-    private Configuration configuration;
-
-    @Autowired
-    private ScanComponent scanKeeper;
+    private ScanComponent scanComponent;
 
     @Autowired
     private AproximationResultBeanFactory aproximationResultBeanFactory;
+
+    @Autowired
+    private RainAproximator rainAproximator;
+
 
     public RainAproximatorService() {
 	}
@@ -62,12 +63,13 @@ public class RainAproximatorService {
 	 * @throws IOException
 	 */
 	public AproximationResultBean doAproximate(double latitude, double longitude) throws AproximationException {
-		RainAproximator rainAproximator = new RainAproximator(configuration);
-        Scan scan = scanKeeper.getScan();
+        Scan scan = scanComponent.getScan();
+        if (scan == null) {
+            logger.warn("Missing scans.");
+            return aproximationResultBeanFactory.createEmptyScanBean();
+        }
         AproximationResult aproximationResult = rainAproximator.aproximate(scan, latitude, longitude);
-
-		AproximationResultBean bean = aproximationResultBeanFactory.createBean(aproximationResult);
-		return bean;
+		return aproximationResultBeanFactory.createBean(aproximationResult);
 	}
 
 

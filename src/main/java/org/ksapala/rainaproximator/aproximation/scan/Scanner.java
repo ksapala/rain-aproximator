@@ -19,6 +19,8 @@ import java.util.List;
 @Component
 public class Scanner {
 
+    private final Logger logger = LoggerFactory.getLogger(Scanner.class);
+
     @Autowired
     private Configuration configuration;
 
@@ -38,19 +40,19 @@ public class Scanner {
         LocalDateTime lastRadarMapTime;
         try {
             lastRadarMapTime = this.lastRadarMapDateParser.parseLastRadarMapDate();
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new AproximationException("Error while parsing last radar map date on main page.", e);
         }
         try {
             images = getImages();
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new AproximationException("Error while scanning radar maps", e);
         }
 
         LocalDateTime mapTime = LocalDateTime.from(lastRadarMapTime);
         List<ScannedMap> maps = new ArrayList<>(images.size());
         for (int i = images.size() - 1; i >= 0; i--) {
-            maps.add(new ScannedMap(images.get(i), mapTime));
+            maps.add(0, new ScannedMap(images.get(i), mapTime));
             mapTime = mapTime.minusMinutes(configuration.getScanner().getRadarMapTimeIntevalMinutes());
         }
 
@@ -63,6 +65,7 @@ public class Scanner {
             BufferedImage image = getImage(radarImageIdentifier);
             images.add(image);
         }
+        logger.debug("Map images read from url. Size = " + images.size());
         return images;
     }
 

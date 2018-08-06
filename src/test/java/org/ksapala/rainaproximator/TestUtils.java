@@ -1,7 +1,8 @@
-package org.ksapala.rainaproximator.withmain;
+package org.ksapala.rainaproximator;
 
 import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
 import org.ksapala.rainaproximator.configuration.Configuration;
+import org.ksapala.rainaproximator.utils.TimeUtils;
 
 import java.time.LocalDateTime;
 
@@ -10,13 +11,18 @@ public class TestUtils {
 
     private final static LocalDateTime dummyTime = LocalDateTime.now();
 
+    private Configuration configuration;
+
+    public TestUtils(Configuration configuration) {
+        this.configuration = configuration;
+    }
     /**
      * @param stringCloudLine
      * @return
      */
-    public static CloudLine stringToCloudLine(Configuration.Algorithm.Cloud cloudConfiguration, String stringCloudLine) {
+    public CloudLine stringToCloudLine(String stringCloudLine) {
         boolean[] line = stringToBoolean(stringCloudLine);
-        CloudLine cloudLine = new CloudLine(cloudConfiguration, line, dummyTime);
+        CloudLine cloudLine = new CloudLine(configuration.getAlgorithm().getCloud(), line, dummyTime);
         return cloudLine;
     }
 
@@ -29,5 +35,9 @@ public class TestUtils {
             line[i] = isRain;
         }
         return line;
+    }
+
+    public LocalDateTime parseInTest(String timeString) {
+        return TimeUtils.parseInTest(timeString, configuration);
     }
 }

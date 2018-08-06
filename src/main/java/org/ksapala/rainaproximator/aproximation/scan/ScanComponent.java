@@ -4,10 +4,10 @@ import org.ksapala.rainaproximator.exception.AproximationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDateTime;
 
 @Component
 public class ScanComponent {
@@ -22,16 +22,16 @@ public class ScanComponent {
     public ScanComponent() {
     }
 
-//    @Scheduled(fixedRate = 1000)
     @PostConstruct
-//    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0/2 * * * ?")
     public void scan() throws AproximationException {
         logger.info("Starting to scan.");
-        final LocalDateTime start = LocalDateTime.now();
 
+        long start = System.currentTimeMillis();
         this.scan = this.scanner.scan();
+        long end = System.currentTimeMillis();
 
-        logger.info("Maps scanned at time: " + start);
+        logger.info("Maps scanned successfully. Scan time: " + (end - start));
     }
 
     public Scan getScan() {

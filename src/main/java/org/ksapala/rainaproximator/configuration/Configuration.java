@@ -17,6 +17,7 @@ import java.util.List;
 public class Configuration {
 
     @NotBlank private String userTimeFormat;
+    @NotBlank private String testTimeFormat;
 
     private Wind wind = new Wind();
     private Algorithm algorithm = new Algorithm();
@@ -36,6 +37,7 @@ public class Configuration {
 
         @NotNull private boolean useSideScans;
         @NotEmpty private int[] sideScansAngles;
+        @NotNull private double defaultWind;
         private Cloud cloud = new Cloud();
 
         @Getter

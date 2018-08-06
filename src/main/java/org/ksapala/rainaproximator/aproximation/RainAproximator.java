@@ -3,11 +3,13 @@ package org.ksapala.rainaproximator.aproximation;
 import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
 import org.ksapala.rainaproximator.aproximation.cloud.CloudLineBuilder;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionState;
+import org.ksapala.rainaproximator.aproximation.regression.RegressionTimeFactory;
 import org.ksapala.rainaproximator.aproximation.scan.Scan;
 import org.ksapala.rainaproximator.aproximation.scan.converter.CoordinatesConverter;
 import org.ksapala.rainaproximator.aproximation.wind.WindGetter;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.exception.AproximationException;
+import org.ksapala.rainaproximator.utils.LoggingUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +20,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 @Component
 public class RainAproximator {
 	
     private final Logger logger = LoggerFactory.getLogger(RainAproximator.class);
 
-	@Autowired
+    @Autowired
     private MessageSource messageSource;
 
-	private final Configuration.Algorithm algorithmConfiguration;
+    @Autowired
+    private RegressionTimeFactory regressionTimeFactory;
+
+    private final Configuration.Algorithm algorithmConfiguration;
 	private CoordinatesConverter coordinatesConverter;
 	private CloudLineBuilder cloudLineBuilder;
 	private WindGetter windGetter;
@@ -48,16 +54,17 @@ public class RainAproximator {
 	 * @throws AproximationException 
 	 */
 	public AproximationResult aproximate(Scan scan, double latitude, double longitude) throws AproximationException {
-		long startTime = System.currentTimeMillis();
+		long start = System.currentTimeMillis();
 
 		double[] convert = this.coordinatesConverter.convert(latitude, longitude);
 		
 		double x = convert[0];
 		double y = convert[1];
-		double windDirection = this.windGetter.getWindDirection(latitude, longitude);
-		
+        Double windDirection = this.windGetter.getWindDirection(latitude, longitude)
+                .orElse(algorithmConfiguration.getDefaultWind());
+
 		AproximationResult aproximatorResult;
-		
+
 		if (algorithmConfiguration.isUseSideScans()) {
 			aproximatorResult = aproximateWithSideScans(scan, x, y, windDirection);
 		} else {
@@ -69,7 +76,10 @@ public class RainAproximator {
                     new Object[0], Locale.getDefault()));
         }
 
-		logger.debug("[performance] Aproximation time: " + (System.currentTimeMillis() - startTime));
+        aproximatorResult.debug("wind: " + windDirection);
+
+        long end = System.currentTimeMillis();
+		logger.debug("[performance] Aproximation time: " + (end - start));
 		return aproximatorResult;
     }
 
@@ -126,12 +136,14 @@ public class RainAproximator {
 	 */
 	AproximationResult aproximate(List<CloudLine> cloudLines) {
 		smoothCloudLines(cloudLines);
-		
-		RegressionState regressionState = new RegressionState(cloudLines);
-		boolean isSun = regressionState.isSun();//predict rain || 0,1
-		
-		AproximationResult rainAproximation;
-		
+
+        RegressionState regressionState = new RegressionState(cloudLines, regressionTimeFactory);
+
+        boolean isSun = regressionState.isSun();//predict rain || 0,1
+        LoggingUtils.log(regressionState);
+
+        AproximationResult rainAproximation;
+
 		if (isSun) {
 			double rainRegression = regressionState.getRainRegression();
 			boolean rainRegressionNan = regressionState.isRainRegressionNan();
@@ -157,7 +169,8 @@ public class RainAproximator {
 			} else {
 				rainAproximation = new AproximationResult(AproximationResultType.SUN_AT_TIME, sunRegression);
 			}
-		}		
+		}
+
 	    return rainAproximation;
     }
 

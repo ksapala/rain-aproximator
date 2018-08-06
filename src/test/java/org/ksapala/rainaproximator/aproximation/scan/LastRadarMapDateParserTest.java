@@ -31,7 +31,7 @@ public class LastRadarMapDateParserTest {
 	}
 	
 	@Test
-	public void testDoParseLastScanDate() throws IOException {
+	public void testDoParseLastScanDate() {
 		LocalDateTime lastRadarMapDate = this.lastRadarMapDateParser.parseLastRadarMapDate();
 		
 		assertNotNull(lastRadarMapDate);

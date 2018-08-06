@@ -15,6 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Optional;
+
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -36,11 +38,13 @@ public class WindGetterTest {
     @Test
 	public void testGetWindDirection() throws AproximationException {
 		WindGetter windGetter = new WindGetter(configuration.getWind());
-		
-		double windDirection = windGetter.getWindDirection(20, 50);
-		
-		assertTrue(windDirection >= 0);
-		assertTrue(windDirection <= 360);
+
+        Optional<Double> windDirection = windGetter.getWindDirection(20, 50);
+
+        if (windDirection.isPresent()) {
+            assertTrue(windDirection.get() >= 0);
+            assertTrue(windDirection.get() <= 360);
+        }
 	}
 
 }

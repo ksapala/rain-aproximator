@@ -3,6 +3,8 @@
  */
 package org.ksapala.rainaproximator.aproximation.regression;
 
+import org.ksapala.rainaproximator.utils.TimeUtils;
+
 /**
  * @author krzysztof
  *
@@ -26,4 +28,12 @@ public class RegressionResult {
 		return this.slope;
 	}
 
+
+    @Override
+    public String toString() {
+        return "RegressionResult {" +
+                "value=" + TimeUtils.millisToLocalDateAndTime((long) value) +
+                ", slope=" + slope +
+                '}';
+    }
 }

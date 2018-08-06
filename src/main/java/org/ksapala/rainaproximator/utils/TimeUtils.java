@@ -31,7 +31,12 @@ public class TimeUtils {
     }
 
     public static DateTimeFormatter getFormatter(Configuration configuration) {
-	    return DateTimeFormatter.ofPattern(configuration.getUserTimeFormat());
+        return DateTimeFormatter.ofPattern(configuration.getUserTimeFormat());
+    }
+
+    public static LocalDateTime parseInTest(String timeString, Configuration configuration) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(configuration.getTestTimeFormat());
+        return LocalDateTime.parse(timeString, formatter);
     }
 
 }

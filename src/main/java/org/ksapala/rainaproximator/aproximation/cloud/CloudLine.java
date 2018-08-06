@@ -32,11 +32,6 @@ public class CloudLine {
 		this.time = time;
 		this.patternBuilder = new PatternBuilder();
 	}
-
-//	public CloudLine(Configuration.Algorithm.Cloud cloudConfiguration, boolean[] line) {
-//		this(cloudConfiguration, line, null);
-//	}
-	
 	
 	public void addRgb(int rgb, int index) {
 	    if (rgb == RGB_TRANSPARENT_GIF_BLACK || rgb == RGB_TRANSPARENT_GIF_WHITE) {
