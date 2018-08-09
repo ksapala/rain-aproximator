@@ -1,17 +1,16 @@
 package org.ksapala.rainaproximator.rest;
 
-import org.ksapala.rainaproximator.aproximation.RainAproximator;
-import org.ksapala.rainaproximator.rest.bean.AproximationResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Locale;
-
 @RestController
 public class RainAproximatorController {
+
+
+    private final double KRK_LATITUDE = 50.077452;
+    private final double KRK_LONGITUDE = 19.981147;
 
     @Autowired
     private RainAproximatorService rainAproximatorService;
@@ -24,9 +23,15 @@ public class RainAproximatorController {
         return rainAproximatorService.aproximate(latitude, longitude);
     }
 
+
     @GetMapping(path = "/aproximateKrk")
     public Object aproximateKrk() {
-        return rainAproximatorService.aproximate(50.077452, 19.981147);
+        return rainAproximatorService.aproximate(KRK_LATITUDE, KRK_LONGITUDE);
+    }
+
+    @GetMapping(path = "/aproximateKrk/{wind}")
+    public Object aproximateKrkWind(@PathVariable double wind) {
+        return rainAproximatorService.aproximateDebug(KRK_LATITUDE, KRK_LONGITUDE, wind);
     }
 
     @GetMapping(path = "/hello")

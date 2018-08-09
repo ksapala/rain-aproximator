@@ -60,11 +60,7 @@ public class CloudLine {
         }
 		return result;
 	}
-	
-	public void print() {
-		System.out.println(toString());
-	}
-	
+
 	/**
 	 *
      */

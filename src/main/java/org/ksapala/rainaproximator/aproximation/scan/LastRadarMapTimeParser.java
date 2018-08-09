@@ -3,17 +3,17 @@
  */
 package org.ksapala.rainaproximator.aproximation.scan;
 
-import com.machinepublishers.jbrowserdriver.JBrowserDriver;
-import com.machinepublishers.jbrowserdriver.Settings;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -28,39 +28,42 @@ import java.time.format.DateTimeFormatter;
  *
  */
 @Component
-public class LastRadarMapDateParser {
+public class LastRadarMapTimeParser {
 
-    private final Logger logger = LoggerFactory.getLogger(LastRadarMapDateParser.class);
+    private final Logger logger = LoggerFactory.getLogger(LastRadarMapTimeParser.class);
 
 	@Autowired
 	private Configuration configuration;
 
-	private JBrowserDriver driver;
-
 	/**
 	 * 
 	 */
-	public LastRadarMapDateParser() {
-        driver = new JBrowserDriver(Settings.builder().build());
+	public LastRadarMapTimeParser() {
 	}
 
 	/**
 	 * @return
 	 */
-	public LocalDateTime parseLastRadarMapDate() {
-        driver.get(configuration.getScanner().getRadarMainPage());
-        String loadedPage = driver.getPageSource();
+	public LocalDateTime parseLastRadarMapTime() throws IOException {
+        String url = configuration.getScanner().getRadarMainPage();
 
-        Document doc = Jsoup.parse(loadedPage);
-		Element tdWithLastRadarMapDateElement = doc.getElementById(configuration.getScanner().getLastRadarMapDateElementId());
-		String dateString = tdWithLastRadarMapDateElement.text();
+        Document doc = Jsoup.connect(url).get();
+        Elements scriptElements = doc.getElementsByTag("script");
+        Element scriptElement = scriptElements.get(0);
 
-		LocalDateTime date = stringToDate(dateString);
-		date = utcToLocal(date);
+        String javascript = scriptElement.data().replace("\n", "");
+        int indexClock = javascript.lastIndexOf("//początek (1)");
+        int indexDate = javascript.lastIndexOf("//data (0)");
 
-		logger.debug("Last radar map date: " + date);
+        String clock = javascript.substring(indexClock - 8, indexClock - 3);
+        String date = javascript.substring(indexDate - 13, indexDate - 3);
 
-		return date;
+		LocalDateTime time = stringToDate(date + " " + clock);
+		time = utcToLocal(time);
+
+		logger.debug("Last radar map time: " + time);
+
+		return time;
 	}
 
 	/**

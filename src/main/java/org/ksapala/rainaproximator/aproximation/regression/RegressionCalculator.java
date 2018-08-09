@@ -32,10 +32,10 @@ public class RegressionCalculator {
 
 	public RegressionResult calculate(int x) {
     	List<RegressionPoint> regressionPoints = this.dataProvider.getRegressionPoints();
-    	logRegressionPoints(this.dataProvider.getDescription() + " regression points : ", regressionPoints);
+    	//logRegressionPoints(this.dataProvider.getDescription() + " regression points : ", regressionPoints);
     	
     	regressionPoints = removeOutliersDifference(regressionPoints);
-    	logRegressionPoints(this.dataProvider.getDescription() + " regression after remove outliners:", regressionPoints);
+    	//logRegressionPoints(this.dataProvider.getDescription() + " regression after remove outliners:", regressionPoints);
     	
 		double[][] data = toDataArray(regressionPoints);
 		

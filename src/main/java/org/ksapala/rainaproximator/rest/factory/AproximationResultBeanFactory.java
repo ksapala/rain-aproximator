@@ -46,7 +46,7 @@ public class AproximationResultBeanFactory {
         }
 
 		AproximationResultBean bean = new AproximationResultBean(aproximationResult.getType().getInfo(messageSource),
-                predictTimeString, aproximationResult.getRemark(), aproximationResult.getDebug());
+                predictTimeString, aproximationResult.getRemark(), aproximationResult.getDebug().toString());
 		return bean;
 	}
 

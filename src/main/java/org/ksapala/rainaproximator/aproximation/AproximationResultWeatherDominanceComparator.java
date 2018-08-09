@@ -21,11 +21,12 @@ public class AproximationResultWeatherDominanceComparator implements Comparator<
 
 	@Override
 	public int compare(AproximationResult result1, AproximationResult result2) {
-		int weatherDominance1 = result1.getType().getWeatherDominance();
-		int weatherDominance2 = result2.getType().getWeatherDominance();
-		if (weatherDominance1 == weatherDominance2) {
-			if (AproximationResultType.RAIN_AT_TIME.equals(result1.getType()) ||
-					AproximationResultType.SUN_AT_TIME.equals(result1.getType())) {
+        AproximationResultType type1 = result1.getType();
+        AproximationResultType type2 = result2.getType();
+
+        if (type1.equals(type2)) {
+			if (AproximationResultType.RAIN_AT_TIME.equals(type1) ||
+					AproximationResultType.SUN_AT_TIME.equals(type1)) {
 				
 				LocalDateTime predictTime1 = result1.getPredictTime();
                 LocalDateTime predictTime2 = result2.getPredictTime();
@@ -33,7 +34,10 @@ public class AproximationResultWeatherDominanceComparator implements Comparator<
 			}
 			return 0;
 		}
-		if (weatherDominance1 < weatherDominance2) {
+        int weatherDominance1 = type1.getWeatherDominance();
+        int weatherDominance2 = type2.getWeatherDominance();
+
+        if (weatherDominance1 < weatherDominance2) {
 			return 1;
 		}
 		return -1;

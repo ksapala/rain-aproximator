@@ -6,7 +6,6 @@ import org.ksapala.rainaproximator.aproximation.regression.RegressionState;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionTimeFactory;
 import org.ksapala.rainaproximator.aproximation.scan.Scan;
 import org.ksapala.rainaproximator.aproximation.scan.converter.CoordinatesConverter;
-import org.ksapala.rainaproximator.aproximation.wind.WindGetter;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.exception.AproximationException;
 import org.ksapala.rainaproximator.utils.LoggingUtils;
@@ -16,11 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
 @Component
 public class RainAproximator {
@@ -36,47 +33,46 @@ public class RainAproximator {
     private final Configuration.Algorithm algorithmConfiguration;
 	private CoordinatesConverter coordinatesConverter;
 	private CloudLineBuilder cloudLineBuilder;
-	private WindGetter windGetter;
+
 
     @Autowired
     public RainAproximator(Configuration configuration) {
 		this.algorithmConfiguration = configuration.getAlgorithm();
 		this.coordinatesConverter = new CoordinatesConverter();
 		this.cloudLineBuilder = new CloudLineBuilder(algorithmConfiguration.getCloud());
-		this.windGetter = new WindGetter(configuration.getWind());
 	}
-	
-	/**
-	 * @param longitude
-	 * @param latitude
-	 * @return
-	 * @throws IOException
-	 * @throws AproximationException 
-	 */
-	public AproximationResult aproximate(Scan scan, double latitude, double longitude) throws AproximationException {
+
+    /**
+     *
+     * @param scan
+     * @param latitude
+     * @param longitude
+     * @param wind
+     * @param useSideScans
+     * @return
+     * @throws AproximationException
+     */
+	public AproximationResult aproximate(Scan scan, double latitude, double longitude, double wind, boolean useSideScans)
+            throws AproximationException {
 		long start = System.currentTimeMillis();
 
 		double[] convert = this.coordinatesConverter.convert(latitude, longitude);
 		
 		double x = convert[0];
 		double y = convert[1];
-        Double windDirection = this.windGetter.getWindDirection(latitude, longitude)
-                .orElse(algorithmConfiguration.getDefaultWind());
 
 		AproximationResult aproximatorResult;
 
-		if (algorithmConfiguration.isUseSideScans()) {
-			aproximatorResult = aproximateWithSideScans(scan, x, y, windDirection);
+		if (useSideScans) {
+			aproximatorResult = aproximateWithSideScans(scan, x, y, wind);
 		} else {
-			aproximatorResult = aproximateStraight(scan, x, y, windDirection);
+			aproximatorResult = aproximateStraight(scan, x, y, wind);
 		}
 
         if (!scan.isCurrentMoment()) {
             aproximatorResult.setRemark(messageSource.getMessage("RainAproximator.radars.not.current",
                     new Object[0], Locale.getDefault()));
         }
-
-        aproximatorResult.debug("wind: " + windDirection);
 
         long end = System.currentTimeMillis();
 		logger.debug("[performance] Aproximation time: " + (end - start));
@@ -119,14 +115,18 @@ public class RainAproximator {
 	/**
 	 * @param x
 	 * @param y
-	 * @param windDirection
+	 * @param wind
 	 * @return
 	 * @throws AproximationException
 	 */
-	private AproximationResult aproximateStraight(Scan scan, double x, double y, double windDirection) throws AproximationException {
-        logger.debug("aproximateStraight for direction: " + windDirection);
-		List<CloudLine> cloudLines = this.cloudLineBuilder.createCloudLines(scan, x, y, windDirection);
+	private AproximationResult aproximateStraight(Scan scan, double x, double y, double wind) throws AproximationException {
+        logger.debug("aproximateStraight for wind direction: " + wind);
+		List<CloudLine> cloudLines = this.cloudLineBuilder.createCloudLines(scan, x, y, wind);
 		AproximationResult aproximatorResult = aproximate(cloudLines);
+
+
+        aproximatorResult.debug("cloudLines", cloudLines);
+        aproximatorResult.debug("wind", wind);
 		return aproximatorResult;
 	}
 

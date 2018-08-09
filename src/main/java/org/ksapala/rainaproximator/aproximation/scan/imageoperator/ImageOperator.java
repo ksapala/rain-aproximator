@@ -11,8 +11,8 @@ public class ImageOperator {
 	public ImageOperator(double alpha, int samplesCount) {
 	    this.alpha = alpha;
 		this.samplesCount = samplesCount;
-		this.alphaN = alpha >= 315 || alpha < 45;
-		this.alphaE = alpha >= 45 && alpha < 135;
+        this.alphaE = alpha >= 45 && alpha < 135;
+        this.alphaN = alpha >= 315 || alpha < 45;
 	    this.alphaW = alpha >= 225 && alpha < 315;
 	}
 	

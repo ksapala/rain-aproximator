@@ -30,15 +30,13 @@ import static org.junit.Assert.assertTrue;
 public class WindGetterTest {
 
     @Autowired
-    private Configuration configuration;
+    private WindGetter windGetter;
 
     @MockBean
     private Scanner scanner;
 
     @Test
 	public void testGetWindDirection() throws AproximationException {
-		WindGetter windGetter = new WindGetter(configuration.getWind());
-
         Optional<Double> windDirection = windGetter.getWindDirection(20, 50);
 
         if (windDirection.isPresent()) {

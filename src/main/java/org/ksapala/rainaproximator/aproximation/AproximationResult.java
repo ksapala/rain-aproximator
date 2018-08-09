@@ -2,6 +2,7 @@ package org.ksapala.rainaproximator.aproximation;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.ksapala.rainaproximator.utils.Debug;
 import org.ksapala.rainaproximator.utils.TimeUtils;
 
 import java.time.LocalDateTime;
@@ -16,11 +17,13 @@ public class AproximationResult {
 	private LocalDateTime predictTime;
 	@Setter
     private String remark;
-    private String debug = "";
+    private Debug debug;
 	
 	public AproximationResult(AproximationResultType type, LocalDateTime predictTime) {
 		 this.type = type;
 		 this.predictTime = predictTime;
+		 this.debug = new Debug();
+
 	}
 	
 	public AproximationResult(AproximationResultType type, double predictTime) {
@@ -34,8 +37,9 @@ public class AproximationResult {
     public boolean isPredict() {
 	    return this.predictTime != null;
     }
-    public void debug(String debug) {
-        this.debug += debug + " ";
+
+    public void debug(String key, Object value) {
+        this.debug.add(key, value);
     }
 
 	@Override
@@ -46,11 +50,6 @@ public class AproximationResult {
         }
 		return "Type: " + this.type.toString() + ", time: " + timeString + ", remark: " + this.remark;
 	}
-	
-//	public String toFriendlyString() {
-//        String timeString = this.predictTime.format(DateTimeFormatter.ofPattern(TO_STRING_PATTERN));
-//		return this.type.getInfo() + ", time: " + timeString;
-//	}
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)

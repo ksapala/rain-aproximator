@@ -25,7 +25,7 @@ public class Scanner {
     private Configuration configuration;
 
     @Autowired
-    private LastRadarMapDateParser lastRadarMapDateParser;
+    private LastRadarMapTimeParser lastRadarMapTimeParser;
 
     public Scanner() {
     }
@@ -39,7 +39,7 @@ public class Scanner {
         List<BufferedImage> images;
         LocalDateTime lastRadarMapTime;
         try {
-            lastRadarMapTime = this.lastRadarMapDateParser.parseLastRadarMapDate();
+            lastRadarMapTime = this.lastRadarMapTimeParser.parseLastRadarMapTime();
         } catch (Exception e) {
             throw new AproximationException("Error while parsing last radar map date on main page.", e);
         }

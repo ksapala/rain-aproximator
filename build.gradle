@@ -15,6 +15,13 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
+
+bootJar {
+    baseName = 'ra-spring-boot'
+    version =  '0.1.0'
+    mainClassName = 'org.ksapala.rainaproximator.RainAproximatorApplication'
+}
+
 group = 'org.ksapala'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
@@ -32,7 +39,7 @@ dependencies {
 	compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
 	compileOnly('org.projectlombok:lombok')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
-    compile 'com.machinepublishers:jbrowserdriver:1.0.0-RC1'
+
 
 
 }

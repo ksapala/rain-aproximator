@@ -8,33 +8,44 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Optional;
 
 @Component
 public class ScanComponent {
 
     private final Logger logger = LoggerFactory.getLogger(ScanComponent.class);
 
-    private Scan scan;
+    private Optional<Scan> scan;
 
     @Autowired
     private Scanner scanner;
 
     public ScanComponent() {
+        scan = Optional.empty();
     }
 
     @PostConstruct
-    @Scheduled(cron = "0 0/2 * * * ?")
-    public void scan() throws AproximationException {
+    @Scheduled(cron = "0 0/5 * * * ?")
+    public void scan() {
+        try {
+            doScan();
+        } catch (AproximationException e) {
+            logger.error("Error while scanning with Scan Component.", e);
+        }
+    }
+
+
+    public void doScan() throws AproximationException {
         logger.info("Starting to scan.");
 
         long start = System.currentTimeMillis();
-        this.scan = this.scanner.scan();
+        this.scan = Optional.ofNullable(this.scanner.scan());
         long end = System.currentTimeMillis();
 
         logger.info("Maps scanned successfully. Scan time: " + (end - start));
     }
 
-    public Scan getScan() {
+    public Optional<Scan> getScan() {
         return scan;
     }
 }

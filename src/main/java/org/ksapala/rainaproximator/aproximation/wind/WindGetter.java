@@ -7,11 +7,12 @@ import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.exception.AproximationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.MessageFormat;
 import java.util.Optional;
-import java.util.OptionalDouble;
 
 /**
  * @author krzysztof
@@ -19,20 +20,18 @@ import java.util.OptionalDouble;
  * contact: krzysztof.sapala@gmail.com
  * 
  */
+@Component
 public class WindGetter {
 
     private final Logger logger = LoggerFactory.getLogger(WindGetter.class);
 
-	private static final String DEG = "deg";
-	private static final String WIND = "wind";
-
-	private final Configuration.Wind windConfiguration;
+    @Autowired
+	private Configuration configuration;
 
 	/**
 	 * 
 	 */
-	public WindGetter(Configuration.Wind windConfiguration) {
-		this.windConfiguration = windConfiguration;
+	public WindGetter() {
 	}
 
 	/**
@@ -41,11 +40,12 @@ public class WindGetter {
 	 * @return
 	 * @throws AproximationException
 	 */
-	public Optional<Double> getWindDirection(double latitude, double longitude) throws AproximationException {
+	public Optional<Double> getWindDirection(double latitude, double longitude) {
 		try {
 			return doGetWindDirection(latitude, longitude);
 		} catch (Exception e) {
-			throw new AproximationException("Error while getting wind direction.", e);
+			logger.error("Error while getting wind direction.", e);
+			return Optional.empty();
 		}
 	}
 
@@ -55,7 +55,7 @@ public class WindGetter {
 	 * @return
 	 */
 	private Optional<Double> doGetWindDirection(double latitude, double longitude) {
-		String urlWithParameters = MessageFormat.format(windConfiguration.getUrl(), latitude, longitude);
+		String urlWithParameters = MessageFormat.format(configuration.getWind().getUrl(), latitude, longitude);
 
         RestTemplate restTemplate = new RestTemplate();
         WeatherJson weatherJson = restTemplate.getForObject(urlWithParameters , WeatherJson.class);

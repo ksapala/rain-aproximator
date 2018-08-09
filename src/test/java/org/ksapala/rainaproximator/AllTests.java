@@ -8,7 +8,7 @@ import org.ksapala.rainaproximator.aproximation.AproximationResultWeatherDominan
 import org.ksapala.rainaproximator.aproximation.RainAproximatorTest;
 import org.ksapala.rainaproximator.aproximation.cloud.CloudLineTest;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionCalculatorTest;
-import org.ksapala.rainaproximator.aproximation.scan.LastRadarMapDateParserTest;
+import org.ksapala.rainaproximator.aproximation.scan.LastRadarMapTimeParserTest;
 import org.ksapala.rainaproximator.aproximation.scan.ScannerTest;
 import org.ksapala.rainaproximator.aproximation.wind.WindGetterTest;
 import org.ksapala.rainaproximator.utils.TimeUtilsTests;
@@ -17,7 +17,7 @@ import org.ksapala.rainaproximator.utils.TimeUtilsTests;
 @SuiteClasses({
         CloudLineTest.class,
         RegressionCalculatorTest.class,
-        LastRadarMapDateParserTest.class,
+        LastRadarMapTimeParserTest.class,
         ScannerTest.class,
         WindGetterTest.class,
         AproximationResultWeatherDominanceComparatorTest.class,

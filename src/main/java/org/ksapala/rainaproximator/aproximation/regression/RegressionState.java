@@ -189,14 +189,14 @@ public class RegressionState {
 
     public void log() {
 	    if (isSun()) {
-	        logger.debug("Sun (....###)");
+	        logger.debug("Sun (......)");
             logger.debug("Rain regression :" + LoggingUtils.getTmeOrNan(getRainRegression()));
             logger.debug("- is Nan: " + isRainRegressionNan());
             logger.debug("- is for the past: " + isRainRegressionForPast());
             logger.debug("Slope:" + rainRegressionSlope);
             logger.debug("- sun decrease:" + sunDecrease());
         } else {
-            logger.debug("Rain (#####...)");
+            logger.debug("Rain (#######)");
             logger.debug("Sun regression: " + LoggingUtils.getTmeOrNan(getSunRegression()));
             logger.debug("- is Nan: " + isSunRegressionNan());
             logger.debug("- is for the past: " + isSunRegressionForPast());
