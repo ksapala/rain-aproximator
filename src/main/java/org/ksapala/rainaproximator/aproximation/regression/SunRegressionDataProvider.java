@@ -24,7 +24,7 @@ public class SunRegressionDataProvider extends RegressionDataProvider {
 	@Override
 	public Distance getDistance(int index) {
 		CloudLine cloudLine = this.cloudLines.get(index);
-		Distance distance = cloudLine.getSunDistance();
+		Distance distance = cloudLine.getFutureSunDistance();
 		return distance;
 	}
 

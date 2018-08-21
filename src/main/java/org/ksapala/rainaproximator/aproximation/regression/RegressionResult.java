@@ -11,6 +11,8 @@ import org.ksapala.rainaproximator.utils.TimeUtils;
  */
 public class RegressionResult {
 
+    public final static RegressionResult NAN_RESULT = new RegressionResult(Double.NaN, Double.NaN);
+
 	private double value;
 	private double slope;
 	

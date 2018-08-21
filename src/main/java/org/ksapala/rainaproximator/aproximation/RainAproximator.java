@@ -124,9 +124,8 @@ public class RainAproximator {
 		List<CloudLine> cloudLines = this.cloudLineBuilder.createCloudLines(scan, x, y, wind);
 		AproximationResult aproximatorResult = aproximate(cloudLines);
 
-
-        aproximatorResult.debug("cloudLines", cloudLines);
-        aproximatorResult.debug("wind", wind);
+        aproximatorResult.getDebug().setCloudLines(cloudLines);
+        aproximatorResult.getDebug().setWind(Double.toString(wind));
 		return aproximatorResult;
 	}
 

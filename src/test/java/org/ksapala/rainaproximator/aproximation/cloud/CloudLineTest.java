@@ -12,6 +12,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 
 @RunWith(SpringRunner.class)
@@ -110,5 +112,36 @@ public class CloudLineTest {
         assertEquals(expected, cloudLine.getLineAsString());
     }
 
+    @Test
+    public void testGetDistancesSimple() {
+        CloudLine cloudLine = testUtils.stringToCloudLine("##....");
+
+        assertEquals(new Distance(0), cloudLine.getRainDistance());
+        assertEquals(new Distance(2), cloudLine.getSunDistance());
+    }
+
+    @Test
+    public void testGetDistancesInfinityAndZero() {
+        CloudLine cloudLine = testUtils.stringToCloudLine("......");
+
+        assertEquals(Distance.INFINITY, cloudLine.getRainDistance());
+        assertEquals(new Distance(0), cloudLine.getSunDistance());
+    }
+
+    @Test
+    public void testGetDistancesFuture() {
+        CloudLine cloudLine = testUtils.stringToCloudLine("##..##..#.");
+
+        assertEquals(new Distance(4), cloudLine.getFutureRainDistance());
+        assertEquals(new Distance(2), cloudLine.getFutureSunDistance());
+    }
+
+    @Test
+    public void testIsFutureDistanceInfinity() {
+        CloudLine cloudLine = testUtils.stringToCloudLine("##...");
+
+        assertTrue(cloudLine.isFutureRainDistanceInfinity());
+        assertFalse(cloudLine.isFutureSunDistanceInfinity());
+    }
 
 }

@@ -1,22 +1,19 @@
 package org.ksapala.rainaproximator.utils;
 
-import java.util.HashMap;
-import java.util.Map;
+import lombok.Getter;
+import lombok.Setter;
+import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
 
+import java.util.List;
+
+@Getter
+@Setter
 public class Debug {
 
-    private Map<String, Object> map;
+    private String wind;
+    private List<CloudLine> cloudLines;
 
     public Debug() {
-        map = new HashMap<>();
     }
 
-    public void add(String key, Object value) {
-        map.put(key, value);
-    }
-
-    @Override
-    public String toString() {
-        return map.toString();
-    }
 }

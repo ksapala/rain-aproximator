@@ -31,11 +31,16 @@ public class RegressionCalculator {
 	}
 
 	public RegressionResult calculate(int x) {
+	    if (!dataProvider.hasData()) {
+	        logger.debug("Regression skipped - empty data.");
+            return RegressionResult.NAN_RESULT;
+        }
+
     	List<RegressionPoint> regressionPoints = this.dataProvider.getRegressionPoints();
-    	//logRegressionPoints(this.dataProvider.getDescription() + " regression points : ", regressionPoints);
+    	logRegressionPoints(this.dataProvider.getDescription() + " regression points : ", regressionPoints);
     	
     	regressionPoints = removeOutliersDifference(regressionPoints);
-    	//logRegressionPoints(this.dataProvider.getDescription() + " regression after remove outliners:", regressionPoints);
+    	logRegressionPoints(this.dataProvider.getDescription() + " regression after remove outliners:", regressionPoints);
     	
 		double[][] data = toDataArray(regressionPoints);
 		
@@ -68,9 +73,9 @@ public class RegressionCalculator {
 	 * @param regressionPoints
 	 */
 	private void logRegressionPoints(String message, List<RegressionPoint> regressionPoints) {
-		logger.debug(message);
+		logger.trace(message);
 		for (RegressionPoint regressionPoint : regressionPoints) {
-			logger.debug("Point distance={}, date={}", regressionPoint.getDistance().getValue(), regressionPoint.getTime());
+			logger.trace("Point distance={}, date={}", regressionPoint.getDistance().getValue(), regressionPoint.getTime());
 		}
 	}
 
@@ -134,7 +139,7 @@ public class RegressionCalculator {
 		for (Double number : numbers) {
 			statistics.addValue(number);
 		}
-		
+
 		double median = statistics.getPercentile(50);
 		return median;
 	}

@@ -29,8 +29,11 @@ public class CloudLineBuilder {
 
     private final Logger logger = LoggerFactory.getLogger(CloudLineBuilder.class);
 
-    private int IMAGE_WIDTH = CoordinatesConverter.IMAGE_WIDTH;
-    private int IMAGE_HEIGHT = CoordinatesConverter.IMAGE_HEIGHT;
+    private final int IMAGE_WIDTH = CoordinatesConverter.IMAGE_WIDTH;
+    private final int IMAGE_HEIGHT = CoordinatesConverter.IMAGE_HEIGHT;
+
+    private final int IMAGE_MARGIN_TOP = CoordinatesConverter.IMAGE_MARGIN_TOP;
+    private final int IMAGE_MARGIN_BOTTOM = CoordinatesConverter.IMAGE_MARGIN_BOTTOM;
 
     private Configuration.Algorithm.Cloud cloudConfiguration;
 
@@ -71,22 +74,21 @@ public class CloudLineBuilder {
      * @param alpha
      * @return
      */
-    public List<CloudLine> parseToCloudLines(Scan scan, double x, double y, double alpha) {
+    private List<CloudLine> parseToCloudLines(Scan scan, double x, double y, double alpha) {
+        List<Point> imagePoints = getImagePoints(x, y, alpha);
         return scan.getMaps().stream()
-                .map(map -> parseToCloudLine(map, x, y, alpha))
+                .map(map -> parseToCloudLine(map, imagePoints))
                 .collect(Collectors.toList());
     }
 
     /**
+     *
      * @param scannedMap
-     * @param x
-     * @param y
-     * @param alpha
+     * @param imagePoints
      * @return
      */
-    public CloudLine parseToCloudLine(ScannedMap scannedMap, double x, double y, double alpha) {
+    private CloudLine parseToCloudLine(ScannedMap scannedMap, List<Point> imagePoints) {
         logger.debug("Trying to parse radar map file:" + scannedMap.getImage());
-        List<Point> imagePoints = getImagePoints(x, y, alpha);
         CloudLine cloudLine = buildCloudLine(scannedMap, imagePoints);
         return cloudLine;
     }
@@ -143,9 +145,11 @@ public class CloudLineBuilder {
         double x = point.getX();
         double y = point.getY();
         boolean containsInWidth = x >= 0 && x < IMAGE_WIDTH;
-        boolean containsInHeight = y >= 0 && y < IMAGE_HEIGHT;
+        boolean containsInHeight = y >= 0 + IMAGE_MARGIN_TOP && y < IMAGE_HEIGHT - IMAGE_MARGIN_BOTTOM;
         return containsInWidth && containsInHeight;
     }
+
+
 
 
 }

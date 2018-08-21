@@ -6,6 +6,7 @@ package org.ksapala.rainaproximator.rest.factory;
 import org.ksapala.rainaproximator.aproximation.AproximationResult;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.rest.bean.AproximationResultBean;
+import org.ksapala.rainaproximator.utils.Debug;
 import org.ksapala.rainaproximator.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -46,7 +47,7 @@ public class AproximationResultBeanFactory {
         }
 
 		AproximationResultBean bean = new AproximationResultBean(aproximationResult.getType().getInfo(messageSource),
-                predictTimeString, aproximationResult.getRemark(), aproximationResult.getDebug().toString());
+                predictTimeString, aproximationResult.getRemark(), aproximationResult.getDebug());
 		return bean;
 	}
 
@@ -57,7 +58,7 @@ public class AproximationResultBeanFactory {
 	public AproximationResultBean createFriendlyErrorBean() {
         String info = messageSource.getMessage("AproximationResultBeanFactory.there.was.error", new Object[0],
                 Locale.getDefault());
-        return new AproximationResultBean("", null, info, "");
+        return new AproximationResultBean("", null, info, null);
     }
 
     /**
@@ -67,6 +68,6 @@ public class AproximationResultBeanFactory {
     public AproximationResultBean createEmptyScanBean() {
         String info = messageSource.getMessage("AproximationResultBeanFactory.empty.scan", new Object[0],
                 Locale.getDefault());
-        return new AproximationResultBean("", null, info, "");
+        return new AproximationResultBean("", null, info, null);
     }
 }

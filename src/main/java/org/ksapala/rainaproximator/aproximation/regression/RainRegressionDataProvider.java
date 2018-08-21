@@ -14,7 +14,7 @@ public class RainRegressionDataProvider extends RegressionDataProvider {
 	@Override
 	public Distance getDistance(int index) {
 		CloudLine cloudLine = this.cloudLines.get(index);
-		Distance distance = cloudLine.getRainDistance();
+		Distance distance = cloudLine.getFutureRainDistance();
 		return distance;
 	}
 	

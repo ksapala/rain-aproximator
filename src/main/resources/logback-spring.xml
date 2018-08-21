@@ -31,7 +31,7 @@
         </rollingPolicy>
     </appender>
 
-    <springProfile name="dev,test">
+    <springProfile name="dev">
 
         <!-- LOG everything at INFO level -->
         <root level="info">
@@ -42,6 +42,21 @@
         <!-- LOG "org.ksapala*" at TRACE level -->
         <logger name="org.ksapala" level="trace" additivity="false">
             <appender-ref ref="RollingFile" />
+            <appender-ref ref="Console" />
+        </logger>
+
+
+    </springProfile>
+
+    <springProfile name="test">
+
+        <!-- LOG everything at INFO level -->
+        <root level="info">
+            <appender-ref ref="Console" />
+        </root>
+
+        <!-- LOG "org.ksapala*" at TRACE level -->
+        <logger name="org.ksapala" level="trace" additivity="false">
             <appender-ref ref="Console" />
         </logger>
 

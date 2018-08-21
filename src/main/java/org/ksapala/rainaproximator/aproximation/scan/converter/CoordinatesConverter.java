@@ -1,22 +1,27 @@
 package org.ksapala.rainaproximator.aproximation.scan.converter;
 
 
+/**
+ * Converts (latitude, longitude) to (x,y) within Image size.
+ * Note that it also also takes geographical grid when calculating.
+ */
 public class CoordinatesConverter {
 
 	public static final int IMAGE_WIDTH = 800;
-	public static final int IMAGE_HEIGHT = 800;
+    public static final int IMAGE_HEIGHT = 800;
+
+    public static final int IMAGE_MARGIN_TOP = 84;
+    public static final int IMAGE_MARGIN_BOTTOM = 26;
 
 	public static final int BASE_X = 404;
 	public static final int BASE_Y = 400;
 
 	public static final double LON_MIN = 13.5;
 	public static final double LON_MAX = 25.5;
-	public static final double LON_SIZE = LON_MAX - LON_MIN;
-	
+
 	public static final double LAT_MAX = 56.3;
 	public static final double LAT_MIN = 48.5;
-	public static final double LAT_SIZE = LAT_MAX - LAT_MIN;
-	
+
 	public static final double LON_BASE = 19.5;
 	public static final double LAT_BASE = 52.4;
 	

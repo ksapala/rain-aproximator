@@ -26,6 +26,23 @@ public class TestUtils {
         return cloudLine;
     }
 
+    /**
+     *
+     * @param cloudLineString
+     * @param timeString
+     * @return
+     */
+    public CloudLine cloudLine(String cloudLineString, String timeString) {
+        CloudLine cloudLine = stringToCloudLine(cloudLineString);
+        cloudLine.setTime(parseInTest(timeString));
+        return cloudLine;
+    }
+
+    /**
+     *
+     * @param stringCloudLine
+     * @return
+     */
     private static boolean[] stringToBoolean(String stringCloudLine) {
         boolean[] line = new boolean[stringCloudLine.length()];
         for (int i = 0; i < stringCloudLine.length(); i++) {
@@ -37,6 +54,11 @@ public class TestUtils {
         return line;
     }
 
+    /**
+     *
+     * @param timeString
+     * @return
+     */
     public LocalDateTime parseInTest(String timeString) {
         return TimeUtils.parseInTest(timeString, configuration);
     }

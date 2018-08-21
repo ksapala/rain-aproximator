@@ -7,6 +7,7 @@ import org.ksapala.rainaproximator.utils.TimeUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 
 @Getter
 public class AproximationResult {
@@ -17,6 +18,7 @@ public class AproximationResult {
 	private LocalDateTime predictTime;
 	@Setter
     private String remark;
+	@Getter
     private Debug debug;
 	
 	public AproximationResult(AproximationResultType type, LocalDateTime predictTime) {
@@ -36,10 +38,6 @@ public class AproximationResult {
 
     public boolean isPredict() {
 	    return this.predictTime != null;
-    }
-
-    public void debug(String key, Object value) {
-        this.debug.add(key, value);
     }
 
 	@Override

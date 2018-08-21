@@ -4,16 +4,13 @@
 package org.ksapala.rainaproximator.aproximation.regression;
 
 import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
-import org.ksapala.rainaproximator.aproximation.cloud.Distance;
+import org.ksapala.rainaproximator.aproximation.cloud.CloudsOperations;
 import org.ksapala.rainaproximator.utils.LoggingUtils;
 import org.ksapala.rainaproximator.utils.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -45,54 +42,11 @@ public class RegressionState {
         this.regressionTimeFactory = regressionTimeFactory;
     }
 
-	/**
-	 * @return
-	 */
-	public boolean isSun() {
-		boolean rainRegressionNan = isRainRegressionNan();
-		if (!rainRegressionNan) {
-			return true;
-		}
-
-		boolean sunRegressionNan = isSunRegressionNan();
-		if (!sunRegressionNan) {
-			boolean rainDecrease = rainDecrease();
-			boolean sunRegressionForPast = isSunRegressionForPast();
-			return  rainDecrease && sunRegressionForPast;
-		}
-
-		List<Distance> rainDistances = getRainInfinityDistances();
-		List<Distance> sunDistances = getSunInfinityDistances();
-	    boolean moreInfinityRainDistances = rainDistances.size() > sunDistances.size();
-		return moreInfinityRainDistances;
-    }
-
-	/**
-	 * @return
-	 */
-	private List<Distance> getRainInfinityDistances() {
-		List<Distance> result = new ArrayList<Distance>();
-	    for (CloudLine cloudLine : this.cloudLines) {
-	        Distance rainDistance = cloudLine.getRainDistance();
-			if (Distance.INFINITY.equals(rainDistance)) {
-	        	result.add(rainDistance);
-	        }
-        }
-	    return result;
-    }
-	
-	/**
-	 * @return
-	 */
-	private List<Distance> getSunInfinityDistances() {
-		List<Distance> result = new ArrayList<Distance>();
-	    for (CloudLine cloudLine : this.cloudLines) {
-	        Distance sunDistance = cloudLine.getSunDistance();
-			if (Distance.INFINITY.equals(sunDistance)) {
-	        	result.add(sunDistance);
-	        }
-        }
-	    return result;
+    /**
+     * @return
+     */
+    public boolean isSun() {
+        return CloudsOperations.isSun(cloudLines);
     }
 
 	/**
@@ -100,7 +54,8 @@ public class RegressionState {
 	 */
 	public double getRainRegression() {
 	    if (this.rainRegression == REGRESSION_NOT_SET) {
-	    	RainRegressionDataProvider dataProvider = new RainRegressionDataProvider(this.cloudLines);
+            List<CloudLine> forRainRegression = CloudsOperations.filterForRainRegression(cloudLines);
+            RainRegressionDataProvider dataProvider = new RainRegressionDataProvider(forRainRegression);
 			RegressionCalculator calculator = new RegressionCalculator(dataProvider);
 	    	RegressionResult result = calculator.calculate(ZERO_DISTANCE);
 
@@ -115,7 +70,8 @@ public class RegressionState {
 	 */
 	public double getSunRegression() {
 		if (this.sunRegression == REGRESSION_NOT_SET) {
-			SunRegressionDataProvider dataProvider = new SunRegressionDataProvider(this.cloudLines);
+            List<CloudLine> forSunRegression = CloudsOperations.filterForSunRegression(cloudLines);
+			SunRegressionDataProvider dataProvider = new SunRegressionDataProvider(forSunRegression);
 			RegressionCalculator calculator = new RegressionCalculator(dataProvider);
 	    	RegressionResult result = calculator.calculate(ZERO_DISTANCE);
 
@@ -179,7 +135,7 @@ public class RegressionState {
 	 * @return
 	 */
 	public boolean sunDecrease() {
-		boolean sunDecrease = this.rainRegressionSlope > 0;
+		boolean sunDecrease = this.rainRegressionSlope < 0;
 		return sunDecrease;
 	}
 

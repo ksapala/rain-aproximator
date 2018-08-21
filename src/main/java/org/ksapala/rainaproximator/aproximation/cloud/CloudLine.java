@@ -1,11 +1,19 @@
 package org.ksapala.rainaproximator.aproximation.cloud;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Getter;
 import lombok.Setter;
 import org.ksapala.rainaproximator.configuration.Configuration;
+import org.ksapala.rainaproximator.exception.AproximationException;
+import org.ksapala.rainaproximator.serializer.CloudLineSerializer;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
+@JsonSerialize(using = CloudLineSerializer.class)
 public class CloudLine {
 
     // constants
@@ -44,9 +52,10 @@ public class CloudLine {
 	private void setRain(int index, boolean value) {
 	    this.line[index] = value;
     }
-	
+
+    @Override
 	public String toString() {
-		return getLineAsString() + " date: " + getTime();
+	    return getLineAsString() + " date: " + getTime();
 	}
 	
 	public String getLineAsString() {
@@ -151,11 +160,11 @@ public class CloudLine {
 	/**
 	 * @return
 	 */
-	public Distance getRainDistance() {
-		if (this.rainDistance == null) {
-			this.rainDistance = getDistanceForValue(true);
-		}
-		return this.rainDistance;
+    public Distance getRainDistance() {
+        if (this.rainDistance == null) {
+            this.rainDistance = getDistanceForValue(true);
+        }
+        return this.rainDistance;
     }
 
 	/**
@@ -167,18 +176,100 @@ public class CloudLine {
 		}
 		return this.sunDistance;
 	}
-	
+
+    /**
+     * @return
+     */
+    private Distance getRainDistance(int fromIndex) {
+        return getDistanceForValue(true, fromIndex);
+    }
+
+    /**
+     * @return
+     */
+    private Distance getSunDistance(int fromIndex) {
+        return getDistanceForValue(false, fromIndex);
+    }
+
+    /**
+     * @return
+     */
+    public boolean isFutureRainDistanceInfinity() {
+        return Distance.INFINITY.equals(getFutureRainDistance());
+    }
+
+    /**
+     * @return
+     */
+    public boolean isFutureSunDistanceInfinity() {
+        return Distance.INFINITY.equals(getFutureSunDistance());
+    }
+
 	/**
 	 * @param value
 	 * @return
 	 */
-	public Distance getDistanceForValue(boolean value) {
-		for (int i = 0; i < this.line.length; i++) {
-	        if (this.line[i] == value) {
-	        	return new Distance(i);
-	        }
-        }
-	    return Distance.INFINITY;
-	}
+    public Distance getDistanceForValue(boolean value) {
+        return getDistanceForValue(value, 0);
+    }
 
+    public Distance getDistanceForValue(boolean value, int fromIndex) {
+        for (int i = fromIndex; i < this.line.length; i++) {
+            if (this.line[i] == value) {
+                return new Distance(i);
+            }
+        }
+        return Distance.INFINITY;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Distance getFutureRainDistance() {
+        if (isSun()) {
+            return getRainDistance();
+        }
+        Distance sunDistance = getSunDistance();
+        return getRainDistance(sunDistance.getValue());
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Distance getFutureSunDistance() {
+        if (isRain()) {
+            return getSunDistance();
+        }
+        Distance rainDistance = getRainDistance();
+        return getSunDistance(rainDistance.getValue());
+    }
+
+    public boolean isRain() {
+        if (line.length > 0) {
+            return line[0];
+        }
+        throw new RuntimeException("Cloud line cannot hava zero length.");
+    }
+
+    public boolean isSun() {
+        return !isRain();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CloudLine cloudLine = (CloudLine) o;
+        return Arrays.equals(line, cloudLine.line) &&
+                Objects.equals(time, cloudLine.time);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(time);
+        result = 31 * result + Arrays.hashCode(line);
+        return result;
+    }
 }
