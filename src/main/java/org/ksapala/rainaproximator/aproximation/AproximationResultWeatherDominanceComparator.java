@@ -11,7 +11,7 @@ import java.util.Date;
  * @author krzysztof
  *
  */
-public class AproximationResultWeatherDominanceComparator implements Comparator<AproximationResult> {
+public class AproximationResultWeatherDominanceComparator implements Comparator<DirectionalAproximationResult> {
 
 	/**
 	 * 
@@ -20,7 +20,10 @@ public class AproximationResultWeatherDominanceComparator implements Comparator<
 	}
 
 	@Override
-	public int compare(AproximationResult result1, AproximationResult result2) {
+	public int compare(DirectionalAproximationResult r1, DirectionalAproximationResult r2) {
+        AproximationResult result1 = r1.getAproximationResult();
+        AproximationResult result2 = r2.getAproximationResult();
+
         AproximationResultType type1 = result1.getType();
         AproximationResultType type2 = result2.getType();
 

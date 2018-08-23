@@ -35,9 +35,14 @@ public class Configuration {
     @Setter
     public class Algorithm {
 
-        @NotNull private boolean useSideScans;
-        @NotEmpty private int[] sideScansAngles;
-        @NotNull private double defaultWind;
+        public final static String MODE_STRAIGHT = "straight";
+        public final static String MODE_AROUND = "around";
+        public final static String MODE_AROUND_FINAL = "aroundFinal";
+
+        @NotBlank private String mode;
+        @NotEmpty private int[] aroundAngles;
+        @NotEmpty private int[] aroundFinalAngles;
+        @NotNull private int defaultWind;
         private Cloud cloud = new Cloud();
 
         @Getter

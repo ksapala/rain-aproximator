@@ -40,7 +40,7 @@ public class WindGetter {
 	 * @return
 	 * @throws AproximationException
 	 */
-	public Optional<Double> getWindDirection(double latitude, double longitude) {
+	public Optional<Integer> getWindDirection(double latitude, double longitude) {
 		try {
 			return doGetWindDirection(latitude, longitude);
 		} catch (Exception e) {
@@ -54,19 +54,21 @@ public class WindGetter {
 	 * @param longitude
 	 * @return
 	 */
-	private Optional<Double> doGetWindDirection(double latitude, double longitude) {
+	private Optional<Integer> doGetWindDirection(double latitude, double longitude) {
 		String urlWithParameters = MessageFormat.format(configuration.getWind().getUrl(), latitude, longitude);
 
         RestTemplate restTemplate = new RestTemplate();
         WeatherJson weatherJson = restTemplate.getForObject(urlWithParameters , WeatherJson.class);
 
         Optional<Double> windDirection = Optional.ofNullable(weatherJson.getWind().getDeg());
+
         if (windDirection.isPresent()) {
             logger.debug("Wind direction successfully get from http: " + windDirection);
+            return Optional.of(Math.toIntExact(Math.round(windDirection.get())));
         } else {
             logger.debug("Wind direction is null because there is no wind.");
+            return Optional.empty();
         }
-        return windDirection;
 	}
 
 }

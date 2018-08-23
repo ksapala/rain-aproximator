@@ -21,28 +21,36 @@ public class AproximationResultWeatherDominanceComparatorTest {
     @Autowired
     private Configuration configuration;
 
+    private DirectionalAproximationResult create(AproximationResultType type, String time) {
+        return new DirectionalAproximationResult(0, new AproximationResult(type, TimeUtils.parseInTest(time, configuration)));
+    }
+
+    private DirectionalAproximationResult create(AproximationResultType type) {
+        return new DirectionalAproximationResult(0, new AproximationResult(type));
+    }
+
     @Test
 	public void testCompare() {
-		List<AproximationResult> results = new ArrayList<>();
-		results.add(new AproximationResult(AproximationResultType.SUN_UNKNOWN));
-		results.add(new AproximationResult(AproximationResultType.RAIN_UNSURE));
-		results.add(new AproximationResult(AproximationResultType.SUN_UNSURE));
-		results.add(new AproximationResult(AproximationResultType.RAIN_UNKNOWN));
-		results.add(new AproximationResult(AproximationResultType.SUN_AT_TIME, TimeUtils.parseInTest("28/04/2015 12:00", configuration)));
-		results.add(new AproximationResult(AproximationResultType.RAIN_AT_TIME, TimeUtils.parseInTest("28/04/2015 17:00", configuration)));
-		results.add(new AproximationResult(AproximationResultType.RAIN_AT_TIME, TimeUtils.parseInTest("28/04/2015 18:00", configuration)));
-		results.add(new AproximationResult(AproximationResultType.SUN_AT_TIME, TimeUtils.parseInTest("28/04/2015 11:00", configuration)));
+		List<DirectionalAproximationResult> results = new ArrayList<>();
+		results.add(create(AproximationResultType.SUN_UNKNOWN));
+		results.add(create(AproximationResultType.RAIN_UNSURE));
+		results.add(create(AproximationResultType.SUN_UNSURE));
+		results.add(create(AproximationResultType.RAIN_UNKNOWN));
+		results.add(create(AproximationResultType.SUN_AT_TIME,"28/04/2015 12:00"));
+		results.add(create(AproximationResultType.RAIN_AT_TIME,"28/04/2015 17:00"));
+		results.add(create(AproximationResultType.RAIN_AT_TIME,"28/04/2015 18:00"));
+		results.add(create(AproximationResultType.SUN_AT_TIME,"28/04/2015 11:00"));
 
 		Collections.sort(results, new AproximationResultWeatherDominanceComparator());
 
-		assertEquals(new AproximationResult(AproximationResultType.RAIN_AT_TIME, TimeUtils.parseInTest("28/04/2015 17:00", configuration)), results.get(0));
-		assertEquals(new AproximationResult(AproximationResultType.RAIN_AT_TIME, TimeUtils.parseInTest("28/04/2015 18:00", configuration)), results.get(1));
-		assertEquals(new AproximationResult(AproximationResultType.SUN_AT_TIME, TimeUtils.parseInTest("28/04/2015 11:00", configuration)), results.get(2));
-		assertEquals(new AproximationResult(AproximationResultType.SUN_AT_TIME, TimeUtils.parseInTest("28/04/2015 12:00", configuration)), results.get(3));
-		assertEquals(new AproximationResult(AproximationResultType.RAIN_UNSURE), results.get(4));
-		assertEquals(new AproximationResult(AproximationResultType.SUN_UNSURE), results.get(5));
-		assertEquals(new AproximationResult(AproximationResultType.RAIN_UNKNOWN), results.get(6));
-		assertEquals(new AproximationResult(AproximationResultType.SUN_UNKNOWN), results.get(7));
+		assertEquals(create(AproximationResultType.RAIN_AT_TIME, "28/04/2015 17:00"), results.get(0));
+		assertEquals(create(AproximationResultType.RAIN_AT_TIME, "28/04/2015 18:00"), results.get(1));
+		assertEquals(create(AproximationResultType.SUN_AT_TIME, "28/04/2015 11:00"), results.get(2));
+		assertEquals(create(AproximationResultType.SUN_AT_TIME, "28/04/2015 12:00"), results.get(3));
+		assertEquals(create(AproximationResultType.RAIN_UNSURE), results.get(4));
+		assertEquals(create(AproximationResultType.SUN_UNSURE), results.get(5));
+		assertEquals(create(AproximationResultType.RAIN_UNKNOWN), results.get(6));
+		assertEquals(create(AproximationResultType.SUN_UNKNOWN), results.get(7));
 	}
 
 }

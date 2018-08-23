@@ -19,10 +19,6 @@ public abstract class RegressionDataProvider {
 	
 	public abstract Distance getDistance(int index);
 
-	public boolean hasData() {
-	    return !cloudLines.isEmpty();
-    }
-
 	public LocalDateTime getTime(int index) {
 		CloudLine cloudLine = this.cloudLines.get(index);
 		LocalDateTime time = cloudLine.getTime();
@@ -51,4 +47,9 @@ public abstract class RegressionDataProvider {
 	}
 
 	public abstract String getDescription();
+
+    public boolean hasData() {
+        return !cloudLines.isEmpty();
+    }
+
 }

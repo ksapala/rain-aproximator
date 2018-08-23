@@ -10,7 +10,8 @@ import java.util.List;
 @Setter
 public class Debug {
 
-    private String wind;
+    private String angle;
+    private String performance;
     private List<CloudLine> cloudLines;
 
     public Debug() {

@@ -55,28 +55,28 @@ public class RainAproximatorService {
      * @return
      */
     public AproximationResultBean aproximate(double latitude, double longitude) {
-        return aproximate(latitude, longitude, Optional.of(0.0), Optional.empty());
+        return aproximate(latitude, longitude, Optional.empty(), Optional.empty());
     }
 
     /**
      * @param latitude
      * @param longitude
-     * @param wind
+     * @param angle
      * @return
      */
-    public AproximationResultBean aproximateDebug(double latitude, double longitude, double wind) {
-        return aproximate(latitude, longitude, Optional.of(wind), Optional.of(false));
+    public AproximationResultBean aproximateDebug(double latitude, double longitude, int angle, String mode) {
+        return aproximate(latitude, longitude, Optional.of(angle), Optional.of(mode));
     }
 
     /**
      * @param latitude
      * @param longitude
-     * @param wind
+     * @param angle
      * @return
      */
-    public AproximationResultBean aproximate(double latitude, double longitude, Optional wind, Optional<Boolean> useSideScans) {
+    public AproximationResultBean aproximate(double latitude, double longitude, Optional<Integer> angle, Optional<String> mode) {
         try {
-            return doAproximate(latitude, longitude, wind, useSideScans);
+            return doAproximate(latitude, longitude, angle, mode);
         } catch (Exception e) {
             logger.error("Exception while invoking Rain Aproximation Rest Service.", e);
             return aproximationResultBeanFactory.createFriendlyErrorBean();
@@ -90,22 +90,23 @@ public class RainAproximatorService {
      * @throws AproximationException
      * @throws IOException
      */
-    public AproximationResultBean doAproximate(double latitude, double longitude, Optional<Double> wind, Optional<Boolean> useSideScans)
+    public AproximationResultBean doAproximate(double latitude, double longitude, Optional<Integer> angle, Optional<String> mode)
             throws AproximationException {
+
         Optional<Scan> scan = scanComponent.getScan();
         if (!scan.isPresent()) {
             logger.warn("Missing scans.");
             return aproximationResultBeanFactory.createEmptyScanBean();
         }
 
-        Double windDirection = wind
-                .orElseGet(() -> windGetter.getWindDirection(latitude, longitude)
-                .orElse(configuration.getAlgorithm().getDefaultWind()));
+        Integer aproximationAngle = angle
+//                .orElseGet(() -> windGetter.getWindDirection(latitude, longitude)
+                .orElse(configuration.getAlgorithm().getDefaultWind());
 
-        boolean isUseSideScans = useSideScans
-                .orElse(configuration.getAlgorithm().isUseSideScans());
+        String aproximationMode = mode
+                .orElse(configuration.getAlgorithm().getMode());
 
-        AproximationResult aproximationResult = rainAproximator.aproximate(scan.get(), latitude, longitude, windDirection, isUseSideScans);
+        AproximationResult aproximationResult = rainAproximator.aproximate(scan.get(), latitude, longitude, aproximationAngle, aproximationMode);
         return aproximationResultBeanFactory.createBean(aproximationResult);
     }
 

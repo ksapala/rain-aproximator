@@ -28,15 +28,21 @@ public class RainAproximatorController {
         return rainAproximatorService.aproximate(latitude, longitude);
     }
 
+    // debug
 
     @GetMapping(path = "/aproximateKrk")
     public AproximationResultBean aproximateKrk() {
-        return rainAproximatorService.aproximate(KRK_LATITUDE, KRK_LONGITUDE);
+        return rainAproximatorService.aproximateDebug(KRK_LATITUDE, KRK_LONGITUDE, 0, "aroundFinal");
     }
 
-    @GetMapping(path = "/aproximateKrk/{wind}")
-    public AproximationResultBean aproximateKrkWind(@PathVariable double wind) {
-        return rainAproximatorService.aproximateDebug(KRK_LATITUDE, KRK_LONGITUDE, wind);
+    @GetMapping(path = "/aproximateKrkAround")
+    public AproximationResultBean aproximateKrkAround() {
+        return rainAproximatorService.aproximateDebug(KRK_LATITUDE, KRK_LONGITUDE, 0, "around");
+    }
+
+    @GetMapping(path = "/aproximateKrk/{angle}")
+    public AproximationResultBean aproximateKrk(@PathVariable int angle) {
+        return rainAproximatorService.aproximateDebug(KRK_LATITUDE, KRK_LONGITUDE, angle, "straight");
     }
 
     @GetMapping(path = "/scan")

@@ -36,8 +36,8 @@ public class WindGetterTest {
     private Scanner scanner;
 
     @Test
-	public void testGetWindDirection() throws AproximationException {
-        Optional<Double> windDirection = windGetter.getWindDirection(20, 50);
+	public void testGetWindDirection() {
+        Optional<Integer> windDirection = windGetter.getWindDirection(20, 50);
 
         if (windDirection.isPresent()) {
             assertTrue(windDirection.get() >= 0);

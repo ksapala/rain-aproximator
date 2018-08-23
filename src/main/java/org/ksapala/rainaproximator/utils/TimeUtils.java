@@ -3,6 +3,7 @@
  */
 package org.ksapala.rainaproximator.utils;
 
+import org.apache.tomcat.jni.Local;
 import org.ksapala.rainaproximator.configuration.Configuration;
 
 import java.time.Instant;
@@ -32,6 +33,11 @@ public class TimeUtils {
 
     public static DateTimeFormatter getFormatter(Configuration configuration) {
         return DateTimeFormatter.ofPattern(configuration.getUserTimeFormat());
+    }
+
+    public static String timeToString(LocalDateTime time, Configuration configuration) {
+        DateTimeFormatter formatter = getFormatter(configuration);
+        return time.format(formatter);
     }
 
     public static LocalDateTime parseInTest(String timeString, Configuration configuration) {

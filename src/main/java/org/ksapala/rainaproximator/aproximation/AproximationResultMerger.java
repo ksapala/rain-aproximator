@@ -19,12 +19,12 @@ public class AproximationResultMerger {
 	}
 	
 	/**
-	 * @param aproximationResults
+	 * @param directionalAproximationResults
 	 * @return
 	 */
-	public static AproximationResult merge(List<AproximationResult> aproximationResults) {
-		Collections.sort(aproximationResults, new AproximationResultWeatherDominanceComparator());
-		AproximationResult aproximationResult = aproximationResults.get(0);
+	public static DirectionalAproximationResult merge(List<DirectionalAproximationResult> directionalAproximationResults) {
+		Collections.sort(directionalAproximationResults, new AproximationResultWeatherDominanceComparator());
+        DirectionalAproximationResult aproximationResult = directionalAproximationResults.get(0);
 		return aproximationResult;
 	}
 

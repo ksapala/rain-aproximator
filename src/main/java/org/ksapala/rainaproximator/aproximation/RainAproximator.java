@@ -1,5 +1,6 @@
 package org.ksapala.rainaproximator.aproximation;
 
+import org.ksapala.rainaproximator.aproximation.angle.Angle;
 import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
 import org.ksapala.rainaproximator.aproximation.cloud.CloudLineBuilder;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionState;
@@ -28,6 +29,12 @@ public class RainAproximator {
     private MessageSource messageSource;
 
     @Autowired
+    private Configuration configuration;
+
+    @Autowired
+    private Angle angle;
+
+    @Autowired
     private RegressionTimeFactory regressionTimeFactory;
 
     private final Configuration.Algorithm algorithmConfiguration;
@@ -47,12 +54,12 @@ public class RainAproximator {
      * @param scan
      * @param latitude
      * @param longitude
-     * @param wind
-     * @param useSideScans
+     * @param angle
+     * @param mode
      * @return
      * @throws AproximationException
      */
-	public AproximationResult aproximate(Scan scan, double latitude, double longitude, double wind, boolean useSideScans)
+	public AproximationResult aproximate(Scan scan, double latitude, double longitude, int angle, String mode)
             throws AproximationException {
 		long start = System.currentTimeMillis();
 
@@ -63,11 +70,15 @@ public class RainAproximator {
 
 		AproximationResult aproximatorResult;
 
-		if (useSideScans) {
-			aproximatorResult = aproximateWithSideScans(scan, x, y, wind);
-		} else {
-			aproximatorResult = aproximateStraight(scan, x, y, wind);
-		}
+        if (Configuration.Algorithm.MODE_AROUND.equals(mode)) {
+            aproximatorResult = aproximateAround(scan, x, y).getAproximationResult();
+
+        } else if (Configuration.Algorithm.MODE_AROUND_FINAL.equals(mode)) {
+            aproximatorResult = aproximateAroundFinal(scan, x, y);
+
+        } else { // MODE_STRAIGHT
+            aproximatorResult = aproximateStraight(scan, x, y, angle).getAproximationResult();
+        }
 
         if (!scan.isCurrentMoment()) {
             aproximatorResult.setRemark(messageSource.getMessage("RainAproximator.radars.not.current",
@@ -75,58 +86,93 @@ public class RainAproximator {
         }
 
         long end = System.currentTimeMillis();
-		logger.debug("[performance] Aproximation time: " + (end - start));
+		long duration = end - start;
+
+		logger.debug("[performance] Aproximation time: " + duration);
+		aproximatorResult.getDebug().setPerformance(Long.toString(duration));
 		return aproximatorResult;
     }
 
-	/**
-	 * @param x
-	 * @param y
-	 * @param windDirection
-	 * @return
-	 * @throws AproximationException
-	 */
-	private AproximationResult aproximateWithSideScans(Scan scan, double x, double y, double windDirection) throws AproximationException {
-		List<AproximationResult> aproximationResults = new ArrayList<AproximationResult>();
+    /**
+     *
+     * @param scan
+     * @param x
+     * @param y
+     * @return
+     * @throws AproximationException
+     */
+    private DirectionalAproximationResult aproximateAround(Scan scan, double x, double y) throws AproximationException {
+        return aproximateAngles(scan, x, y, algorithmConfiguration.getAroundAngles());
+    }
 
-		// straight
-		AproximationResult straightAproximationResult = aproximateStraight(scan, x, y, windDirection);
-		aproximationResults.add(straightAproximationResult);
-		
-		// side scans
-		for (Integer sideScansAngle : algorithmConfiguration.getSideScansAngles()) {
-			double scanAngle = windDirection + sideScansAngle;
-			AproximationResult sideScanAproximationResult = aproximateStraight(scan, x, y, scanAngle);
-			aproximationResults.add(sideScanAproximationResult);
-		}
-		
-		logAproximationResults("Aproximation results to merge:", aproximationResults);
-		AproximationResult mergedAproximationResult = AproximationResultMerger.merge(aproximationResults);
-		return mergedAproximationResult;
-	}
+    /**
+     *
+     * @param scan
+     * @param x
+     * @param y
+     * @return
+     * @throws AproximationException
+     */
+    private AproximationResult aproximateAroundFinal(Scan scan, double x, double y) throws AproximationException {
+        DirectionalAproximationResult directionalAproximationResult = aproximateAround(scan, x, y);
 
-	private void logAproximationResults(String message, List<AproximationResult> aproximationResults) {
+        int[] finalAngles = angle.create(directionalAproximationResult.getAngle(), algorithmConfiguration.getAroundFinalAngles());
+
+        DirectionalAproximationResult finalDirectionalAproximationResult = aproximateAngles(scan, x, y, finalAngles);
+
+        return finalDirectionalAproximationResult.getAproximationResult();
+    }
+
+    /**
+     *
+     * @param scan
+     * @param x
+     * @param y
+     * @param angles
+     * @return
+     * @throws AproximationException
+     */
+    private DirectionalAproximationResult aproximateAngles(Scan scan, double x, double y, int[] angles) throws AproximationException {
+        logger.debug("Aproximating for angles: " + angles);
+        List<DirectionalAproximationResult> directionalAproximationResults = new ArrayList<>();
+
+        for (Integer angle : angles) {
+            DirectionalAproximationResult result = aproximateStraight(scan, x, y, angle);
+            directionalAproximationResults.add(result);
+        }
+
+        logDirectionalAproximationResults("Aproximation results to merge:", directionalAproximationResults);
+        DirectionalAproximationResult mergedAproximationResult = AproximationResultMerger.merge(directionalAproximationResults);
+        return mergedAproximationResult;
+    }
+
+    /**
+     *
+     * @param message
+     * @param directionalAproximationResults
+     */
+	private void logDirectionalAproximationResults(String message, List<DirectionalAproximationResult> directionalAproximationResults) {
         logger.debug(message);
-		for (AproximationResult aproximationResult : aproximationResults) {
-            logger.debug(aproximationResult.toString());
+		for (DirectionalAproximationResult directionalAproximationResult : directionalAproximationResults) {
+            logger.debug(directionalAproximationResult.toString());
 		}
 	}
 
 	/**
 	 * @param x
 	 * @param y
-	 * @param wind
+	 * @param angle
 	 * @return
 	 * @throws AproximationException
 	 */
-	private AproximationResult aproximateStraight(Scan scan, double x, double y, double wind) throws AproximationException {
-        logger.debug("aproximateStraight for wind direction: " + wind);
-		List<CloudLine> cloudLines = this.cloudLineBuilder.createCloudLines(scan, x, y, wind);
+	private DirectionalAproximationResult aproximateStraight(Scan scan, double x, double y, int angle) throws AproximationException {
+        logger.debug("aproximateStraight for angle: " + angle);
+		List<CloudLine> cloudLines = this.cloudLineBuilder.createCloudLines(scan, x, y, angle);
 		AproximationResult aproximatorResult = aproximate(cloudLines);
 
         aproximatorResult.getDebug().setCloudLines(cloudLines);
-        aproximatorResult.getDebug().setWind(Double.toString(wind));
-		return aproximatorResult;
+        aproximatorResult.getDebug().setAngle(Double.toString(angle));
+		return new DirectionalAproximationResult(angle, aproximatorResult);
 	}
 
 	/**
