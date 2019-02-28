@@ -3,12 +3,13 @@
  */
 package org.ksapala.rainaproximator.rest;
 
-import org.ksapala.rainaproximator.aproximation.AproximationResult;
 import org.ksapala.rainaproximator.aproximation.RainAproximator;
+import org.ksapala.rainaproximator.aproximation.result.AproximationResult;
 import org.ksapala.rainaproximator.aproximation.scan.Scan;
 import org.ksapala.rainaproximator.aproximation.scan.ScanComponent;
 import org.ksapala.rainaproximator.aproximation.wind.WindGetter;
 import org.ksapala.rainaproximator.configuration.Configuration;
+import org.ksapala.rainaproximator.configuration.Mode;
 import org.ksapala.rainaproximator.exception.AproximationException;
 import org.ksapala.rainaproximator.rest.bean.AproximationResultBean;
 import org.ksapala.rainaproximator.rest.factory.AproximationResultBeanFactory;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 
 /**
@@ -64,7 +64,7 @@ public class RainAproximatorService {
      * @param angle
      * @return
      */
-    public AproximationResultBean aproximateDebug(double latitude, double longitude, int angle, String mode) {
+    public AproximationResultBean aproximateDebug(double latitude, double longitude, int angle, Mode mode) {
         return aproximate(latitude, longitude, Optional.of(angle), Optional.of(mode));
     }
 
@@ -74,7 +74,7 @@ public class RainAproximatorService {
      * @param angle
      * @return
      */
-    public AproximationResultBean aproximate(double latitude, double longitude, Optional<Integer> angle, Optional<String> mode) {
+    public AproximationResultBean aproximate(double latitude, double longitude, Optional<Integer> angle, Optional<Mode> mode) {
         try {
             return doAproximate(latitude, longitude, angle, mode);
         } catch (Exception e) {
@@ -90,10 +90,11 @@ public class RainAproximatorService {
      * @throws AproximationException
      * @throws IOException
      */
-    public AproximationResultBean doAproximate(double latitude, double longitude, Optional<Integer> angle, Optional<String> mode)
+    public AproximationResultBean doAproximate(double latitude, double longitude, Optional<Integer> angle, Optional<Mode> mode)
             throws AproximationException {
 
         Optional<Scan> scan = scanComponent.getScan();
+
         if (!scan.isPresent()) {
             logger.warn("Missing scans.");
             return aproximationResultBeanFactory.createEmptyScanBean();
@@ -103,8 +104,8 @@ public class RainAproximatorService {
 //                .orElseGet(() -> windGetter.getWindDirection(latitude, longitude)
                 .orElse(configuration.getAlgorithm().getDefaultWind());
 
-        String aproximationMode = mode
-                .orElse(configuration.getAlgorithm().getMode());
+        Mode aproximationMode = mode
+                .orElse(new Mode(configuration.getAlgorithm().getMode()));
 
         AproximationResult aproximationResult = rainAproximator.aproximate(scan.get(), latitude, longitude, aproximationAngle, aproximationMode);
         return aproximationResultBeanFactory.createBean(aproximationResult);

@@ -3,8 +3,10 @@
  */
 package org.ksapala.rainaproximator.aproximation.regression;
 
+import lombok.Getter;
 import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
 import org.ksapala.rainaproximator.aproximation.cloud.CloudsOperations;
+import org.ksapala.rainaproximator.aproximation.debug.RegressionDebug;
 import org.ksapala.rainaproximator.utils.LoggingUtils;
 import org.ksapala.rainaproximator.utils.TimeUtils;
 import org.slf4j.Logger;
@@ -37,7 +39,13 @@ public class RegressionState {
 	private Boolean rainRegressionForPast = null;
 	private Boolean sunRegressionForPast = null;
 
-    public RegressionState(List<CloudLine> cloudLines, RegressionTimeFactory regressionTimeFactory) {
+	@Getter
+    private double rSquare;
+
+	@Getter
+    private RegressionDebug regressionDebug;
+
+    public  RegressionState(List<CloudLine> cloudLines, RegressionTimeFactory regressionTimeFactory) {
         this.cloudLines = cloudLines;
         this.regressionTimeFactory = regressionTimeFactory;
     }
@@ -61,6 +69,8 @@ public class RegressionState {
 
 			this.rainRegression = result.getValue();
 			this.rainRegressionSlope  = result.getSlope();
+			this.regressionDebug = result.getRegressionDebug();
+            this.rSquare = result.getRSquare();
 	    }
 	    return this.rainRegression;
     }
@@ -77,6 +87,8 @@ public class RegressionState {
 
 			this.sunRegression = result.getValue();
 			this.sunRegressionSlope  = result.getSlope();
+            this.regressionDebug = result.getRegressionDebug();
+            this.rSquare = result.getRSquare();
 	    }
 	    return this.sunRegression;
     }

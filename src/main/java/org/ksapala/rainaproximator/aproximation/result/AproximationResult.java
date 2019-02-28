@@ -1,13 +1,12 @@
-package org.ksapala.rainaproximator.aproximation;
+package org.ksapala.rainaproximator.aproximation.result;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.ksapala.rainaproximator.utils.Debug;
+import org.ksapala.rainaproximator.aproximation.debug.Debug;
 import org.ksapala.rainaproximator.utils.TimeUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
 
 @Getter
 public class AproximationResult {
@@ -16,24 +15,30 @@ public class AproximationResult {
 
 	private AproximationResultType type;
 	private LocalDateTime predictTime;
+
 	@Setter
     private String remark;
-	@Getter
+
+    @Getter
+    private Accuracy accuracy;
+
+    @Getter
     private Debug debug;
-	
-	public AproximationResult(AproximationResultType type, LocalDateTime predictTime) {
+
+    public AproximationResult(AproximationResultType type, Accuracy accuracy, LocalDateTime predictTime) {
 		 this.type = type;
-		 this.predictTime = predictTime;
+		 this.accuracy = accuracy;
+         this.predictTime = predictTime;
 		 this.debug = new Debug();
 
 	}
 	
-	public AproximationResult(AproximationResultType type, double predictTime) {
-	    this(type, TimeUtils.millisToLocalDateAndTime((long) predictTime));
+	public AproximationResult(AproximationResultType type, Accuracy accuracy, double predictTime) {
+	    this(type, accuracy, TimeUtils.millisToLocalDateAndTime((long) predictTime));
     }
 	
-	public AproximationResult(AproximationResultType type) {
-	    this(type, null);
+	public AproximationResult(AproximationResultType type, Accuracy accuracy) {
+	    this(type, accuracy, null);
     }
 
     public boolean isPredict() {
@@ -46,7 +51,7 @@ public class AproximationResult {
         if (isPredict()) {
             timeString = this.predictTime.format(DateTimeFormatter.ofPattern(TO_STRING_PATTERN));
         }
-		return "Type: " + this.type.toString() + ", time: " + timeString + ", remark: " + this.remark;
+		return "Type: " + this.type.toString() + ", time: " + timeString + ", accuracy: " + accuracy.toString() + ", remark: " + this.remark;
 	}
 	
 	/* (non-Javadoc)
@@ -67,6 +72,5 @@ public class AproximationResult {
 		}
 		return false;
 	}
-
 	
 }

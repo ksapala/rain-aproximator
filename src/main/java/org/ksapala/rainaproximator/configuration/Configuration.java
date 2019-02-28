@@ -34,16 +34,19 @@ public class Configuration {
     @Getter
     @Setter
     public class Algorithm {
-
-        public final static String MODE_STRAIGHT = "straight";
-        public final static String MODE_AROUND = "around";
-        public final static String MODE_AROUND_FINAL = "aroundFinal";
-
-        @NotBlank private String mode;
         @NotEmpty private int[] aroundAngles;
         @NotEmpty private int[] aroundFinalAngles;
         @NotNull private int defaultWind;
+
+        private Mode mode = new Mode();
         private Cloud cloud = new Cloud();
+
+        @Getter
+        @Setter
+        public class Mode {
+            @NotBlank private String name;
+            @NotBlank private String compare;
+        }
 
         @Getter
         @Setter

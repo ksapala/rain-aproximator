@@ -14,6 +14,7 @@ import org.ksapala.rainaproximator.exception.AproximationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.validation.constraints.NotNull;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +75,7 @@ public class CloudLineBuilder {
      * @param alpha
      * @return
      */
-    private List<CloudLine> parseToCloudLines(Scan scan, double x, double y, double alpha) {
+    private List<CloudLine> parseToCloudLines(@NotNull Scan scan, double x, double y, double alpha) {
         List<Point> imagePoints = getImagePoints(x, y, alpha);
         return scan.getMaps().stream()
                 .map(map -> parseToCloudLine(map, imagePoints))

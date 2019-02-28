@@ -144,4 +144,12 @@ public class CloudLineTest {
         assertFalse(cloudLine.isFutureSunDistanceInfinity());
     }
 
+    @Test
+    public void testIsFutureDistanceBothInfinity() {
+        CloudLine cloudLine = testUtils.stringToCloudLine(".....");
+
+        assertTrue(cloudLine.isFutureRainDistanceInfinity());
+        assertTrue(cloudLine.isFutureSunDistanceInfinity());
+    }
+
 }

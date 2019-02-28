@@ -26,13 +26,13 @@ public class WindGetter {
     private final Logger logger = LoggerFactory.getLogger(WindGetter.class);
 
     @Autowired
-	private Configuration configuration;
+    private Configuration configuration;
 
-	/**
+    /**
 	 * 
 	 */
-	public WindGetter() {
-	}
+    public WindGetter() {
+    }
 
 	/**
 	 * @param latitude

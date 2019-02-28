@@ -3,32 +3,26 @@
  */
 package org.ksapala.rainaproximator.aproximation.regression;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.ksapala.rainaproximator.aproximation.debug.RegressionDebug;
 import org.ksapala.rainaproximator.utils.TimeUtils;
 
 /**
  * @author krzysztof
  *
  */
+@AllArgsConstructor
+@Getter
 public class RegressionResult {
 
-    public final static RegressionResult NAN_RESULT = new RegressionResult(Double.NaN, Double.NaN);
+    public final static RegressionResult NAN_RESULT = new RegressionResult(Double.NaN, Double.NaN, Double.NaN,
+            new RegressionDebug(Double.NaN, Double.NaN, Double.NaN, 0));
 
 	private double value;
-	private double slope;
-	
-
-	public RegressionResult(double value, double slope) {
-		this.value = value;
-		this.slope = slope;
-	}
-
-	public double getValue() {
-		return this.value;
-	}
-
-	public double getSlope() {
-		return this.slope;
-	}
+    private double slope;
+    private double rSquare;
+    private RegressionDebug regressionDebug;
 
 
     @Override
@@ -36,6 +30,7 @@ public class RegressionResult {
         return "RegressionResult {" +
                 "value=" + TimeUtils.millisToLocalDateAndTime((long) value) +
                 ", slope=" + slope +
+                ", rSquare=" + rSquare +
                 '}';
     }
 }

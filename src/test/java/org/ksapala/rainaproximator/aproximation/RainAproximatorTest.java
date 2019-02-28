@@ -6,6 +6,8 @@ import org.junit.runner.RunWith;
 import org.ksapala.rainaproximator.TestUtils;
 import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionTimeFactory;
+import org.ksapala.rainaproximator.aproximation.result.AproximationResult;
+import org.ksapala.rainaproximator.aproximation.result.AproximationResultType;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -6,6 +6,7 @@ package org.ksapala.rainaproximator.aproximation.regression;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 import org.ksapala.rainaproximator.aproximation.cloud.Distance;
+import org.ksapala.rainaproximator.aproximation.debug.RegressionDebug;
 import org.ksapala.rainaproximator.utils.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +39,7 @@ public class RegressionCalculator {
 
     	List<RegressionPoint> regressionPoints = this.dataProvider.getRegressionPoints();
     	logRegressionPoints(this.dataProvider.getDescription() + " regression points : ", regressionPoints);
-    	
+
     	regressionPoints = removeOutliersDifference(regressionPoints);
     	logRegressionPoints(this.dataProvider.getDescription() + " regression after remove outliners:", regressionPoints);
     	
@@ -49,12 +50,27 @@ public class RegressionCalculator {
 
 		double regression = simpleRegression.predict(x);
 		double regressionSlope  = simpleRegression.getSlope();
+        double standardDeviation = getStandardDeviation(regressionPoints);
+        double rSquare = simpleRegression.getRSquare();
 
-        RegressionResult result = new RegressionResult(regression, regressionSlope);
+        RegressionDebug regressionDebug = new RegressionDebug(standardDeviation, regressionSlope, rSquare, data.length);
+        RegressionResult result = new RegressionResult(regression, regressionSlope, rSquare, regressionDebug);
         return result;
 	}
-	
-	/**
+
+    /**
+     * @param regressionPoints
+     * @return
+     */
+    private double getStandardDeviation(List<RegressionPoint> regressionPoints) {
+        DescriptiveStatistics statistics = new DescriptiveStatistics();
+        for (RegressionPoint regressionPoint : regressionPoints) {
+            statistics.addValue(regressionPoint.getDistance().getValue());
+        }
+        return statistics.getStandardDeviation();
+    }
+
+    /**
 	 * @param regressionPoints
 	 * @return
 	 */

@@ -231,6 +231,9 @@ public class CloudLine {
             return getRainDistance();
         }
         Distance sunDistance = getSunDistance();
+        if (Distance.INFINITY.equals(sunDistance)) {
+            return Distance.INFINITY;
+        }
         return getRainDistance(sunDistance.getValue());
     }
 
@@ -243,6 +246,9 @@ public class CloudLine {
             return getSunDistance();
         }
         Distance rainDistance = getRainDistance();
+        if (Distance.INFINITY.equals(rainDistance)) {
+            return Distance.INFINITY;
+        }
         return getSunDistance(rainDistance.getValue());
     }
 

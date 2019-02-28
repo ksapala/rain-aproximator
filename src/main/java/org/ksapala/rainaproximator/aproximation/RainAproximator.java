@@ -5,9 +5,11 @@ import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
 import org.ksapala.rainaproximator.aproximation.cloud.CloudLineBuilder;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionState;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionTimeFactory;
+import org.ksapala.rainaproximator.aproximation.result.*;
 import org.ksapala.rainaproximator.aproximation.scan.Scan;
 import org.ksapala.rainaproximator.aproximation.scan.converter.CoordinatesConverter;
 import org.ksapala.rainaproximator.configuration.Configuration;
+import org.ksapala.rainaproximator.configuration.Mode;
 import org.ksapala.rainaproximator.exception.AproximationException;
 import org.ksapala.rainaproximator.utils.LoggingUtils;
 import org.slf4j.Logger;
@@ -59,7 +61,7 @@ public class RainAproximator {
      * @return
      * @throws AproximationException
      */
-	public AproximationResult aproximate(Scan scan, double latitude, double longitude, int angle, String mode)
+	public AproximationResult aproximate(Scan scan, double latitude, double longitude, int angle, Mode mode)
             throws AproximationException {
 		long start = System.currentTimeMillis();
 
@@ -70,11 +72,11 @@ public class RainAproximator {
 
 		AproximationResult aproximatorResult;
 
-        if (Configuration.Algorithm.MODE_AROUND.equals(mode)) {
-            aproximatorResult = aproximateAround(scan, x, y).getAproximationResult();
+        if (Mode.NAME_AROUND.equals(mode.getName())) {
+            aproximatorResult = aproximateAround(scan, x, y, mode).getAproximationResult();
 
-        } else if (Configuration.Algorithm.MODE_AROUND_FINAL.equals(mode)) {
-            aproximatorResult = aproximateAroundFinal(scan, x, y);
+        } else if (Mode.NAME_AROUND_FINAL.equals(mode.getName())) {
+            aproximatorResult = aproximateAroundFinal(scan, x, y, mode).getAproximationResult();
 
         } else { // MODE_STRAIGHT
             aproximatorResult = aproximateStraight(scan, x, y, angle).getAproximationResult();
@@ -89,7 +91,7 @@ public class RainAproximator {
 		long duration = end - start;
 
 		logger.debug("[performance] Aproximation time: " + duration);
-		aproximatorResult.getDebug().setPerformance(Long.toString(duration));
+        aproximatorResult.getDebug().setPerformance(Long.toString(duration));
 		return aproximatorResult;
     }
 
@@ -98,11 +100,12 @@ public class RainAproximator {
      * @param scan
      * @param x
      * @param y
+     * @param mode
      * @return
      * @throws AproximationException
      */
-    private DirectionalAproximationResult aproximateAround(Scan scan, double x, double y) throws AproximationException {
-        return aproximateAngles(scan, x, y, algorithmConfiguration.getAroundAngles());
+    private DirectionalAproximationResult aproximateAround(Scan scan, double x, double y, Mode mode) throws AproximationException {
+        return aproximateAngles(scan, mode, x, y, algorithmConfiguration.getAroundAngles());
     }
 
     /**
@@ -110,29 +113,31 @@ public class RainAproximator {
      * @param scan
      * @param x
      * @param y
+     * @param mode
      * @return
      * @throws AproximationException
      */
-    private AproximationResult aproximateAroundFinal(Scan scan, double x, double y) throws AproximationException {
-        DirectionalAproximationResult directionalAproximationResult = aproximateAround(scan, x, y);
+    private DirectionalAproximationResult aproximateAroundFinal(Scan scan, double x, double y, Mode mode) throws AproximationException {
+        DirectionalAproximationResult directionalAproximationResult = aproximateAround(scan, x, y, mode);
 
         int[] finalAngles = angle.create(directionalAproximationResult.getAngle(), algorithmConfiguration.getAroundFinalAngles());
 
-        DirectionalAproximationResult finalDirectionalAproximationResult = aproximateAngles(scan, x, y, finalAngles);
+        DirectionalAproximationResult finalDirectionalAproximationResult = aproximateAngles(scan, mode, x, y, finalAngles);
 
-        return finalDirectionalAproximationResult.getAproximationResult();
+        return finalDirectionalAproximationResult;
     }
 
     /**
      *
      * @param scan
+     * @param mode
      * @param x
      * @param y
      * @param angles
      * @return
      * @throws AproximationException
      */
-    private DirectionalAproximationResult aproximateAngles(Scan scan, double x, double y, int[] angles) throws AproximationException {
+    private DirectionalAproximationResult aproximateAngles(Scan scan, Mode mode, double x, double y, int[] angles) throws AproximationException {
         logger.debug("Aproximating for angles: " + angles);
         List<DirectionalAproximationResult> directionalAproximationResults = new ArrayList<>();
 
@@ -142,7 +147,8 @@ public class RainAproximator {
         }
 
         logDirectionalAproximationResults("Aproximation results to merge:", directionalAproximationResults);
-        DirectionalAproximationResult mergedAproximationResult = AproximationResultMerger.merge(directionalAproximationResults);
+        AproximationResultMerger merger = new AproximationResultMerger(mode);
+        DirectionalAproximationResult mergedAproximationResult = merger.merge(directionalAproximationResults);
         return mergedAproximationResult;
     }
 
@@ -187,19 +193,20 @@ public class RainAproximator {
         boolean isSun = regressionState.isSun();//predict rain || 0,1
         LoggingUtils.log(regressionState);
 
-        AproximationResult rainAproximation;
+        AproximationResult aproximationResult;
+        Accuracy accuracy = new Accuracy(regressionState.getRSquare());
 
-		if (isSun) {
+        if (isSun) {
 			double rainRegression = regressionState.getRainRegression();
 			boolean rainRegressionNan = regressionState.isRainRegressionNan();
 			boolean rainRegressionForPast = regressionState.isRainRegressionForPast();
-			
+
 			if (rainRegressionNan) {
-				rainAproximation = new AproximationResult(AproximationResultType.RAIN_UNKNOWN);
+				aproximationResult = new AproximationResult(AproximationResultType.RAIN_UNKNOWN, accuracy);
 			} else if (rainRegressionForPast) {
-				rainAproximation = new AproximationResult(AproximationResultType.RAIN_UNSURE);
+				aproximationResult = new AproximationResult(AproximationResultType.RAIN_UNSURE, accuracy);
 			} else {
-				rainAproximation = new AproximationResult(AproximationResultType.RAIN_AT_TIME, rainRegression);
+				aproximationResult = new AproximationResult(AproximationResultType.RAIN_AT_TIME, accuracy, rainRegression);
 			}
 			
 		} else { // rain
@@ -208,15 +215,16 @@ public class RainAproximator {
 			boolean sunRegressionForPast = regressionState.isSunRegressionForPast();
 			
 			if (sunRegressionNan) {
-				rainAproximation = new AproximationResult(AproximationResultType.SUN_UNKNOWN);
+				aproximationResult = new AproximationResult(AproximationResultType.SUN_UNKNOWN, accuracy);
 			} else if (sunRegressionForPast) {
-				rainAproximation = new AproximationResult(AproximationResultType.SUN_UNSURE);
+				aproximationResult = new AproximationResult(AproximationResultType.SUN_UNSURE, accuracy);
 			} else {
-				rainAproximation = new AproximationResult(AproximationResultType.SUN_AT_TIME, sunRegression);
+				aproximationResult = new AproximationResult(AproximationResultType.SUN_AT_TIME, accuracy, sunRegression);
 			}
 		}
 
-	    return rainAproximation;
+        aproximationResult.getDebug().setRegressionDebug(regressionState.getRegressionDebug());
+	    return aproximationResult;
     }
 
 	/**
