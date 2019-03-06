@@ -25,7 +25,7 @@ public class ScanComponent {
     }
 
     @PostConstruct
-    @Scheduled(cron = "0 0/5 * * * ?")
+//    @Scheduled(cron = "0 0/5 * * * ?")
     public void scan() {
         try {
             doScan();
@@ -39,7 +39,7 @@ public class ScanComponent {
         logger.info("Starting to scan.");
 
         long start = System.currentTimeMillis();
-        this.scan = Optional.ofNullable(this.scanner.scan());
+        scan = Optional.ofNullable(scanner.scan());
         long end = System.currentTimeMillis();
 
         logger.info("Maps scanned successfully. Scan time: " + (end - start));

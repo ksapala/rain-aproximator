@@ -8,13 +8,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
+import javax.validation.constraints.NotNull;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 public class Scanner {
@@ -37,9 +43,9 @@ public class Scanner {
      */
     public Scan scan() throws AproximationException {
         List<BufferedImage> images;
-        LocalDateTime lastRadarMapTime;
+        LocalDateTime parsedTime;
         try {
-            lastRadarMapTime = this.lastRadarMapTimeParser.parseLastRadarMapTime();
+            parsedTime = this.lastRadarMapTimeParser.parseLastRadarMapTime();
         } catch (Exception e) {
             throw new AproximationException("Error while parsing last radar map date on main page.", e);
         }
@@ -49,14 +55,17 @@ public class Scanner {
             throw new AproximationException("Error while scanning radar maps", e);
         }
 
-        LocalDateTime mapTime = LocalDateTime.from(lastRadarMapTime);
-        List<ScannedMap> maps = new ArrayList<>(images.size());
-        for (int i = images.size() - 1; i >= 0; i--) {
-            maps.add(0, new ScannedMap(images.get(i), mapTime));
-            mapTime = mapTime.minusMinutes(configuration.getScanner().getRadarMapTimeIntevalMinutes());
-        }
+        int intervalMinutes = configuration.getScanner().getRadarMapTimeIntevalMinutes();
 
-        return new Scan(maps, lastRadarMapTime);
+        List<ScannedMap> maps = IntStream.range(0, images.size())
+                .mapToObj(i -> new ScannedMap(images.get(i), parsedTime.minusMinutes(intervalMinutes * (images.size() - i - 1))))
+                .filter(ScannedMap::isClear)
+                .collect(Collectors.toList());
+
+        LocalDateTime lastMapTime = maps.stream().map(ScannedMap::getTime)
+                .reduce((first, second) -> second)
+                .orElse(parsedTime);
+        return new Scan(maps, lastMapTime);
     }
 
     private List<BufferedImage> getImages() throws IOException {
@@ -72,7 +81,6 @@ public class Scanner {
     private BufferedImage getImage(String radarImageIdentifier) throws IOException {
         String urlString = MessageFormat.format(configuration.getScanner().getRadarUrl(), radarImageIdentifier);
         URL url = new URL(urlString);
-        BufferedImage bufferedImage = ImageIO.read(url);
-        return bufferedImage;
+        return ImageIO.read(url);
     }
 }

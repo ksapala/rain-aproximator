@@ -35,12 +35,19 @@ public class ScannerTest {
         assertNotNull(scan.getLastMapTime());
         assertNotNull(scan.getMaps());
 
-        int mapsCount = configuration.getScanner().getRadarImageIdentifiers().size();
-        if (mapsCount > 1) {
-            assertTrue(scan.getMaps().size() == mapsCount);
+        int imageIdentifiersCount  = configuration.getScanner().getRadarImageIdentifiers().size();
+        if (imageIdentifiersCount > 1) {
+            int actualMapsCount = scan.getMaps().size();
+            assertTrue(actualMapsCount <= imageIdentifiersCount);
 
-            LocalDateTime timeLast = scan.getMaps().get(mapsCount - 1).getTime();
-            LocalDateTime timeLastMinusOne = scan.getMaps().get(mapsCount - 2).getTime();
+            ScannedMap last = scan.getMaps().get(actualMapsCount - 1);
+            ScannedMap lastMinusOne = scan.getMaps().get(actualMapsCount - 2);
+
+            LocalDateTime timeLast = last.getTime();
+            LocalDateTime timeLastMinusOne = lastMinusOne.getTime();
+
+            assertTrue(last.isClear());
+            assertTrue(lastMinusOne.isClear());
 
             assertEquals(scan.getLastMapTime(), timeLast);
             assertEquals(timeLast.minusMinutes(configuration.getScanner().getRadarMapTimeIntevalMinutes()), timeLastMinusOne);

@@ -56,11 +56,11 @@ public class RainAproximatorTest {
 	@Test
 	public void testAproximateRainAtTime() {
 		List<CloudLine> cloudLines = new ArrayList<CloudLine>();
-		CloudLine cloudLine1 = testUtils.stringToCloudLine("....#.......###########...");
-		CloudLine cloudLine2 = testUtils.stringToCloudLine("....#.....###########.....");
-		CloudLine cloudLine3 = testUtils.stringToCloudLine("........#######.###.......");
-		CloudLine cloudLine4 = testUtils.stringToCloudLine("......####.#.####.........");
-		CloudLine cloudLine5 = testUtils.stringToCloudLine("....####.####.#. ..........");
+		CloudLine cloudLine1 = testUtils.stringToCloudLine("............###########...");
+		CloudLine cloudLine2 = testUtils.stringToCloudLine("..........###########.....");
+		CloudLine cloudLine3 = testUtils.stringToCloudLine("........###########.......");
+		CloudLine cloudLine4 = testUtils.stringToCloudLine("......###########.........");
+		CloudLine cloudLine5 = testUtils.stringToCloudLine("....###########...........");
 
 		cloudLine1.setTime(testUtils.parseInTest("04/02/2115 13:15"));
 		cloudLine2.setTime(testUtils.parseInTest("04/02/2115 13:25"));
@@ -125,8 +125,8 @@ public class RainAproximatorTest {
 		List<CloudLine> cloudLines = new ArrayList<>();
 		CloudLine cloudLine1 = testUtils.stringToCloudLine("...................");
 		CloudLine cloudLine2 = testUtils.stringToCloudLine("....##########.....");
-		CloudLine cloudLine3 = testUtils.stringToCloudLine(".........#.........");
-		CloudLine cloudLine4 = testUtils.stringToCloudLine(".##................");
+		CloudLine cloudLine3 = testUtils.stringToCloudLine("...................");
+		CloudLine cloudLine4 = testUtils.stringToCloudLine("...................");
 		CloudLine cloudLine5 = testUtils.stringToCloudLine("...................");
 
 		cloudLine1.setTime(testUtils.parseInTest("04/02/2115 13:15"));
@@ -155,11 +155,11 @@ public class RainAproximatorTest {
 	@Test
 	public void testAproximateSunUnknown() {
 		List<CloudLine> cloudLines = new ArrayList<CloudLine>();
-		CloudLine cloudLine1 = testUtils.stringToCloudLine("#######..##########");
+		CloudLine cloudLine1 = testUtils.stringToCloudLine("###################");
 		CloudLine cloudLine2 = testUtils.stringToCloudLine("###################");
-		CloudLine cloudLine3 = testUtils.stringToCloudLine(".........#.........");
+		CloudLine cloudLine3 = testUtils.stringToCloudLine("...................");
 		CloudLine cloudLine4 = testUtils.stringToCloudLine("###################");
-		CloudLine cloudLine5 = testUtils.stringToCloudLine("#####.#########..##");
+		CloudLine cloudLine5 = testUtils.stringToCloudLine("###################");
 
 		cloudLine1.setTime(testUtils.parseInTest("04/02/2115 13:15"));
 		cloudLine2.setTime(testUtils.parseInTest("04/02/2115 13:25"));
@@ -191,7 +191,7 @@ public class RainAproximatorTest {
 		CloudLine cloudLine2 = testUtils.stringToCloudLine("#########..........");
 		CloudLine cloudLine3 = testUtils.stringToCloudLine("############.......");
 		CloudLine cloudLine4 = testUtils.stringToCloudLine("###############....");
-		CloudLine cloudLine5 = testUtils.stringToCloudLine("#####.###########..");
+		CloudLine cloudLine5 = testUtils.stringToCloudLine("#################..");
 
 		cloudLine1.setTime(testUtils.parseInTest("04/02/2115 13:15"));
 		cloudLine2.setTime(testUtils.parseInTest("04/02/2115 13:25"));

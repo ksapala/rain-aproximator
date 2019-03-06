@@ -3,14 +3,12 @@ package org.ksapala.rainaproximator.aproximation.cloud;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Getter;
 import lombok.Setter;
+import org.ksapala.rainaproximator.aproximation.image.RainImage;
 import org.ksapala.rainaproximator.configuration.Configuration;
-import org.ksapala.rainaproximator.exception.AproximationException;
 import org.ksapala.rainaproximator.serializer.CloudLineSerializer;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 @JsonSerialize(using = CloudLineSerializer.class)
@@ -19,8 +17,7 @@ public class CloudLine {
     // constants
     public static final String SUN_SYMBOL = ".";
 	public static final String RAIN_SYMBOL = "#";
-	private static final int RGB_TRANSPARENT_GIF_BLACK = 0;
-	private static final int RGB_TRANSPARENT_GIF_WHITE = 16777215;
+
 
 	// fields
     private boolean[] line;
@@ -41,8 +38,8 @@ public class CloudLine {
 		this.patternBuilder = new PatternBuilder();
 	}
 	
-	public void addRgb(int rgb, int index) {
-	    if (rgb == RGB_TRANSPARENT_GIF_BLACK || rgb == RGB_TRANSPARENT_GIF_WHITE) {
+	void addRgb(int rgb, int index) {
+	    if (rgb == RainImage.RGB_TRANSPARENT_GIF_BLACK || rgb == RainImage.RGB_TRANSPARENT_GIF_WHITE) {
 	    	setRain(index, false);	
 	    } else {
 	    	setRain(index, true);	
@@ -59,15 +56,15 @@ public class CloudLine {
 	}
 	
 	public String getLineAsString() {
-		String result = "";
+		StringBuilder result = new StringBuilder();
 		for (Boolean isRain : this.line) {
 			if (isRain) {
-			    result += RAIN_SYMBOL;
+			    result.append(RAIN_SYMBOL);
 			} else {
-				result += SUN_SYMBOL;	
+				result.append(SUN_SYMBOL);
 			}
         }
-		return result;
+		return result.toString();
 	}
 
 	/**
@@ -120,10 +117,10 @@ public class CloudLine {
     }
 
 	/**
-	 * @param matchPattern
-	 * @param replacePattern
-	 */
-	public void replacePattern(boolean[] matchPattern, boolean[] replacePattern) {
+     * @param matchPattern
+     * @param replacePattern
+     */
+    void replacePattern(boolean[] matchPattern, boolean[] replacePattern) {
 		for (int i = 0; i < this.line.length - matchPattern.length + 1; i++) {
 			boolean lineEqualsFromIndex = lineEqualsFromIndex(i, matchPattern);
 			if (lineEqualsFromIndex) {
@@ -138,9 +135,7 @@ public class CloudLine {
 	 * @param replacePattern
 	 */
 	private void replacePatternFromIndex(int index, boolean[] replacePattern) {
-		for (int i = 0; i < replacePattern.length; i++) {
-	        this.line[index + i] = replacePattern[i];
-        }
+        System.arraycopy(replacePattern, 0, this.line, index, replacePattern.length);
     }
 
 	/**

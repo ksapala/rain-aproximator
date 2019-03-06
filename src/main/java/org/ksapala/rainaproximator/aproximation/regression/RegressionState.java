@@ -19,6 +19,8 @@ import java.util.List;
 /**
  * @author krzysztof
  *
+ * Changes cloud lines into information about sun/rain regression.
+ *
  * contact: krzysztof.sapala@gmail.com
  *
  */
@@ -38,6 +40,8 @@ public class RegressionState {
 	private double sunRegressionSlope;
 	private Boolean rainRegressionForPast = null;
 	private Boolean sunRegressionForPast = null;
+    private List<CloudLine> forRainRegression;
+    private List<CloudLine> forSunRegression;
 
 	@Getter
     private double rSquare;
@@ -62,16 +66,16 @@ public class RegressionState {
 	 */
 	public double getRainRegression() {
 	    if (this.rainRegression == REGRESSION_NOT_SET) {
-            List<CloudLine> forRainRegression = CloudsOperations.filterForRainRegression(cloudLines);
+            this.forRainRegression = CloudsOperations.filterForRainRegression(cloudLines);
             RainRegressionDataProvider dataProvider = new RainRegressionDataProvider(forRainRegression);
 			RegressionCalculator calculator = new RegressionCalculator(dataProvider);
 	    	RegressionResult result = calculator.calculate(ZERO_DISTANCE);
 
 			this.rainRegression = result.getValue();
 			this.rainRegressionSlope  = result.getSlope();
-			this.regressionDebug = result.getRegressionDebug();
             this.rSquare = result.getRSquare();
-	    }
+			this.regressionDebug = result.getRegressionDebug();
+        }
 	    return this.rainRegression;
     }
 	
@@ -80,15 +84,15 @@ public class RegressionState {
 	 */
 	public double getSunRegression() {
 		if (this.sunRegression == REGRESSION_NOT_SET) {
-            List<CloudLine> forSunRegression = CloudsOperations.filterForSunRegression(cloudLines);
+            this.forSunRegression = CloudsOperations.filterForSunRegression(cloudLines);
 			SunRegressionDataProvider dataProvider = new SunRegressionDataProvider(forSunRegression);
 			RegressionCalculator calculator = new RegressionCalculator(dataProvider);
 	    	RegressionResult result = calculator.calculate(ZERO_DISTANCE);
 
 			this.sunRegression = result.getValue();
 			this.sunRegressionSlope  = result.getSlope();
-            this.regressionDebug = result.getRegressionDebug();
             this.rSquare = result.getRSquare();
+            this.regressionDebug = result.getRegressionDebug();
 	    }
 	    return this.sunRegression;
     }
@@ -98,8 +102,7 @@ public class RegressionState {
 	 */
 	public boolean isRainRegressionNan() {
 		double rainRegression = getRainRegression();
-		boolean isRainRegressionNan = Double.isNaN(rainRegression);
-		return isRainRegressionNan;
+        return Double.isNaN(rainRegression);
 	}
 	
 	/**
@@ -107,8 +110,7 @@ public class RegressionState {
 	 */
 	public boolean isSunRegressionNan() {
 		double sunRegression = getSunRegression();
-		boolean isSunRegressionNan = Double.isNaN(sunRegression);
-		return isSunRegressionNan;
+        return Double.isNaN(sunRegression);
 	}
 	
 	/**
@@ -139,17 +141,23 @@ public class RegressionState {
 	 * @return
 	 */
 	public boolean rainDecrease() {
-		boolean rainDecrease = this.sunRegressionSlope < 0;
-		return rainDecrease;
+        return this.sunRegressionSlope < 0;
 	}
 	
 	/**
 	 * @return
 	 */
 	public boolean sunDecrease() {
-		boolean sunDecrease = this.rainRegressionSlope < 0;
-		return sunDecrease;
+        return this.rainRegressionSlope < 0;
 	}
+
+    public List<CloudLine> getForRainRegression() {
+        return forRainRegression;
+    }
+
+    public List<CloudLine> getForSunRegression() {
+        return forSunRegression;
+    }
 
     public LocalDateTime now() {
         return this.regressionTimeFactory.now();

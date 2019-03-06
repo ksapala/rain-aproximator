@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package org.ksapala.rainaproximator.aproximation.regression;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
@@ -15,6 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Finds line distance(time) for given time.
+ * Time is x.
+ * Regression result is line f(x).
+ *
  * @author krzysztof
  *
  */
@@ -31,31 +33,36 @@ public class RegressionCalculator {
 		this.dataProvider = dataProvider;
 	}
 
+    /**
+     * Calculates regression.
+     *
+     * @param x
+     * @return
+     */
 	public RegressionResult calculate(int x) {
 	    if (!dataProvider.hasData()) {
 	        logger.debug("Regression skipped - empty data.");
             return RegressionResult.NAN_RESULT;
         }
 
-    	List<RegressionPoint> regressionPoints = this.dataProvider.getRegressionPoints();
-    	logRegressionPoints(this.dataProvider.getDescription() + " regression points : ", regressionPoints);
+    	List<RegressionPoint> allRegressionPoints = this.dataProvider.getRegressionPoints();
+    	logRegressionPoints(this.dataProvider.getDescription() + " regression points : ", allRegressionPoints);
 
-    	regressionPoints = removeOutliersDifference(regressionPoints);
-    	logRegressionPoints(this.dataProvider.getDescription() + " regression after remove outliners:", regressionPoints);
+        List<RegressionPoint> takenRegressionPoints = removeOutliersDifference(allRegressionPoints);
+    	logRegressionPoints(this.dataProvider.getDescription() + " regression after remove outliners:", takenRegressionPoints);
     	
-		double[][] data = toDataArray(regressionPoints);
+		double[][] data = toDataArray(takenRegressionPoints);
 		
     	SimpleRegression simpleRegression = new SimpleRegression();
     	simpleRegression.addData(data);
 
 		double regression = simpleRegression.predict(x);
 		double regressionSlope  = simpleRegression.getSlope();
-        double standardDeviation = getStandardDeviation(regressionPoints);
+        double standardDeviation = getStandardDeviation(takenRegressionPoints);
         double rSquare = simpleRegression.getRSquare();
 
-        RegressionDebug regressionDebug = new RegressionDebug(standardDeviation, regressionSlope, rSquare, data.length);
-        RegressionResult result = new RegressionResult(regression, regressionSlope, rSquare, regressionDebug);
-        return result;
+        RegressionDebug regressionDebug = RegressionDebug.of(standardDeviation, regressionSlope, rSquare, allRegressionPoints, takenRegressionPoints);
+        return new RegressionResult(regression, regressionSlope, rSquare, regressionDebug);
 	}
 
     /**
@@ -103,7 +110,7 @@ public class RegressionCalculator {
 		if (regressionPoints.isEmpty()) {
 			return regressionPoints;
 		}
-		List<RegressionPoint> result = new ArrayList<RegressionPoint>();
+		List<RegressionPoint> result = new ArrayList<>();
 		double[] differences = getDifferences(regressionPoints);
 		
 		double median = getMedian(differences);
@@ -156,8 +163,7 @@ public class RegressionCalculator {
 			statistics.addValue(number);
 		}
 
-		double median = statistics.getPercentile(50);
-		return median;
+        return statistics.getPercentile(50);
 	}
 	
 }
