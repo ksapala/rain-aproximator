@@ -57,7 +57,7 @@ public class RegressionStateTest {
         assertEquals(expectedTime, TimeUtils.millisToLocalDateAndTime((long) regressionState.getRainRegression()));
         assertFalse(regressionState.isRainRegressionNan());
         assertFalse(regressionState.isRainRegressionForPast());
-        assertTrue(regressionState.sunDecrease());
+        assertTrue(regressionState.rainIsApproaching());
     }
 
     @Test
@@ -82,7 +82,7 @@ public class RegressionStateTest {
         assertEquals(expectedTime, TimeUtils.millisToLocalDateAndTime((long) regressionState.getRainRegression()));
         assertFalse(regressionState.isRainRegressionNan());
         assertFalse(regressionState.isRainRegressionForPast());
-        assertTrue(regressionState.sunDecrease());
+        assertTrue(regressionState.rainIsApproaching());
     }
 
     @Test
@@ -107,7 +107,7 @@ public class RegressionStateTest {
         assertEquals(expectedTime, TimeUtils.millisToLocalDateAndTime((long) regressionState.getRainRegression()));
         assertFalse(regressionState.isRainRegressionNan());
         assertFalse(regressionState.isRainRegressionForPast());
-        assertTrue(regressionState.sunDecrease());
+        assertTrue(regressionState.rainIsApproaching());
     }
 
     @Test
@@ -132,10 +132,26 @@ public class RegressionStateTest {
         assertEquals(expectedTime, TimeUtils.millisToLocalDateAndTime((long) regressionState.getRainRegression()));
         assertFalse(regressionState.isRainRegressionNan());
         assertFalse(regressionState.isRainRegressionForPast());
-        assertTrue(regressionState.sunDecrease());
+        assertTrue(regressionState.rainIsApproaching());
     }
 
     @Test
-    public void getSunRegression() {
+    public void getRainRegressionRainInTheMeantime() {
+        List<CloudLine> cloudLines = new ArrayList<>();
+        cloudLines.add(testUtils.cloudLine("................###########.....", "04/02/2115 14:00"));
+        cloudLines.add(testUtils.cloudLine("...........###########..........", "04/02/2115 14:10"));
+        cloudLines.add(testUtils.cloudLine("......###########...............", "04/02/2115 14:20"));
+        cloudLines.add(testUtils.cloudLine(".###########....................", "04/02/2115 14:30"));
+
+
+        RegressionState regressionState = new RegressionState(cloudLines, regressionTimeFactory);
+        LocalDateTime expectedTime = testUtils.parseInTest("04/02/2115 14:32");
+
+        assertFalse(regressionState.isSun());
+        assertEquals(expectedTime, TimeUtils.millisToLocalDateAndTime((long) regressionState.getRainRegression()));
+        assertFalse(regressionState.isRainRegressionNan());
+        assertTrue(regressionState.isRainRegressionForPast());
+        assertTrue(regressionState.rainIsApproaching());
     }
+
 }

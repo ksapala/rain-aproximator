@@ -5,8 +5,9 @@ package org.ksapala.rainaproximator.aproximation.regression;
 
 import lombok.Getter;
 import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
-import org.ksapala.rainaproximator.aproximation.cloud.CloudsOperations;
+import org.ksapala.rainaproximator.aproximation.domainfilters.Filters;
 import org.ksapala.rainaproximator.aproximation.debug.RegressionDebug;
+import org.ksapala.rainaproximator.aproximation.structure.RegressionPointStructure;
 import org.ksapala.rainaproximator.utils.LoggingUtils;
 import org.ksapala.rainaproximator.utils.TimeUtils;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -23,6 +25,8 @@ import java.util.List;
  *
  * contact: krzysztof.sapala@gmail.com
  *
+ *
+ * TODO: Refactor this: Reuse code for rain and sun + make this bean.
  */
 public class RegressionState {
 
@@ -36,45 +40,81 @@ public class RegressionState {
 
     private double rainRegression = REGRESSION_NOT_SET;
 	private double sunRegression = REGRESSION_NOT_SET;
-	private double rainRegressionSlope;
-	private double sunRegressionSlope;
+    private double rainRegressionSlope;
+    private double sunRegressionSlope;
 	private Boolean rainRegressionForPast = null;
 	private Boolean sunRegressionForPast = null;
-    private List<CloudLine> forRainRegression;
-    private List<CloudLine> forSunRegression;
 
-	@Getter
-    private double rSquare;
 
-	@Getter
-    private RegressionDebug regressionDebug;
+    @Getter private List<CloudLine> rainCandidates;
+    @Getter private List<CloudLine> sunCandidates;
+    @Getter private List<CloudLine> rainGoodFitClouds;
+    @Getter private List<CloudLine> sunGoodFitClouds;
+    @Getter private double rSquare;
+    @Getter private RegressionDebug rainRegressionDebug;
+    @Getter private RegressionDebug sunRegressionDebug;
+
+    private Filters filters;
 
     public  RegressionState(List<CloudLine> cloudLines, RegressionTimeFactory regressionTimeFactory) {
         this.cloudLines = cloudLines;
         this.regressionTimeFactory = regressionTimeFactory;
+        this.filters = new Filters();
     }
 
     /**
      * @return
      */
     public boolean isSun() {
-        return CloudsOperations.isSun(cloudLines);
+        if (CloudLine.isSun(cloudLines)) {
+            return !rainInMeantime();
+        } else {
+            return sunInMeantime();
+        }
     }
 
-	/**
+    /**
+     * @return
+     */
+    private boolean rainInMeantime() {
+        return rainIsApproaching() && isRainRegressionForPast();
+    }
+
+    /**
+     * @return
+     */
+    private boolean sunInMeantime() {
+        return sunIsApproaching() && isSunRegressionForPast();
+    }
+
+    /**
 	 * @return
 	 */
 	public double getRainRegression() {
 	    if (this.rainRegression == REGRESSION_NOT_SET) {
-            this.forRainRegression = CloudsOperations.filterForRainRegression(cloudLines);
-            RainRegressionDataProvider dataProvider = new RainRegressionDataProvider(forRainRegression);
-			RegressionCalculator calculator = new RegressionCalculator(dataProvider);
-	    	RegressionResult result = calculator.calculate(ZERO_DISTANCE);
+            this.rainCandidates = filters.filterRainCandidates(cloudLines);
+
+            List<RegressionPointStructure> structures = rainCandidates.stream()
+                    .map(c -> new RegressionPointStructure(new RegressionPoint(c.getFutureRainDistance(), c.getTime()), c))
+                    .collect(Collectors.toList());
+
+            structures = filters.filterGoodFit(structures);
+
+            this.rainGoodFitClouds = structures.stream()
+                    .map(RegressionPointStructure::getCloudLine)
+                    .collect(Collectors.toList());
+
+            List<RegressionPoint> goodFitPoints = structures.stream()
+                    .map(RegressionPointStructure::getRegressionPoint)
+                    .collect(Collectors.toList());
+
+            RegressionCalculator calculator = new RegressionCalculator(goodFitPoints);
+            RegressionResult result = calculator.calculate(ZERO_DISTANCE);
 
 			this.rainRegression = result.getValue();
 			this.rainRegressionSlope  = result.getSlope();
             this.rSquare = result.getRSquare();
-			this.regressionDebug = result.getRegressionDebug();
+            this.rainRegressionDebug = result.getRegressionDebug();
         }
 	    return this.rainRegression;
     }
@@ -84,15 +124,29 @@ public class RegressionState {
 	 */
 	public double getSunRegression() {
 		if (this.sunRegression == REGRESSION_NOT_SET) {
-            this.forSunRegression = CloudsOperations.filterForSunRegression(cloudLines);
-			SunRegressionDataProvider dataProvider = new SunRegressionDataProvider(forSunRegression);
-			RegressionCalculator calculator = new RegressionCalculator(dataProvider);
-	    	RegressionResult result = calculator.calculate(ZERO_DISTANCE);
+            this.sunCandidates = filters.filterSunCandidates(cloudLines);
 
-			this.sunRegression = result.getValue();
+            List<RegressionPointStructure> structures = sunCandidates.stream()
+                    .map(c -> new RegressionPointStructure(new RegressionPoint(c.getFutureSunDistance(), c.getTime()), c))
+                    .collect(Collectors.toList());
+
+            structures = filters.filterGoodFit(structures);
+
+            this.sunGoodFitClouds = structures.stream()
+                    .map(RegressionPointStructure::getCloudLine)
+                    .collect(Collectors.toList());
+
+            List<RegressionPoint> goodFitPoints = structures.stream()
+                    .map(RegressionPointStructure::getRegressionPoint)
+                    .collect(Collectors.toList());
+
+            RegressionCalculator calculator = new RegressionCalculator(goodFitPoints);
+            RegressionResult result = calculator.calculate(ZERO_DISTANCE);
+
+            this.sunRegression = result.getValue();
 			this.sunRegressionSlope  = result.getSlope();
             this.rSquare = result.getRSquare();
-            this.regressionDebug = result.getRegressionDebug();
+            this.sunRegressionDebug = result.getRegressionDebug();
 	    }
 	    return this.sunRegression;
     }
@@ -140,26 +194,20 @@ public class RegressionState {
 	/**
 	 * @return
 	 */
-	public boolean rainDecrease() {
+	public boolean sunIsApproaching() {
+	    getSunRegression();
         return this.sunRegressionSlope < 0;
 	}
 	
 	/**
 	 * @return
 	 */
-	public boolean sunDecrease() {
+	public boolean rainIsApproaching() {
+	    getRainRegression();
         return this.rainRegressionSlope < 0;
 	}
 
-    public List<CloudLine> getForRainRegression() {
-        return forRainRegression;
-    }
-
-    public List<CloudLine> getForSunRegression() {
-        return forSunRegression;
-    }
-
-    public LocalDateTime now() {
+    private LocalDateTime now() {
         return this.regressionTimeFactory.now();
     }
 
@@ -170,14 +218,15 @@ public class RegressionState {
             logger.debug("- is Nan: " + isRainRegressionNan());
             logger.debug("- is for the past: " + isRainRegressionForPast());
             logger.debug("Slope:" + rainRegressionSlope);
-            logger.debug("- sun decrease:" + sunDecrease());
+            logger.debug("- rain is approaching:" + rainIsApproaching());
         } else {
             logger.debug("Rain (#######)");
             logger.debug("Sun regression: " + LoggingUtils.getTmeOrNan(getSunRegression()));
             logger.debug("- is Nan: " + isSunRegressionNan());
             logger.debug("- is for the past: " + isSunRegressionForPast());
             logger.debug("Slope:" + sunRegressionSlope);
-            logger.debug("- rain decrease:" + rainDecrease());
+            logger.debug("- sun is approaching:" + sunIsApproaching());
         }
     }
+
 }

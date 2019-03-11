@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ksapala.rainaproximator.TestUtils;
+import org.ksapala.rainaproximator.aproximation.domainfilters.Filters;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doReturn;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -24,10 +24,12 @@ public class CloudsOperationsTest {
 
 
     private TestUtils testUtils;
+    private Filters filters;
 
     @Before
     public void setUp() {
         testUtils = new TestUtils(configuration);
+        filters = new Filters();
     }
 
     @Test
@@ -44,7 +46,7 @@ public class CloudsOperationsTest {
         cloudLines.add(testUtils.cloudLine("..........################", "04/02/2115 14:20"));
         cloudLines.add(testUtils.cloudLine("......####################", "04/02/2115 14:30"));
 
-        List<CloudLine> forRainRegression = CloudsOperations.filterForRainRegression(cloudLines);
+        List<CloudLine> forRainRegression = filters.filterRainCandidates(cloudLines);
 
         assertEquals(5, forRainRegression.size());
         CloudLine first = forRainRegression.get(0);
@@ -69,7 +71,7 @@ public class CloudsOperationsTest {
         cloudLines.add(testUtils.cloudLine("........##################", "04/02/2115 14:20"));
         cloudLines.add(testUtils.cloudLine("......####################", "04/02/2115 14:30"));
 
-        List<CloudLine> forRainRegression = CloudsOperations.filterForRainRegression(cloudLines);
+        List<CloudLine> forRainRegression = filters.filterRainCandidates(cloudLines);
 
         assertEquals(6, forRainRegression.size());
         CloudLine first = forRainRegression.get(0);
@@ -93,7 +95,7 @@ public class CloudsOperationsTest {
         cloudLines.add(testUtils.cloudLine("########................", "04/02/2115 14:20"));
         cloudLines.add(testUtils.cloudLine("####....................", "04/02/2115 14:30"));
 
-        List<CloudLine> forSunRegression = CloudsOperations.filterForSunRegression(cloudLines);
+        List<CloudLine> forSunRegression = filters.filterSunCandidates(cloudLines);
 
         assertEquals(5, forSunRegression.size());
         CloudLine first = forSunRegression.get(0);

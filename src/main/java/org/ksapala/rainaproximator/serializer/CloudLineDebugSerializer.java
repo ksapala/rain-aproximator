@@ -23,9 +23,9 @@ public class CloudLineDebugSerializer extends StdSerializer<CloudLineDebug> {
             throws IOException {
 
         jgen.writeStartObject();
-        jgen.writeStringField("i", value.getI());
-        jgen.writeStringField("line", value.getLine());
-        jgen.writeStringField("time", value.getTime().toString());
+        jgen.writeStringField("i", value.getInfo());
+        jgen.writeStringField("line", value.getCloudLine().getLineAsString());
+        jgen.writeStringField("time", value.getCloudLine().getTime().toString());
         jgen.writeEndObject();
     }
 }

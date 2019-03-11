@@ -9,6 +9,7 @@ import org.ksapala.rainaproximator.serializer.CloudLineSerializer;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 @JsonSerialize(using = CloudLineSerializer.class)
@@ -17,7 +18,6 @@ public class CloudLine {
     // constants
     public static final String SUN_SYMBOL = ".";
 	public static final String RAIN_SYMBOL = "#";
-
 
 	// fields
     private boolean[] line;
@@ -29,13 +29,11 @@ public class CloudLine {
     // algorithm members
 	private Distance rainDistance = null;
 	private Distance sunDistance = null;
-	private PatternBuilder patternBuilder;
 
 	public CloudLine(Configuration.Algorithm.Cloud cloudConfiguration, boolean[] line, LocalDateTime time) {
         this.cloudConfiguration = cloudConfiguration;
         this.line = line;
 		this.time = time;
-		this.patternBuilder = new PatternBuilder();
 	}
 	
 	void addRgb(int rgb, int index) {
@@ -80,12 +78,12 @@ public class CloudLine {
 	 */
 	private void smoothStart() {
 		for (int i = cloudConfiguration.getReplaceHolesStartMin(); i < cloudConfiguration.getReplaceHolesStartMax(); i++) {
-			boolean[] startTruePattern = this.patternBuilder.buildStartTrue(i + 1);
-			boolean[] allFalsePattern = this.patternBuilder.buildAllFalse(i + 1);
+			boolean[] startTruePattern = PatternBuilder.buildStartTrue(i + 1);
+			boolean[] allFalsePattern = PatternBuilder.buildAllFalse(i + 1);
 			replaceStart(startTruePattern, allFalsePattern);
 			
-			boolean[] startFalsePattern = this.patternBuilder.buildStartFalse(i + 1);
-			boolean[] allTruePattern = this.patternBuilder.buildAllTrue(i + 1);
+			boolean[] startFalsePattern = PatternBuilder.buildStartFalse(i + 1);
+			boolean[] allTruePattern = PatternBuilder.buildAllTrue(i + 1);
 			replaceStart(startFalsePattern, allTruePattern);
 		}
     }
@@ -95,12 +93,12 @@ public class CloudLine {
 	 */
 	private void smoothMiddle() {
 		for (int i = cloudConfiguration.getReplaceHolesMin(); i <= cloudConfiguration.getReplaceHolesMax(); i++) {
-			boolean[] middleFalsePattern = this.patternBuilder.buildMiddleFalse(i + 2);
-			boolean[] allTruePattern = this.patternBuilder.buildAllTrue(i + 2);
+			boolean[] middleFalsePattern = PatternBuilder.buildMiddleFalse(i + 2);
+			boolean[] allTruePattern = PatternBuilder.buildAllTrue(i + 2);
 			replacePattern(middleFalsePattern, allTruePattern);
 			
-			boolean[] middleTruePattern = this.patternBuilder.buildMiddleTrue(i + 2);
-			boolean[] allFalsePattern = this.patternBuilder.buildAllFalse(i + 2);
+			boolean[] middleTruePattern = PatternBuilder.buildMiddleTrue(i + 2);
+			boolean[] allFalsePattern = PatternBuilder.buildAllFalse(i + 2);
 			replacePattern(middleTruePattern, allFalsePattern);
         }
     }
@@ -257,6 +255,20 @@ public class CloudLine {
     public boolean isSun() {
         return !isRain();
     }
+
+
+    public static boolean isRain(List<CloudLine> cloudLines) {
+        if (cloudLines.isEmpty()) {
+            throw new RuntimeException("Cloud lines list cannot be empty.");
+        }
+        CloudLine last = cloudLines.get(cloudLines.size() - 1);
+        return last.isRain();
+    }
+
+    public static boolean isSun(List<CloudLine> cloudLines) {
+        return !isRain(cloudLines);
+    }
+
 
     @Override
     public boolean equals(Object o) {

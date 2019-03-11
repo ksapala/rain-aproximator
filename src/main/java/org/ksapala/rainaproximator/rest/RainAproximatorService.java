@@ -25,6 +25,7 @@ import java.util.Optional;
 /**
  * @author krzysztof
  *
+ * // TODO refactor optionals
  */
 @Component
 public class RainAproximatorService {
@@ -87,15 +88,12 @@ public class RainAproximatorService {
      * @param latitude
      * @param longitude
      * @return
-     * @throws AproximationException
-     * @throws IOException
      */
-    public AproximationResultBean doAproximate(double latitude, double longitude, Optional<Integer> angle, Optional<Mode> mode)
-            throws AproximationException {
+    public AproximationResultBean doAproximate(double latitude, double longitude, Optional<Integer> angle, Optional<Mode> mode) {
 
         Optional<Scan> scan = scanComponent.getScan();
 
-        if (!scan.isPresent()) {
+        if (!scan.isPresent()) { // TODO refactor optionals
             logger.warn("Missing scans.");
             return aproximationResultBeanFactory.createEmptyScanBean();
         }

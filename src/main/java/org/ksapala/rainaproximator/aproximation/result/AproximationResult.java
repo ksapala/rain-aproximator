@@ -15,28 +15,21 @@ public class AproximationResult {
 
 	private AproximationResultType type;
 	private LocalDateTime predictTime;
-
-	@Setter
     private String remark;
-
-    @Getter
     private Accuracy accuracy;
-
-    @Getter
     private Debug debug;
 
     public AproximationResult(AproximationResultType type, Accuracy accuracy, LocalDateTime predictTime) {
 		 this.type = type;
 		 this.accuracy = accuracy;
          this.predictTime = predictTime;
-		 this.debug = new Debug();
 
 	}
-	
+
 	public AproximationResult(AproximationResultType type, Accuracy accuracy, double predictTime) {
 	    this(type, accuracy, TimeUtils.millisToLocalDateAndTime((long) predictTime));
     }
-	
+
 	public AproximationResult(AproximationResultType type, Accuracy accuracy) {
 	    this(type, accuracy, null);
     }
@@ -53,7 +46,7 @@ public class AproximationResult {
         }
 		return "Type: " + this.type.toString() + ", time: " + timeString + ", accuracy: " + accuracy.toString() + ", remark: " + this.remark;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
@@ -72,5 +65,12 @@ public class AproximationResult {
 		}
 		return false;
 	}
-	
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public void setDebug(Debug debug) {
+        this.debug = debug;
+    }
 }

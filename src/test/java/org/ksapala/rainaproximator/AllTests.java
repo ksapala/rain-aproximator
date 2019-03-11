@@ -8,7 +8,6 @@ import org.ksapala.rainaproximator.aproximation.RainAproximatorTest;
 import org.ksapala.rainaproximator.aproximation.angle.AngleTest;
 import org.ksapala.rainaproximator.aproximation.cloud.CloudLineTest;
 import org.ksapala.rainaproximator.aproximation.cloud.CloudsOperationsTest;
-import org.ksapala.rainaproximator.aproximation.regression.RegressionCalculatorTest;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionStateTest;
 import org.ksapala.rainaproximator.aproximation.result.ComparatorModeAccuracyTest;
 import org.ksapala.rainaproximator.aproximation.result.ComparatorModePredictTimeTest;
@@ -22,7 +21,6 @@ import org.ksapala.rainaproximator.utils.TimeUtilsTests;
         AngleTest.class,
         CloudLineTest.class,
         CloudsOperationsTest.class,
-        RegressionCalculatorTest.class,
         RegressionStateTest.class,
         LastRadarMapTimeParserTest.class,
         ScannerTest.class,
