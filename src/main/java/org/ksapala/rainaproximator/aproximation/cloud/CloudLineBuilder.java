@@ -1,18 +1,12 @@
-/**
- * 
- */
 package org.ksapala.rainaproximator.aproximation.cloud;
 
 import org.ksapala.rainaproximator.aproximation.image.RainImage;
 import org.ksapala.rainaproximator.aproximation.scan.Scan;
 import org.ksapala.rainaproximator.aproximation.scan.ScannedMap;
-import org.ksapala.rainaproximator.aproximation.scan.converter.CoordinatesConverter;
 import org.ksapala.rainaproximator.aproximation.scan.imageoperator.ImageCalculator;
 import org.ksapala.rainaproximator.aproximation.scan.imageoperator.ImageIterator;
 import org.ksapala.rainaproximator.aproximation.scan.imageoperator.ImageOperator;
 import org.ksapala.rainaproximator.configuration.Configuration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.NotNull;
 import java.awt.*;
@@ -27,14 +21,6 @@ import java.util.stream.Collectors;
  *
  */
 public class CloudLineBuilder {
-
-    private final Logger logger = LoggerFactory.getLogger(CloudLineBuilder.class);
-
-    private final int IMAGE_WIDTH = RainImage.IMAGE_WIDTH;
-    private final int IMAGE_HEIGHT = RainImage.IMAGE_HEIGHT;
-
-    private final int IMAGE_MARGIN_TOP = RainImage.IMAGE_MARGIN_TOP;
-    private final int IMAGE_MARGIN_BOTTOM = RainImage.IMAGE_MARGIN_BOTTOM;
 
     private Configuration.Algorithm.Cloud cloudConfiguration;
 
@@ -83,7 +69,7 @@ public class CloudLineBuilder {
      * @return
      */
     private List<Point> getImagePoints(double startX, double startY, double alpha) {
-        List<Point> points = new ArrayList<Point>();
+        List<Point> points = new ArrayList<>();
 
         ImageOperator imageOperator = getImageOperator(alpha);
         ImageCalculator imageCalculator = imageOperator.getImageCalculator();
@@ -112,8 +98,8 @@ public class CloudLineBuilder {
     private boolean imageContains(Point point) {
         double x = point.getX();
         double y = point.getY();
-        boolean containsInWidth = x >= 0 && x < IMAGE_WIDTH;
-        boolean containsInHeight = y >= 0 + IMAGE_MARGIN_TOP && y < IMAGE_HEIGHT - IMAGE_MARGIN_BOTTOM;
+        boolean containsInWidth = x >= 0 && x < RainImage.IMAGE_WIDTH;
+        boolean containsInHeight = y >= RainImage.IMAGE_MARGIN_TOP && y < RainImage.IMAGE_HEIGHT - RainImage.IMAGE_MARGIN_BOTTOM;
         return containsInWidth && containsInHeight;
     }
 
