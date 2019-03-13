@@ -5,14 +5,13 @@ import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionPoint;
 import org.ksapala.rainaproximator.aproximation.structure.RegressionPointStructure;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Filters {
+
+    private final double EXPAND_FACTOR = 1.5;
 
     public Filters() {
     }
@@ -86,26 +85,29 @@ public class Filters {
                 .map(RegressionPointStructure::getRegressionPoint)
                 .collect(Collectors.toList());
 
+        RegressionPointStructure lastStructure = structures.get(structures.size() - 1);
         List<Integer> differences = getDifferences(regressionPoints);
 
-        double median = getMedian(differences);
-        double borderValue = structures.get(0).getRegressionPoint().getDistance().getValue() - 2 * median;
-        boolean add;
+        int lastValue = lastStructure.getRegressionPoint().getDistance().getValue();
+        double median = Math.abs(getMedian(differences)); // minus for reverse iteration
+        double expand = median * EXPAND_FACTOR;
+        double borderDown = lastValue - median;
+        double borderUp = lastValue + median;
 
-        for (RegressionPointStructure structure: structures) {
+        for (int i = structures.size() - 1; i >= 0 ; i--) {
+            RegressionPointStructure structure = structures.get(i);
             int value = structure.getRegressionPoint().getDistance().getValue();
 
-            if (median > 0) {
-                add = value >= borderValue;
-            } else {
-                add = value <= borderValue;
-            }
-
-            if (add) {
+            if (value > borderDown - expand && value < borderUp + expand) {
                 result.add(structure);
+                borderDown = value - median;
+                borderUp = value + median;
+            } else {
+                borderDown = borderDown - median;
+                borderUp = borderUp + median;
             }
-            borderValue = borderValue + median;
         }
+        Collections.reverse(result);
         return result;
     }
 

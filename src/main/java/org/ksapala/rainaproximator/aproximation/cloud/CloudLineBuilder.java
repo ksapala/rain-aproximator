@@ -102,8 +102,4 @@ public class CloudLineBuilder {
         boolean containsInHeight = y >= RainImage.IMAGE_MARGIN_TOP && y < RainImage.IMAGE_HEIGHT - RainImage.IMAGE_MARGIN_BOTTOM;
         return containsInWidth && containsInHeight;
     }
-
-
-
-
 }
