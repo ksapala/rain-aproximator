@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @Component
 public class RainAproximator {
@@ -59,7 +56,6 @@ public class RainAproximator {
      */
 	public AproximationResult aproximate(Scan scan, double latitude, double longitude, int angle, Mode mode) {
 		long start = System.currentTimeMillis();
-
 		double[] convert = this.coordinatesConverter.convert(latitude, longitude);
 		
 		double x = convert[0];
