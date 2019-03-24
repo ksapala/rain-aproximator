@@ -1,9 +1,10 @@
 package org.ksapala.rainaproximator.aproximation.domainfilters;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
+import org.ksapala.rainaproximator.aproximation.cloud.Cloud;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionPoint;
 import org.ksapala.rainaproximator.aproximation.structure.RegressionPointStructure;
+import org.ksapala.rainaproximator.configuration.Configuration;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -11,28 +12,29 @@ import java.util.stream.IntStream;
 
 public class Filters {
 
-    private final double EXPAND_FACTOR = 1.5;
+    private Configuration.Algorithm algorithm;
 
-    public Filters() {
+    public Filters(Configuration.Algorithm algorithm) {
+        this.algorithm = algorithm;
     }
 
-    public List<CloudLine> filterRainCandidates(List<CloudLine> cloudLines) {
-        List<CloudLine> result = new ArrayList<>(cloudLines.size());
+    public List<Cloud> filterRainCandidates(List<Cloud> clouds) {
+        List<Cloud> result = new ArrayList<>(clouds.size());
         boolean changedToRain = false;
-        for (ListIterator<CloudLine> iterator = cloudLines.listIterator(cloudLines.size()); iterator.hasPrevious(); ) {
-            CloudLine cloudLine = iterator.previous();
-            if (cloudLine.isFutureRainDistanceInfinity()) {
+        for (ListIterator<Cloud> iterator = clouds.listIterator(clouds.size()); iterator.hasPrevious(); ) {
+            Cloud cloud = iterator.previous();
+            if (cloud.isFutureRainDistanceInfinity()) {
                 break;
             }
             if (changedToRain) { // second part - rain
-                if (cloudLine.isRain()) {
-                    result.add(cloudLine);
+                if (cloud.isRain()) {
+                    result.add(cloud);
                 } else {
                     break;
                 }
             } else { // first part - sun
-                result.add(cloudLine);
-                if (cloudLine.isRain()) {
+                result.add(cloud);
+                if (cloud.isRain()) {
                     changedToRain = true;
                 }
             }
@@ -43,26 +45,26 @@ public class Filters {
 
     /**
      *
-     * @param cloudLines
+     * @param clouds
      * @return
      */
-    public List<CloudLine> filterSunCandidates(List<CloudLine> cloudLines) {
-        List<CloudLine> result = new ArrayList<>(cloudLines.size());
+    public List<Cloud> filterSunCandidates(List<Cloud> clouds) {
+        List<Cloud> result = new ArrayList<>(clouds.size());
         boolean changedToSun = false;
-        for (ListIterator<CloudLine> iterator = cloudLines.listIterator(cloudLines.size()); iterator.hasPrevious(); ) {
-            CloudLine cloudLine = iterator.previous();
-            if (cloudLine.isFutureSunDistanceInfinity()) {
+        for (ListIterator<Cloud> iterator = clouds.listIterator(clouds.size()); iterator.hasPrevious(); ) {
+            Cloud cloud = iterator.previous();
+            if (cloud.isFutureSunDistanceInfinity()) {
                 break;
             }
             if (changedToSun) { // second part - sun
-                if (cloudLine.isSun()) {
-                    result.add(cloudLine);
+                if (cloud.isSun()) {
+                    result.add(cloud);
                 } else {
                     break;
                 }
             } else { // first part - rain
-                result.add(cloudLine);
-                if (cloudLine.isSun()) {
+                result.add(cloud);
+                if (cloud.isSun()) {
                     changedToSun = true;
                 }
             }
@@ -89,8 +91,8 @@ public class Filters {
         List<Integer> differences = getDifferences(regressionPoints);
 
         int lastValue = lastStructure.getRegressionPoint().getDistance().getValue();
-        double median = Math.abs(getMedian(differences)); // minus for reverse iteration
-        double expand = median * EXPAND_FACTOR;
+        double median = Math.abs(getMedian(differences));
+        double expand = median * algorithm.getGoodFitExpandFactor();
         double borderDown = lastValue - median;
         double borderUp = lastValue + median;
 

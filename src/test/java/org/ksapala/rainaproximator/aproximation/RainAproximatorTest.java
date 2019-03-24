@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ksapala.rainaproximator.TestUtils;
-import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
+import org.ksapala.rainaproximator.aproximation.cloud.Cloud;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionTimeFactory;
 import org.ksapala.rainaproximator.aproximation.result.AproximationResult;
 import org.ksapala.rainaproximator.aproximation.result.AproximationResultType;
@@ -46,36 +46,36 @@ public class RainAproximatorTest {
 	}
 
 	@Test
-	public void testCloudLineFromString() {
-		String stringCloudLine = "....#.....####....";
-        CloudLine cloudLine = testUtils.stringToCloudLine(stringCloudLine);
+	public void testCloudFromString() {
+		String stringCloud = "....#.....####....";
+        Cloud cloud = testUtils.stringToCloud(stringCloud);
 
-		assertEquals(stringCloudLine, cloudLine.getLineAsString());
+		assertEquals(stringCloud, cloud.getLineAsString());
 	}
 	
 	@Test
 	public void testAproximateRainAtTime() {
-		List<CloudLine> cloudLines = new ArrayList<CloudLine>();
-		CloudLine cloudLine1 = testUtils.stringToCloudLine("............###########...");
-		CloudLine cloudLine2 = testUtils.stringToCloudLine("..........###########.....");
-		CloudLine cloudLine3 = testUtils.stringToCloudLine("........###########.......");
-		CloudLine cloudLine4 = testUtils.stringToCloudLine("......###########.........");
-		CloudLine cloudLine5 = testUtils.stringToCloudLine("....###########...........");
+		List<Cloud> clouds = new ArrayList<Cloud>();
+		Cloud cloud1 = testUtils.stringToCloud("............###########...");
+		Cloud cloud2 = testUtils.stringToCloud("..........###########.....");
+		Cloud cloud3 = testUtils.stringToCloud("........###########.......");
+		Cloud cloud4 = testUtils.stringToCloud("......###########.........");
+		Cloud cloud5 = testUtils.stringToCloud("....###########...........");
 
-		cloudLine1.setTime(testUtils.parseInTest("04/02/2115 13:15"));
-		cloudLine2.setTime(testUtils.parseInTest("04/02/2115 13:25"));
-		cloudLine3.setTime(testUtils.parseInTest("04/02/2115 13:35"));
-		cloudLine4.setTime(testUtils.parseInTest("04/02/2115 13:45"));
-		cloudLine5.setTime(testUtils.parseInTest("04/02/2115 13:55"));
+		cloud1.setTime(testUtils.parseInTest("04/02/2115 13:15"));
+		cloud2.setTime(testUtils.parseInTest("04/02/2115 13:25"));
+		cloud3.setTime(testUtils.parseInTest("04/02/2115 13:35"));
+		cloud4.setTime(testUtils.parseInTest("04/02/2115 13:45"));
+		cloud5.setTime(testUtils.parseInTest("04/02/2115 13:55"));
 		LocalDateTime expectedTime = testUtils.parseInTest("04/02/2115 14:15");
 
-		cloudLines.add(cloudLine1);
-		cloudLines.add(cloudLine2);
-		cloudLines.add(cloudLine3);
-		cloudLines.add(cloudLine4);
-		cloudLines.add(cloudLine5);
+		clouds.add(cloud1);
+		clouds.add(cloud2);
+		clouds.add(cloud3);
+		clouds.add(cloud4);
+		clouds.add(cloud5);
 
-		AproximationResult aproximationResult = rainAproximator.aproximate(cloudLines);
+		AproximationResult aproximationResult = rainAproximator.aproximate(clouds);
 		assertNotNull(aproximationResult);
 
 		AproximationResultType actualType = aproximationResult.getType();
@@ -89,27 +89,31 @@ public class RainAproximatorTest {
 	
 	@Test
 	public void testAproximateSunAtTime() {
-		List<CloudLine> cloudLines = new ArrayList<>();
-		CloudLine cloudLine1 = testUtils.stringToCloudLine("######################.");
-		CloudLine cloudLine2 = testUtils.stringToCloudLine("##################.....");
-		CloudLine cloudLine3 = testUtils.stringToCloudLine("##############.........");
-		CloudLine cloudLine4 = testUtils.stringToCloudLine("##########.............");
-		CloudLine cloudLine5 = testUtils.stringToCloudLine("######.................");
+        // given
+		List<Cloud> clouds = new ArrayList<>();
+		Cloud cloud1 = testUtils.stringToCloud("######################.");
+		Cloud cloud2 = testUtils.stringToCloud("##################.....");
+		Cloud cloud3 = testUtils.stringToCloud("##############.........");
+		Cloud cloud4 = testUtils.stringToCloud("##########.............");
+		Cloud cloud5 = testUtils.stringToCloud("######.................");
 
-		cloudLine1.setTime(testUtils.parseInTest("04/02/2115 13:15"));
-		cloudLine2.setTime(testUtils.parseInTest("04/02/2115 13:25"));
-		cloudLine3.setTime(testUtils.parseInTest("04/02/2115 13:35"));
-		cloudLine4.setTime(testUtils.parseInTest("04/02/2115 13:45"));
-		cloudLine5.setTime(testUtils.parseInTest("04/02/2115 13:55"));
+		cloud1.setTime(testUtils.parseInTest("04/02/2115 13:15"));
+		cloud2.setTime(testUtils.parseInTest("04/02/2115 13:25"));
+		cloud3.setTime(testUtils.parseInTest("04/02/2115 13:35"));
+		cloud4.setTime(testUtils.parseInTest("04/02/2115 13:45"));
+		cloud5.setTime(testUtils.parseInTest("04/02/2115 13:55"));
         LocalDateTime expectedTime = testUtils.parseInTest("04/02/2115 14:10");
 
-		cloudLines.add(cloudLine1);
-		cloudLines.add(cloudLine2);
-		cloudLines.add(cloudLine3);
-		cloudLines.add(cloudLine4);
-		cloudLines.add(cloudLine5);
+		clouds.add(cloud1);
+		clouds.add(cloud2);
+		clouds.add(cloud3);
+		clouds.add(cloud4);
+		clouds.add(cloud5);
 
-		AproximationResult aproximationResult = rainAproximator.aproximate(cloudLines);
+		// when
+		AproximationResult aproximationResult = rainAproximator.aproximate(clouds);
+
+		// then
 		assertNotNull(aproximationResult);
 
 		AproximationResultType actualType = aproximationResult.getType();
@@ -122,26 +126,26 @@ public class RainAproximatorTest {
 	
 	@Test
 	public void testAproximateRainUnknown() {
-		List<CloudLine> cloudLines = new ArrayList<>();
-		CloudLine cloudLine1 = testUtils.stringToCloudLine("...................");
-		CloudLine cloudLine2 = testUtils.stringToCloudLine("....##########.....");
-		CloudLine cloudLine3 = testUtils.stringToCloudLine("...................");
-		CloudLine cloudLine4 = testUtils.stringToCloudLine("...................");
-		CloudLine cloudLine5 = testUtils.stringToCloudLine("...................");
+		List<Cloud> clouds = new ArrayList<>();
+		Cloud cloud1 = testUtils.stringToCloud("...................");
+		Cloud cloud2 = testUtils.stringToCloud("....##########.....");
+		Cloud cloud3 = testUtils.stringToCloud("...................");
+		Cloud cloud4 = testUtils.stringToCloud("...................");
+		Cloud cloud5 = testUtils.stringToCloud("...................");
 
-		cloudLine1.setTime(testUtils.parseInTest("04/02/2115 13:15"));
-		cloudLine2.setTime(testUtils.parseInTest("04/02/2115 13:25"));
-		cloudLine3.setTime(testUtils.parseInTest("04/02/2115 13:35"));
-		cloudLine4.setTime(testUtils.parseInTest("04/02/2115 13:45"));
-		cloudLine5.setTime(testUtils.parseInTest("04/02/2115 13:55"));
+		cloud1.setTime(testUtils.parseInTest("04/02/2115 13:15"));
+		cloud2.setTime(testUtils.parseInTest("04/02/2115 13:25"));
+		cloud3.setTime(testUtils.parseInTest("04/02/2115 13:35"));
+		cloud4.setTime(testUtils.parseInTest("04/02/2115 13:45"));
+		cloud5.setTime(testUtils.parseInTest("04/02/2115 13:55"));
 
-		cloudLines.add(cloudLine1);
-		cloudLines.add(cloudLine2);
-		cloudLines.add(cloudLine3);
-		cloudLines.add(cloudLine4);
-		cloudLines.add(cloudLine5);
+		clouds.add(cloud1);
+		clouds.add(cloud2);
+		clouds.add(cloud3);
+		clouds.add(cloud4);
+		clouds.add(cloud5);
 
-		AproximationResult aproximationResult = rainAproximator.aproximate(cloudLines);
+		AproximationResult aproximationResult = rainAproximator.aproximate(clouds);
 		assertNotNull(aproximationResult);
 
 		AproximationResultType actualType = aproximationResult.getType();
@@ -154,26 +158,26 @@ public class RainAproximatorTest {
 	
 	@Test
 	public void testAproximateSunUnknown() {
-		List<CloudLine> cloudLines = new ArrayList<CloudLine>();
-		CloudLine cloudLine1 = testUtils.stringToCloudLine("###################");
-		CloudLine cloudLine2 = testUtils.stringToCloudLine("###################");
-		CloudLine cloudLine3 = testUtils.stringToCloudLine("...................");
-		CloudLine cloudLine4 = testUtils.stringToCloudLine("###################");
-		CloudLine cloudLine5 = testUtils.stringToCloudLine("###################");
+		List<Cloud> clouds = new ArrayList<Cloud>();
+		Cloud cloud1 = testUtils.stringToCloud("###################");
+		Cloud cloud2 = testUtils.stringToCloud("###################");
+		Cloud cloud3 = testUtils.stringToCloud("...................");
+		Cloud cloud4 = testUtils.stringToCloud("###################");
+		Cloud cloud5 = testUtils.stringToCloud("###################");
 
-		cloudLine1.setTime(testUtils.parseInTest("04/02/2115 13:15"));
-		cloudLine2.setTime(testUtils.parseInTest("04/02/2115 13:25"));
-		cloudLine3.setTime(testUtils.parseInTest("04/02/2115 13:35"));
-		cloudLine4.setTime(testUtils.parseInTest("04/02/2115 13:45"));
-		cloudLine5.setTime(testUtils.parseInTest("04/02/2115 13:55"));
+		cloud1.setTime(testUtils.parseInTest("04/02/2115 13:15"));
+		cloud2.setTime(testUtils.parseInTest("04/02/2115 13:25"));
+		cloud3.setTime(testUtils.parseInTest("04/02/2115 13:35"));
+		cloud4.setTime(testUtils.parseInTest("04/02/2115 13:45"));
+		cloud5.setTime(testUtils.parseInTest("04/02/2115 13:55"));
 
-		cloudLines.add(cloudLine1);
-		cloudLines.add(cloudLine2);
-		cloudLines.add(cloudLine3);
-		cloudLines.add(cloudLine4);
-		cloudLines.add(cloudLine5);
+		clouds.add(cloud1);
+		clouds.add(cloud2);
+		clouds.add(cloud3);
+		clouds.add(cloud4);
+		clouds.add(cloud5);
 
-		AproximationResult aproximationResult = rainAproximator.aproximate(cloudLines);
+		AproximationResult aproximationResult = rainAproximator.aproximate(clouds);
 		assertNotNull(aproximationResult);
 
 		AproximationResultType actualType = aproximationResult.getType();
@@ -186,27 +190,27 @@ public class RainAproximatorTest {
 	
 	@Test
 	public void testAproximateSunUnknownDateForPast() {
-		List<CloudLine> cloudLines = new ArrayList<CloudLine>();
-		CloudLine cloudLine1 = testUtils.stringToCloudLine("######.............");
-		CloudLine cloudLine2 = testUtils.stringToCloudLine("#########..........");
-		CloudLine cloudLine3 = testUtils.stringToCloudLine("############.......");
-		CloudLine cloudLine4 = testUtils.stringToCloudLine("###############....");
-		CloudLine cloudLine5 = testUtils.stringToCloudLine("#################..");
+		List<Cloud> clouds = new ArrayList<Cloud>();
+		Cloud cloud1 = testUtils.stringToCloud("######.............");
+		Cloud cloud2 = testUtils.stringToCloud("#########..........");
+		Cloud cloud3 = testUtils.stringToCloud("############.......");
+		Cloud cloud4 = testUtils.stringToCloud("###############....");
+		Cloud cloud5 = testUtils.stringToCloud("#################..");
 
-		cloudLine1.setTime(testUtils.parseInTest("04/02/2115 13:15"));
-		cloudLine2.setTime(testUtils.parseInTest("04/02/2115 13:25"));
-		cloudLine3.setTime(testUtils.parseInTest("04/02/2115 13:35"));
-		cloudLine4.setTime(testUtils.parseInTest("04/02/2115 13:45"));
-		cloudLine5.setTime(testUtils.parseInTest("04/02/2115 13:55"));
+		cloud1.setTime(testUtils.parseInTest("04/02/2115 13:15"));
+		cloud2.setTime(testUtils.parseInTest("04/02/2115 13:25"));
+		cloud3.setTime(testUtils.parseInTest("04/02/2115 13:35"));
+		cloud4.setTime(testUtils.parseInTest("04/02/2115 13:45"));
+		cloud5.setTime(testUtils.parseInTest("04/02/2115 13:55"));
 
 
-		cloudLines.add(cloudLine1);
-		cloudLines.add(cloudLine2);
-		cloudLines.add(cloudLine3);
-		cloudLines.add(cloudLine4);
-		cloudLines.add(cloudLine5);
+		clouds.add(cloud1);
+		clouds.add(cloud2);
+		clouds.add(cloud3);
+		clouds.add(cloud4);
+		clouds.add(cloud5);
 
-		AproximationResult aproximationResult = rainAproximator.aproximate(cloudLines);
+		AproximationResult aproximationResult = rainAproximator.aproximate(clouds);
 		assertNotNull(aproximationResult);
 
 		AproximationResultType actualType = aproximationResult.getType();

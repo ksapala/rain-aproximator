@@ -8,8 +8,7 @@ public class ImageCalculatorAlphaNS extends ImageCalculator {
 
 	@Override
 	public double getX(int index) {
-		double x = Math.tan(this.alphaRadians) * index;
-		return x;
+        return Math.tan(this.alphaRadians) * index;
 	}
 
 	@Override

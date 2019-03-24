@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * contact: krzysztof.sapala@gmail.com
  *
  */
-public class CloudLineBuilder {
+public class CloudBuilder {
 
     private Configuration.Algorithm.Cloud cloudConfiguration;
 
@@ -28,7 +28,7 @@ public class CloudLineBuilder {
 	 *
      * @param cloudConfiguration
      */
-	public CloudLineBuilder(Configuration.Algorithm.Cloud cloudConfiguration) {
+	public CloudBuilder(Configuration.Algorithm.Cloud cloudConfiguration) {
         this.cloudConfiguration = cloudConfiguration;
 	}
 
@@ -40,10 +40,10 @@ public class CloudLineBuilder {
      * @param alpha
      * @return
      */
-    public List<CloudLine> buildCloudLines(@NotNull Scan scan, double x, double y, double alpha) {
+    public List<Cloud> buildClouds(@NotNull Scan scan, double x, double y, double alpha) {
         List<Point> imagePoints = getImagePoints(x, y, alpha);
         return scan.getMaps().stream()
-                .map(map -> buildCloudLine(map, imagePoints))
+                .map(map -> buildCloud(map, imagePoints))
                 .collect(Collectors.toList());
     }
 
@@ -52,14 +52,14 @@ public class CloudLineBuilder {
      * @param imagePoints
      * @return
      */
-    private CloudLine buildCloudLine(ScannedMap map, List<Point> imagePoints) {
-        CloudLine cloudLine = new CloudLine(cloudConfiguration, new boolean[imagePoints.size()], map.getTime());
+    private Cloud buildCloud(ScannedMap map, List<Point> imagePoints) {
+        Cloud cloud = new Cloud(cloudConfiguration, new boolean[imagePoints.size()], map.getTime());
         for (int i = 0; i < imagePoints.size(); i++) {
             Point point = imagePoints.get(i);
             int rgb = map.getImage().getRGB(point.x, point.y);
-            cloudLine.addRgb(rgb, i);
+            cloud.addRgb(rgb, i);
         }
-        return cloudLine;
+        return cloud;
     }
 
     /**
@@ -92,7 +92,7 @@ public class CloudLineBuilder {
     }
 
     private ImageOperator getImageOperator(double alpha) {
-        return new ImageOperator(alpha, cloudConfiguration.getCloudLineLength());
+        return new ImageOperator(alpha, cloudConfiguration.getCloudLength());
     }
 
     private boolean imageContains(Point point) {

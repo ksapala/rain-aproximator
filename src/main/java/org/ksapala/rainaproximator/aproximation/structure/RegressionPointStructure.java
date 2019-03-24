@@ -2,7 +2,7 @@ package org.ksapala.rainaproximator.aproximation.structure;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
+import org.ksapala.rainaproximator.aproximation.cloud.Cloud;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionPoint;
 
 @AllArgsConstructor
@@ -10,5 +10,5 @@ import org.ksapala.rainaproximator.aproximation.regression.RegressionPoint;
 public class RegressionPointStructure {
 
     private RegressionPoint regressionPoint;
-    private CloudLine cloudLine;
+    private Cloud cloud;
 }

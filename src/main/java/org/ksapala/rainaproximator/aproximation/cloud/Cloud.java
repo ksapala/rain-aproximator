@@ -5,15 +5,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.ksapala.rainaproximator.aproximation.image.RainImage;
 import org.ksapala.rainaproximator.configuration.Configuration;
-import org.ksapala.rainaproximator.serializer.CloudLineSerializer;
+import org.ksapala.rainaproximator.serializer.CloudSerializer;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-@JsonSerialize(using = CloudLineSerializer.class)
-public class CloudLine {
+@JsonSerialize(using = CloudSerializer.class)
+public class Cloud {
 
     // constants
     public static final String SUN_SYMBOL = ".";
@@ -30,7 +30,7 @@ public class CloudLine {
 	private Distance rainDistance = null;
 	private Distance sunDistance = null;
 
-	public CloudLine(Configuration.Algorithm.Cloud cloudConfiguration, boolean[] line, LocalDateTime time) {
+	public Cloud(Configuration.Algorithm.Cloud cloudConfiguration, boolean[] line, LocalDateTime time) {
         this.cloudConfiguration = cloudConfiguration;
         this.line = line;
 		this.time = time;
@@ -257,16 +257,16 @@ public class CloudLine {
     }
 
 
-    public static boolean isRain(List<CloudLine> cloudLines) {
-        if (cloudLines.isEmpty()) {
+    public static boolean isRain(List<Cloud> clouds) {
+        if (clouds.isEmpty()) {
             throw new RuntimeException("Cloud lines list cannot be empty.");
         }
-        CloudLine last = cloudLines.get(cloudLines.size() - 1);
+        Cloud last = clouds.get(clouds.size() - 1);
         return last.isRain();
     }
 
-    public static boolean isSun(List<CloudLine> cloudLines) {
-        return !isRain(cloudLines);
+    public static boolean isSun(List<Cloud> clouds) {
+        return !isRain(clouds);
     }
 
 
@@ -274,9 +274,9 @@ public class CloudLine {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CloudLine cloudLine = (CloudLine) o;
-        return Arrays.equals(line, cloudLine.line) &&
-                Objects.equals(time, cloudLine.time);
+        Cloud cloud = (Cloud) o;
+        return Arrays.equals(line, cloud.line) &&
+                Objects.equals(time, cloud.time);
     }
 
     @Override

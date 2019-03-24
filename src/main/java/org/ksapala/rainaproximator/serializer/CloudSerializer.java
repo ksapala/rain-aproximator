@@ -3,23 +3,23 @@ package org.ksapala.rainaproximator.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
+import org.ksapala.rainaproximator.aproximation.cloud.Cloud;
 
 import java.io.IOException;
 
-public class CloudLineSerializer extends StdSerializer<CloudLine> {
+public class CloudSerializer extends StdSerializer<Cloud> {
 
-    public CloudLineSerializer() {
+    public CloudSerializer() {
         this(null);
     }
 
-    public CloudLineSerializer(Class<CloudLine> t) {
+    public CloudSerializer(Class<Cloud> t) {
         super(t);
     }
 
     @Override
     public void serialize(
-            CloudLine value, JsonGenerator jgen, SerializerProvider provider)
+            Cloud value, JsonGenerator jgen, SerializerProvider provider)
             throws IOException {
 
         jgen.writeStartObject();

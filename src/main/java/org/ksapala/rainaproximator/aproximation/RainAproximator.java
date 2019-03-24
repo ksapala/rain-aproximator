@@ -1,14 +1,15 @@
 package org.ksapala.rainaproximator.aproximation;
 
 import org.ksapala.rainaproximator.aproximation.angle.Angle;
-import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
-import org.ksapala.rainaproximator.aproximation.cloud.CloudLineBuilder;
+import org.ksapala.rainaproximator.aproximation.cloud.Cloud;
+import org.ksapala.rainaproximator.aproximation.cloud.CloudBuilder;
 import org.ksapala.rainaproximator.aproximation.debug.Debug;
-import org.ksapala.rainaproximator.aproximation.regression.RegressionState;
+import org.ksapala.rainaproximator.aproximation.weather.Condition;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionTimeFactory;
 import org.ksapala.rainaproximator.aproximation.result.*;
 import org.ksapala.rainaproximator.aproximation.scan.Scan;
 import org.ksapala.rainaproximator.aproximation.scan.converter.CoordinatesConverter;
+import org.ksapala.rainaproximator.aproximation.weather.Weather;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.configuration.Mode;
 import org.slf4j.Logger;
@@ -35,14 +36,14 @@ public class RainAproximator {
 
     private final Configuration.Algorithm algorithmConfiguration;
 	private CoordinatesConverter coordinatesConverter;
-	private CloudLineBuilder cloudLineBuilder;
+	private CloudBuilder cloudBuilder;
 
 
     @Autowired
     public RainAproximator(Configuration configuration) {
 		this.algorithmConfiguration = configuration.getAlgorithm();
 		this.coordinatesConverter = new CoordinatesConverter();
-		this.cloudLineBuilder = new CloudLineBuilder(algorithmConfiguration.getCloud());
+		this.cloudBuilder = new CloudBuilder(algorithmConfiguration.getCloud());
 	}
 
     /**
@@ -160,73 +161,71 @@ public class RainAproximator {
 	private DirectionalAproximationResult aproximateStraight(Scan scan, double x, double y, int angle) {
         logger.debug("Step 1 - aproximateStraight for angle: " + angle);
 
-        List<CloudLine> cloudLines = this.cloudLineBuilder.buildCloudLines(scan, x, y, angle);
-        logger.debug("Step 2 - created cloud lines bellow:");
-        cloudLines.forEach(cloudLine -> logger.debug(cloudLine.toString()));
+        List<Cloud> clouds = this.cloudBuilder.buildClouds(scan, x, y, angle);
+        logger.debug("Step 2 - created clouds lines bellow:");
+        clouds.forEach(cloud -> logger.debug(cloud.toString()));
 
-        logger.debug("Step 3 - cloud lines after smooth bellow:");
-        cloudLines.forEach(cloudLine -> {
-            cloudLine.smoothLine();
-            logger.debug(cloudLine.toString());
+        logger.debug("Step 3 - clouds lines after smooth bellow:");
+        clouds.forEach(cloud -> {
+            cloud.smoothLine();
+            logger.debug(cloud.toString());
         });
 
-        AproximationResult aproximatorResult = aproximate(cloudLines);
+        AproximationResult aproximatorResult = aproximate(clouds);
 
         aproximatorResult.getDebug().setAngle(Double.toString(angle));
 		return new DirectionalAproximationResult(angle, aproximatorResult);
 	}
 
 	/**
-	 * @param cloudLines
+	 * @param clouds
 	 * @return
 	 */
-	AproximationResult aproximate(List<CloudLine> cloudLines) {
+	AproximationResult aproximate(List<Cloud> clouds) {
         Debug debug = new Debug();
-        debug.setCloudLines(cloudLines);
+        debug.setClouds(clouds);
 
-        RegressionState regressionState = new RegressionState(cloudLines, regressionTimeFactory);
+        Weather weather = new Weather(clouds, regressionTimeFactory, algorithmConfiguration);
 
-        boolean isSun = regressionState.isSun();
-//        LoggingUtils.log(regressionState);
+        boolean isSun = weather.isSun();
+
+//        LoggingUtils.log(weather);
 
         AproximationResult aproximationResult;
 
+        Condition condition;
         if (isSun) {
-			double rainRegression = regressionState.getRainRegression();
-			boolean rainRegressionNan = regressionState.isRainRegressionNan();
-			boolean rainRegressionForPast = regressionState.isRainRegressionForPast();
+            condition = weather.getRain();
+        } else {
+            condition = weather.getSun();
+        }
+        double regression = condition.getRegression();
+        boolean regressionNan = condition.isRegressionNan();
+        boolean regressionForPast = condition.isRegressionForPast();
+        Accuracy accuracy = new Accuracy(condition.getRSquare());
 
-            Accuracy accuracy = new Accuracy(regressionState.getRSquare());
-			if (rainRegressionNan) {
+        if (isSun) {
+			if (regressionNan) {
 				aproximationResult = new AproximationResult(AproximationResultType.RAIN_UNKNOWN, accuracy);
-			} else if (rainRegressionForPast) {
+			} else if (regressionForPast) {
 				aproximationResult = new AproximationResult(AproximationResultType.RAIN_UNSURE, accuracy);
 			} else {
-				aproximationResult = new AproximationResult(AproximationResultType.RAIN_AT_TIME, accuracy, rainRegression);
+				aproximationResult = new AproximationResult(AproximationResultType.RAIN_AT_TIME, accuracy, regression);
 			}
-
-            debug.addInfo(regressionState.getRainCandidates(), "TAKEN");
-            debug.addInfo(regressionState.getRainGoodFitClouds(), "GOODFIT");
-            debug.setRegressionDebug(regressionState.getRainRegressionDebug());
 
 		} else { // rain
-			double sunRegression = regressionState.getSunRegression();
-			boolean sunRegressionNan = regressionState.isSunRegressionNan();
-			boolean sunRegressionForPast = regressionState.isSunRegressionForPast();
-
-            Accuracy accuracy = new Accuracy(regressionState.getRSquare());
-			if (sunRegressionNan) {
+			if (regressionNan) {
 				aproximationResult = new AproximationResult(AproximationResultType.SUN_UNKNOWN, accuracy);
-			} else if (sunRegressionForPast) {
+			} else if (regressionForPast) {
 				aproximationResult = new AproximationResult(AproximationResultType.SUN_UNSURE, accuracy);
 			} else {
-				aproximationResult = new AproximationResult(AproximationResultType.SUN_AT_TIME, accuracy, sunRegression);
+				aproximationResult = new AproximationResult(AproximationResultType.SUN_AT_TIME, accuracy, regression);
 			}
-
-            debug.addInfo(regressionState.getSunCandidates(), "TAKEN");
-            debug.addInfo(regressionState.getSunGoodFitClouds(), "GOODFIT");
-			debug.setRegressionDebug(regressionState.getSunRegressionDebug());
 		}
+
+        debug.addInfo(condition.getCandidateClouds(), "TAKEN");
+        debug.addInfo(condition.getGoodFitClouds(), "GOODFIT");
+        debug.setRegressionDebug(condition.getRegressionDebug());
 
         aproximationResult.setDebug(debug);
 	    return aproximationResult;

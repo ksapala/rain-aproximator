@@ -35,8 +35,7 @@ public class AproximationResultMerger {
 	 */
 	public DirectionalAproximationResult merge(List<DirectionalAproximationResult> directionalAproximationResults) {
         directionalAproximationResults.sort(this.comparator);
-        DirectionalAproximationResult aproximationResult = directionalAproximationResults.get(0);
-		return aproximationResult;
+        return directionalAproximationResults.get(0);
 	}
 
 }

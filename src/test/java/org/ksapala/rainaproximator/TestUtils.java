@@ -1,6 +1,6 @@
 package org.ksapala.rainaproximator;
 
-import org.ksapala.rainaproximator.aproximation.cloud.CloudLine;
+import org.ksapala.rainaproximator.aproximation.cloud.Cloud;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.utils.TimeUtils;
 
@@ -17,38 +17,37 @@ public class TestUtils {
         this.configuration = configuration;
     }
     /**
-     * @param stringCloudLine
+     * @param stringCloud
      * @return
      */
-    public CloudLine stringToCloudLine(String stringCloudLine) {
-        boolean[] line = stringToBoolean(stringCloudLine);
-        CloudLine cloudLine = new CloudLine(configuration.getAlgorithm().getCloud(), line, dummyTime);
-        return cloudLine;
+    public Cloud stringToCloud(String stringCloud) {
+        boolean[] line = stringToBoolean(stringCloud);
+        return new Cloud(configuration.getAlgorithm().getCloud(), line, dummyTime);
     }
 
     /**
      *
-     * @param cloudLineString
+     * @param cloudString
      * @param timeString
      * @return
      */
-    public CloudLine cloudLine(String cloudLineString, String timeString) {
-        CloudLine cloudLine = stringToCloudLine(cloudLineString);
-        cloudLine.setTime(parseInTest(timeString));
-        return cloudLine;
+    public Cloud cloud(String cloudString, String timeString) {
+        Cloud cloud = stringToCloud(cloudString);
+        cloud.setTime(parseInTest(timeString));
+        return cloud;
     }
 
     /**
      *
-     * @param stringCloudLine
+     * @param stringCloud
      * @return
      */
-    private static boolean[] stringToBoolean(String stringCloudLine) {
-        boolean[] line = new boolean[stringCloudLine.length()];
-        for (int i = 0; i < stringCloudLine.length(); i++) {
-            char rainSymbol = stringCloudLine.charAt(i);
+    private static boolean[] stringToBoolean(String stringCloud) {
+        boolean[] line = new boolean[stringCloud.length()];
+        for (int i = 0; i < stringCloud.length(); i++) {
+            char rainSymbol = stringCloud.charAt(i);
             String rainSymbolString = String.valueOf(rainSymbol);
-            boolean isRain = CloudLine.RAIN_SYMBOL.equals(rainSymbolString);
+            boolean isRain = Cloud.RAIN_SYMBOL.equals(rainSymbolString);
             line[i] = isRain;
         }
         return line;

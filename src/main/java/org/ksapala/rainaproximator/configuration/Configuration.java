@@ -37,6 +37,7 @@ public class Configuration {
         @NotEmpty private int[] aroundAngles;
         @NotEmpty private int[] aroundFinalAngles;
         @NotNull private int defaultWind;
+        @NotNull private double goodFitExpandFactor;
 
         private Mode mode = new Mode();
         private Cloud cloud = new Cloud();
@@ -56,7 +57,7 @@ public class Configuration {
             @NotNull private int replaceHolesMax;
             @NotNull private int replaceHolesStartMin;
             @NotNull private int replaceHolesStartMax;
-            @NotNull private int cloudLineLength;
+            @NotNull private int cloudLength;
         }
     }
 

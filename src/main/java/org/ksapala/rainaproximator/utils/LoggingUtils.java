@@ -1,10 +1,10 @@
 package org.ksapala.rainaproximator.utils;
 
-import org.ksapala.rainaproximator.aproximation.regression.RegressionState;
+import org.ksapala.rainaproximator.aproximation.weather.Condition;
 
 public class LoggingUtils {
 
-    public static void log(RegressionState regressionState) {
+    public static void log(Condition regressionState) {
         regressionState.log();
     }
 

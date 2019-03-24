@@ -18,7 +18,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CloudLineTest {
+public class CloudTest {
 
     @Autowired
     private Configuration configuration;
@@ -52,43 +52,43 @@ public class CloudLineTest {
 	@Test
 	public void testReplacePatternBoolean() {
 		String line = getLongLine();
-		CloudLine cloudLine = testUtils.stringToCloudLine(line);
+		Cloud cloud = testUtils.stringToCloud(line);
 		
 		long start = System.currentTimeMillis();
-		cloudLine.replacePattern(new boolean[] {true, false, false, true}, new boolean[] {true, true, true, true});
+		cloud.replacePattern(new boolean[] {true, false, false, true}, new boolean[] {true, true, true, true});
 		System.out.println("boolean replace time: " + (System.currentTimeMillis() - start));
 
-		assertEquals(getLongLineExpectedAfterReplace(), cloudLine.getLineAsString());
+		assertEquals(getLongLineExpectedAfterReplace(), cloud.getLineAsString());
 	}
 	
 	@Test
 	public void testSmoothLineSimple() {
 		String lineeeee = "#.#..#";
 		String expected = "######";
-		CloudLine cloudLine = testUtils.stringToCloudLine(lineeeee);
+		Cloud cloud = testUtils.stringToCloud(lineeeee);
 		
-		cloudLine.smoothLine();
-		assertEquals(expected, cloudLine.getLineAsString());
+		cloud.smoothLine();
+		assertEquals(expected, cloud.getLineAsString());
 	}
 	
 	@Test
 	public void testSmoothLineSimple2() {
 		String lineeeee = "#.#.#.#";
 		String expected = "#######";
-		CloudLine cloudLine = testUtils.stringToCloudLine(lineeeee);
+		Cloud cloud = testUtils.stringToCloud(lineeeee);
 		
-		cloudLine.smoothLine();
-		assertEquals(expected, cloudLine.getLineAsString());
+		cloud.smoothLine();
+		assertEquals(expected, cloud.getLineAsString());
 	}
 
     @Test
     public void testSmoothLine() {
         String lineeeee = "##...........##########.#########..########.....##########...............#....##......####.......#.#.#.#.#.#..#..#..#";
         String expected = ".............#############################################.......................................####################";
-        CloudLine cloudLine = testUtils.stringToCloudLine(lineeeee);
+        Cloud cloud = testUtils.stringToCloud(lineeeee);
 
-        cloudLine.smoothLine();
-        assertEquals(expected, cloudLine.getLineAsString());
+        cloud.smoothLine();
+        assertEquals(expected, cloud.getLineAsString());
     }
 
 
@@ -96,60 +96,60 @@ public class CloudLineTest {
     public void testSmoothMaxHoleLength() {
         String lineeeee = "............###########..................##########....................";
         String expected = "............###########................................................";
-        CloudLine cloudLine = testUtils.stringToCloudLine(lineeeee);
+        Cloud cloud = testUtils.stringToCloud(lineeeee);
 
-        cloudLine.smoothLine();
-        assertEquals(expected, cloudLine.getLineAsString());
+        cloud.smoothLine();
+        assertEquals(expected, cloud.getLineAsString());
     }
 
     @Test
     public void testSmoothStartEnd() {
         String lineeeee = "##.###.#.##.##......................#..#.#.#.##...#..";
         String expected = "##############.......................................";
-        CloudLine cloudLine = testUtils.stringToCloudLine(lineeeee);
+        Cloud cloud = testUtils.stringToCloud(lineeeee);
 
-        cloudLine.smoothLine();
-        assertEquals(expected, cloudLine.getLineAsString());
+        cloud.smoothLine();
+        assertEquals(expected, cloud.getLineAsString());
     }
 
     @Test
     public void testGetDistancesSimple() {
-        CloudLine cloudLine = testUtils.stringToCloudLine("##....");
+        Cloud cloud = testUtils.stringToCloud("##....");
 
-        assertEquals(new Distance(0), cloudLine.getRainDistance());
-        assertEquals(new Distance(2), cloudLine.getSunDistance());
+        assertEquals(new Distance(0), cloud.getRainDistance());
+        assertEquals(new Distance(2), cloud.getSunDistance());
     }
 
     @Test
     public void testGetDistancesInfinityAndZero() {
-        CloudLine cloudLine = testUtils.stringToCloudLine("......");
+        Cloud cloud = testUtils.stringToCloud("......");
 
-        assertEquals(Distance.INFINITY, cloudLine.getRainDistance());
-        assertEquals(new Distance(0), cloudLine.getSunDistance());
+        assertEquals(Distance.INFINITY, cloud.getRainDistance());
+        assertEquals(new Distance(0), cloud.getSunDistance());
     }
 
     @Test
     public void testGetDistancesFuture() {
-        CloudLine cloudLine = testUtils.stringToCloudLine("##..##..#.");
+        Cloud cloud = testUtils.stringToCloud("##..##..#.");
 
-        assertEquals(new Distance(4), cloudLine.getFutureRainDistance());
-        assertEquals(new Distance(2), cloudLine.getFutureSunDistance());
+        assertEquals(new Distance(4), cloud.getFutureRainDistance());
+        assertEquals(new Distance(2), cloud.getFutureSunDistance());
     }
 
     @Test
     public void testIsFutureDistanceInfinity() {
-        CloudLine cloudLine = testUtils.stringToCloudLine("##...");
+        Cloud cloud = testUtils.stringToCloud("##...");
 
-        assertTrue(cloudLine.isFutureRainDistanceInfinity());
-        assertFalse(cloudLine.isFutureSunDistanceInfinity());
+        assertTrue(cloud.isFutureRainDistanceInfinity());
+        assertFalse(cloud.isFutureSunDistanceInfinity());
     }
 
     @Test
     public void testIsFutureDistanceBothInfinity() {
-        CloudLine cloudLine = testUtils.stringToCloudLine(".....");
+        Cloud cloud = testUtils.stringToCloud(".....");
 
-        assertTrue(cloudLine.isFutureRainDistanceInfinity());
-        assertTrue(cloudLine.isFutureSunDistanceInfinity());
+        assertTrue(cloud.isFutureRainDistanceInfinity());
+        assertTrue(cloud.isFutureSunDistanceInfinity());
     }
 
 }
