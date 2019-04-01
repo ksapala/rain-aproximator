@@ -7,16 +7,18 @@ import java.util.Objects;
 
 @AllArgsConstructor
 @Getter
-public class DirectionalAproximationResult {
+public class Aproximation {
 
-    private int angle;
-    private AproximationResult aproximationResult;
+    private final int angle;
+    private final AproximationResult aproximationResult;
+    private final Accuracy accuracy;
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DirectionalAproximationResult that = (DirectionalAproximationResult) o;
+        Aproximation that = (Aproximation) o;
         return angle == that.angle &&
                 Objects.equals(aproximationResult, that.aproximationResult);
     }

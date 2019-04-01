@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class AproximationResultMerger {
 
-	private Comparator<DirectionalAproximationResult> comparator;
+	private Comparator<Aproximation> comparator;
 
     /**
      *
@@ -30,12 +30,12 @@ public class AproximationResultMerger {
     }
 
 	/**
-	 * @param directionalAproximationResults
+	 * @param aproximations
 	 * @return
 	 */
-	public DirectionalAproximationResult merge(List<DirectionalAproximationResult> directionalAproximationResults) {
-        directionalAproximationResults.sort(this.comparator);
-        return directionalAproximationResults.get(0);
+	public Aproximation merge(List<Aproximation> aproximations) {
+        aproximations.sort(this.comparator);
+        return aproximations.get(0);
 	}
 
 }

@@ -16,12 +16,14 @@ import org.ksapala.rainaproximator.utils.TimeUtils;
 @Getter
 public class RegressionResult {
 
-    public final static RegressionResult NAN_RESULT = new RegressionResult(Double.NaN, Double.NaN, Double.NaN,
-            RegressionDebug.NAN_REGRESSION_DEBUG);
+    public final static RegressionResult NAN_RESULT = new RegressionResult(Double.NaN, Double.NaN, Double.NaN, Double.NaN,
+            Double.NaN, RegressionDebug.NAN_REGRESSION_DEBUG);
 
 	private double value;
     private double slope;
     private double rSquare;
+    private double velocity;
+    private double differencesStandardDeviation;
     private RegressionDebug regressionDebug;
 
 
@@ -33,4 +35,5 @@ public class RegressionResult {
                 ", rSquare=" + rSquare +
                 '}';
     }
+
 }

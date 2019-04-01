@@ -11,18 +11,19 @@ import java.util.List;
 public class RegressionDebug {
 
     public final static RegressionDebug NAN_REGRESSION_DEBUG = new RegressionDebug(Double.NaN, Double.NaN, Double.NaN,
-            Double.NaN, 0);
+            Double.NaN, Double.NaN, 0);
 
     private double standardDeviation;
+    private double differencesStandardDeviation;
     private double slope;
-    private double velocity;
+    private double velocity; // how many minutes takes to fly over one unit
     private double rSquare;
     private int pointsCount;
 
 
-    public static RegressionDebug of(double standardDeviation, double regressionSlope, double rSquare,
-                                     List<RegressionPoint> points) {
-        return new RegressionDebug(standardDeviation, regressionSlope, regressionSlope / 1000 / 60, rSquare, points.size());
+    public static RegressionDebug of(double standardDeviation, double differencesStandardDeviation, double regressionSlope,
+                                     double rSquare, double velocity, List<RegressionPoint> points) {
+        return new RegressionDebug(standardDeviation, differencesStandardDeviation, regressionSlope, velocity, rSquare, points.size());
     }
 
 }

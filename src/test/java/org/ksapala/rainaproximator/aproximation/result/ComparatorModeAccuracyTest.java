@@ -21,18 +21,18 @@ public class ComparatorModeAccuracyTest {
     @Autowired
     private Configuration configuration;
 
-    private DirectionalAproximationResult create(AproximationResultType type, double rSquare, String time) {
-        return new DirectionalAproximationResult(0, new AproximationResult(type, new Accuracy(rSquare),
-                TimeUtils.parseInTest(time, configuration)));
+    private Aproximation create(AproximationResultType type, double rSquare, String time) {
+        return new Aproximation(0, new AproximationResult(type,
+                TimeUtils.parseInTest(time, configuration)), new Accuracy(rSquare, 0));
     }
 
-    private DirectionalAproximationResult create(AproximationResultType type, double rSquare) {
-        return new DirectionalAproximationResult(0, new AproximationResult(type, new Accuracy(rSquare)));
+    private Aproximation create(AproximationResultType type, double rSquare) {
+        return new Aproximation(0, new AproximationResult(type), new Accuracy(rSquare, 0));
     }
 
     @Test
 	public void testCompare() {
-		List<DirectionalAproximationResult> results = new ArrayList<>();
+		List<Aproximation> results = new ArrayList<>();
 		results.add(create(AproximationResultType.SUN_UNKNOWN,0.9));
         results.add(create(AproximationResultType.SUN_UNSURE,0.9));
         results.add(create(AproximationResultType.RAIN_UNSURE,0.9));

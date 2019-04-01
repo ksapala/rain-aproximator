@@ -3,9 +3,10 @@
  */
 package org.ksapala.rainaproximator.rest.factory;
 
+import org.ksapala.rainaproximator.aproximation.result.Aproximation;
 import org.ksapala.rainaproximator.aproximation.result.AproximationResult;
 import org.ksapala.rainaproximator.configuration.Configuration;
-import org.ksapala.rainaproximator.rest.bean.AproximationResultBean;
+import org.ksapala.rainaproximator.rest.bean.AproximationBean;
 import org.ksapala.rainaproximator.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -19,7 +20,7 @@ import java.util.Locale;
  *
  */
 @Component
-public class AproximationResultBeanFactory {
+public class AproximationBeanFactory {
 
 
     @Autowired
@@ -31,42 +32,42 @@ public class AproximationResultBeanFactory {
     /**
 	 * 
 	 */
-	public AproximationResultBeanFactory() {
+	public AproximationBeanFactory() {
 	}
 	
 	/**
-	 * @param aproximationResult
+	 * @param aproximation
 	 * @return
 	 */
-	public AproximationResultBean createBean(AproximationResult aproximationResult) {
+	public AproximationBean createBean(Aproximation aproximation) {
+	    AproximationResult aproximationResult = aproximation.getAproximationResult();
         LocalDateTime predictTime = aproximationResult.getPredictTime();
         String predictTimeString = "";
         if (aproximationResult.isPredict()) {
             predictTimeString = predictTime.format(TimeUtils.getFormatter(configuration));
         }
 
-		AproximationResultBean bean = new AproximationResultBean(aproximationResult.getType().getInfo(messageSource),
-                predictTimeString, aproximationResult.getRemark(), aproximationResult.getAccuracy(), aproximationResult.getDebug());
-		return bean;
+        return new AproximationBean(aproximationResult.getType().getInfo(messageSource),
+                predictTimeString, aproximationResult.getRemark(), aproximation.getAccuracy(), aproximationResult.getDebug());
 	}
 
     /**
      *
      * @return
      */
-	public AproximationResultBean createFriendlyErrorBean() {
+	public AproximationBean createFriendlyErrorBean() {
         String info = messageSource.getMessage("AproximationResultBeanFactory.there.was.error", new Object[0],
                 Locale.getDefault());
-        return new AproximationResultBean("", null, info, null, null);
+        return new AproximationBean("", null, info, null, null);
     }
 
     /**
      *
      * @return
      */
-    public AproximationResultBean createEmptyScanBean() {
+    public AproximationBean createEmptyScanBean() {
         String info = messageSource.getMessage("AproximationResultBeanFactory.empty.scan", new Object[0],
                 Locale.getDefault());
-        return new AproximationResultBean("", null, info, null, null);
+        return new AproximationBean("", null, info, null, null);
     }
 }

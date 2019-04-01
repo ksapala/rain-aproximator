@@ -3,7 +3,7 @@
  */
 package org.ksapala.rainaproximator.aproximation.comparator;
 
-import org.ksapala.rainaproximator.aproximation.result.DirectionalAproximationResult;
+import org.ksapala.rainaproximator.aproximation.result.Aproximation;
 
 import java.util.Comparator;
 
@@ -19,30 +19,30 @@ public class Comparators {
 	public Comparators() {
 	}
 
-    public static Comparator<DirectionalAproximationResult> modeAccuracy() {
+    public static Comparator<Aproximation> modeAccuracy() {
         return Comparators.byWeatherDominance().thenComparing(Comparators.byAccuracy());
     }
 
-    public static Comparator<DirectionalAproximationResult> modePredictTime() {
+    public static Comparator<Aproximation> modePredictTime() {
         return Comparators.byWeatherDominance().thenComparing(Comparators.byPredictTime());
     }
 
-    private static Comparator<DirectionalAproximationResult> byWeatherDominance() {
+    private static Comparator<Aproximation> byWeatherDominance() {
         return Comparator.comparing(
                 d -> d.getAproximationResult().getType().getWeatherDominance()
         );
     }
 
-    private static Comparator<DirectionalAproximationResult> byAccuracy() {
+    private static Comparator<Aproximation> byAccuracy() {
         return Comparator.comparing(
-                d -> d.getAproximationResult().getAccuracy(),
+                Aproximation::getAccuracy,
                 Comparator.naturalOrder()
         );
     }
 
-    private static Comparator<DirectionalAproximationResult> byPredictTime() {
+    private static Comparator<Aproximation> byPredictTime() {
         return Comparator.comparing(
-                d -> d.getAproximationResult().getPredictTime(),
+                a -> a.getAproximationResult().getPredictTime(),
                 Comparator.naturalOrder()
         );
     }

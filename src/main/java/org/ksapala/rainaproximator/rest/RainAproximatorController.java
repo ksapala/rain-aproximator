@@ -1,7 +1,7 @@
 package org.ksapala.rainaproximator.rest;
 
 import org.ksapala.rainaproximator.configuration.Mode;
-import org.ksapala.rainaproximator.rest.bean.AproximationResultBean;
+import org.ksapala.rainaproximator.rest.bean.AproximationBean;
 import org.ksapala.rainaproximator.rest.bean.ScanResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,32 +25,32 @@ public class RainAproximatorController {
     private HelloService helloService;
 
     @GetMapping(path = "/aproximate/{latitude}/{longitude}")
-    public AproximationResultBean aproximate(@PathVariable double latitude, @PathVariable double longitude) {
+    public AproximationBean aproximate(@PathVariable double latitude, @PathVariable double longitude) {
         return rainAproximatorService.aproximate(latitude, longitude);
     }
 
     // debug
 
     @GetMapping(path = "/aproximateKrk")
-    public AproximationResultBean aproximateKrk() {
+    public AproximationBean aproximateKrk() {
         Mode mode = new Mode(Mode.NAME_AROUND_FINAL, Mode.COMPARE_ACCURACY);
         return rainAproximatorService.aproximateDebug(KRK_LATITUDE, KRK_LONGITUDE, 0, mode);
     }
 
     @GetMapping(path = "/aproximateKrkTime")
-    public AproximationResultBean aproximateKrkTime() {
+    public AproximationBean aproximateKrkTime() {
         Mode mode = new Mode(Mode.NAME_AROUND_FINAL, Mode.COMPARE_TIME);
         return rainAproximatorService.aproximateDebug(KRK_LATITUDE, KRK_LONGITUDE, 0, mode);
     }
 
     @GetMapping(path = "/aproximateKrkAround")
-    public AproximationResultBean aproximateKrkAround() {
+    public AproximationBean aproximateKrkAround() {
         Mode mode = new Mode(Mode.NAME_AROUND, Mode.COMPARE_ACCURACY);
         return rainAproximatorService.aproximateDebug(KRK_LATITUDE, KRK_LONGITUDE, 0, mode);
     }
 
     @GetMapping(path = "/aproximateKrk/{angle}")
-    public AproximationResultBean aproximateKrk(@PathVariable int angle) {
+    public AproximationBean aproximateKrk(@PathVariable int angle) {
         Mode mode = new Mode(Mode.NAME_STRAIGHT, Mode.COMPARE_ACCURACY);
         return rainAproximatorService.aproximateDebug(KRK_LATITUDE, KRK_LONGITUDE, angle, mode);
     }

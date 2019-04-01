@@ -1,12 +1,34 @@
 package org.ksapala.rainaproximator.aproximation.angle;
 
-import org.springframework.stereotype.Component;
-
 import javax.validation.constraints.NotEmpty;
 import java.util.Arrays;
 
-@Component
 public class Angle {
+
+    private final double alpha;
+    private final double alphaRadians;
+
+    public Angle(double alpha) {
+        this.alpha = alpha;
+        this.alphaRadians = Math.toRadians(alpha);
+    }
+
+
+    public boolean isN() {
+        return alpha >= 315 || alpha < 45;
+    }
+
+    public boolean isE() {
+        return alpha >= 45 && alpha < 135;
+    }
+
+    public boolean isS() {
+        return alpha >= 135 && alpha < 225;
+    }
+
+    public boolean isW() {
+        return alpha >= 225 && alpha < 315;
+    }
 
     /**
      *
@@ -14,7 +36,7 @@ public class Angle {
      * @param deltaAngles
      * @return
      */
-    public int[] create(int base, @NotEmpty int[] deltaAngles) {
+    public static int[] create(int base, @NotEmpty int[] deltaAngles) {
         int[] angles = new int[deltaAngles.length + 1];
 
         for (int i = 0; i < deltaAngles.length; i++) {
@@ -31,7 +53,7 @@ public class Angle {
      * @param delta
      * @return
      */
-    public int create(int base, int delta) {
+    public static int create(int base, int delta) {
         int result = base + delta;
         if (result < 0) {
             result += 360;
@@ -40,4 +62,9 @@ public class Angle {
         }
         return result;
     }
+
+    public double tan() {
+        return Math.tan(alphaRadians);
+    }
+
 }

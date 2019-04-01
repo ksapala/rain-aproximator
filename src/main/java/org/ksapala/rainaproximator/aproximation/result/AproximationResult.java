@@ -1,7 +1,6 @@
 package org.ksapala.rainaproximator.aproximation.result;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.ksapala.rainaproximator.aproximation.debug.Debug;
 import org.ksapala.rainaproximator.utils.TimeUtils;
 
@@ -16,22 +15,19 @@ public class AproximationResult {
 	private AproximationResultType type;
 	private LocalDateTime predictTime;
     private String remark;
-    private Accuracy accuracy;
     private Debug debug;
 
-    public AproximationResult(AproximationResultType type, Accuracy accuracy, LocalDateTime predictTime) {
-		 this.type = type;
-		 this.accuracy = accuracy;
-         this.predictTime = predictTime;
-
-	}
-
-	public AproximationResult(AproximationResultType type, Accuracy accuracy, double predictTime) {
-	    this(type, accuracy, TimeUtils.millisToLocalDateAndTime((long) predictTime));
+    public AproximationResult(AproximationResultType type, LocalDateTime predictTime) {
+        this.type = type;
+        this.predictTime = predictTime;
     }
 
-	public AproximationResult(AproximationResultType type, Accuracy accuracy) {
-	    this(type, accuracy, null);
+	public AproximationResult(AproximationResultType type, double predictTime) {
+	    this(type, TimeUtils.millisToLocalDateAndTime((long) predictTime));
+    }
+
+	public AproximationResult(AproximationResultType type) {
+	    this(type, null);
     }
 
     public boolean isPredict() {
@@ -44,7 +40,7 @@ public class AproximationResult {
         if (isPredict()) {
             timeString = this.predictTime.format(DateTimeFormatter.ofPattern(TO_STRING_PATTERN));
         }
-		return "Type: " + this.type.toString() + ", time: " + timeString + ", accuracy: " + accuracy.toString() + ", remark: " + this.remark;
+		return "Type: " + this.type.toString() + ", time: " + timeString + ", remark: " + this.remark;
 	}
 
 	/* (non-Javadoc)

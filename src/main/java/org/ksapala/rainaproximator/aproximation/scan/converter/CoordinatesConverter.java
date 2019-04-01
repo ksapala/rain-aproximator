@@ -5,7 +5,7 @@ import org.ksapala.rainaproximator.aproximation.image.RainImage;
 
 /**
  * Converts (latitude, longitude) to (x,y) within Image size.
- * Note that it also also takes geographical grid when calculating.
+ * It also also takes geographical grid into calculating.
  */
 public class CoordinatesConverter {
 

@@ -1,14 +1,16 @@
 package org.ksapala.rainaproximator.aproximation.scan.imageoperator;
 
+import org.ksapala.rainaproximator.aproximation.angle.Angle;
+
 public class ImageCalculatorAlphaNS extends ImageCalculator {
 
-	public ImageCalculatorAlphaNS(double alpha) {
-	    super(alpha);
+	public ImageCalculatorAlphaNS(Angle angle) {
+	    super(angle);
     }
 
 	@Override
 	public double getX(int index) {
-        return Math.tan(this.alphaRadians) * index;
+        return angle.tan() * index;
 	}
 
 	@Override

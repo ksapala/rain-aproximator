@@ -7,10 +7,10 @@ import org.ksapala.rainaproximator.aproximation.result.Accuracy;
 
 @AllArgsConstructor
 @Getter
-public class AproximationResultBean {
+public class AproximationBean {
 
 
-    public static final AproximationResultBean HELLO = new AproximationResultBean("Hello, this is example result!",
+    public static final AproximationBean HELLO = new AproximationBean("Hello, this is example result!",
             "", "No remark.", null, null);
 
     private String info;

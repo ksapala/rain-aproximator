@@ -55,7 +55,7 @@ public class RainAproximatorTest {
 	
 	@Test
 	public void testAproximateRainAtTime() {
-		List<Cloud> clouds = new ArrayList<Cloud>();
+		List<Cloud> clouds = new ArrayList<>();
 		Cloud cloud1 = testUtils.stringToCloud("............###########...");
 		Cloud cloud2 = testUtils.stringToCloud("..........###########.....");
 		Cloud cloud3 = testUtils.stringToCloud("........###########.......");
@@ -75,7 +75,7 @@ public class RainAproximatorTest {
 		clouds.add(cloud4);
 		clouds.add(cloud5);
 
-		AproximationResult aproximationResult = rainAproximator.aproximate(clouds);
+		AproximationResult aproximationResult = rainAproximator.aproximate(clouds, 0).getAproximationResult();
 		assertNotNull(aproximationResult);
 
 		AproximationResultType actualType = aproximationResult.getType();
@@ -111,7 +111,7 @@ public class RainAproximatorTest {
 		clouds.add(cloud5);
 
 		// when
-		AproximationResult aproximationResult = rainAproximator.aproximate(clouds);
+        AproximationResult aproximationResult = rainAproximator.aproximate(clouds, 0).getAproximationResult();
 
 		// then
 		assertNotNull(aproximationResult);
@@ -145,7 +145,7 @@ public class RainAproximatorTest {
 		clouds.add(cloud4);
 		clouds.add(cloud5);
 
-		AproximationResult aproximationResult = rainAproximator.aproximate(clouds);
+        AproximationResult aproximationResult = rainAproximator.aproximate(clouds, 0).getAproximationResult();
 		assertNotNull(aproximationResult);
 
 		AproximationResultType actualType = aproximationResult.getType();
@@ -158,7 +158,7 @@ public class RainAproximatorTest {
 	
 	@Test
 	public void testAproximateSunUnknown() {
-		List<Cloud> clouds = new ArrayList<Cloud>();
+		List<Cloud> clouds = new ArrayList<>();
 		Cloud cloud1 = testUtils.stringToCloud("###################");
 		Cloud cloud2 = testUtils.stringToCloud("###################");
 		Cloud cloud3 = testUtils.stringToCloud("...................");
@@ -177,7 +177,7 @@ public class RainAproximatorTest {
 		clouds.add(cloud4);
 		clouds.add(cloud5);
 
-		AproximationResult aproximationResult = rainAproximator.aproximate(clouds);
+        AproximationResult aproximationResult = rainAproximator.aproximate(clouds, 0).getAproximationResult();
 		assertNotNull(aproximationResult);
 
 		AproximationResultType actualType = aproximationResult.getType();
@@ -190,7 +190,7 @@ public class RainAproximatorTest {
 	
 	@Test
 	public void testAproximateSunUnknownDateForPast() {
-		List<Cloud> clouds = new ArrayList<Cloud>();
+		List<Cloud> clouds = new ArrayList<>();
 		Cloud cloud1 = testUtils.stringToCloud("######.............");
 		Cloud cloud2 = testUtils.stringToCloud("#########..........");
 		Cloud cloud3 = testUtils.stringToCloud("############.......");
@@ -210,7 +210,7 @@ public class RainAproximatorTest {
 		clouds.add(cloud4);
 		clouds.add(cloud5);
 
-		AproximationResult aproximationResult = rainAproximator.aproximate(clouds);
+        AproximationResult aproximationResult = rainAproximator.aproximate(clouds, 0).getAproximationResult();
 		assertNotNull(aproximationResult);
 
 		AproximationResultType actualType = aproximationResult.getType();

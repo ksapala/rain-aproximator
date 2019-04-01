@@ -8,7 +8,10 @@ import org.ksapala.rainaproximator.utils.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Finds line distance(time) for given time.
@@ -52,10 +55,12 @@ public class RegressionCalculator {
 		double regression = simpleRegression.predict(x);
 		double regressionSlope  = simpleRegression.getSlope();
         double standardDeviation = getStandardDeviation(points);
+        double differencesStandardDeviation = getDifferencesStandardDeviation(points);
         double rSquare = simpleRegression.getRSquare();
+        double velocity = regressionSlope / 1000 / 60;
 
-        RegressionDebug regressionDebug = RegressionDebug.of(standardDeviation, regressionSlope, rSquare, points);
-        return new RegressionResult(regression, regressionSlope, rSquare, regressionDebug);
+        RegressionDebug regressionDebug = RegressionDebug.of(standardDeviation, differencesStandardDeviation, regressionSlope, rSquare, velocity, points);
+        return new RegressionResult(regression, regressionSlope, rSquare, velocity, differencesStandardDeviation, regressionDebug);
 	}
 
     /**
@@ -65,6 +70,20 @@ public class RegressionCalculator {
     private double getStandardDeviation(List<RegressionPoint> regressionPoints) {
         DescriptiveStatistics statistics = new DescriptiveStatistics();
         regressionPoints.forEach(p -> statistics.addValue(p.getDistance().getValue()));
+        return statistics.getStandardDeviation();
+    }
+
+    /**
+     * @param regressionPoints
+     * @return
+     */
+    double getDifferencesStandardDeviation(List<RegressionPoint> regressionPoints) {
+        DescriptiveStatistics statistics = new DescriptiveStatistics();
+        int[] differences = IntStream.range(0, regressionPoints.size() - 1)
+                .map(i -> regressionPoints.get(i + 1).getDistance().getValue() - regressionPoints.get(i).getDistance().getValue())
+                .toArray();
+
+        Arrays.stream(differences).forEach(statistics::addValue);
         return statistics.getStandardDeviation();
     }
 
@@ -81,6 +100,7 @@ public class RegressionCalculator {
 		}
 		return data;
 	}
+
 
 	/**
 	 * @param message

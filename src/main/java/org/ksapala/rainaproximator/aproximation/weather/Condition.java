@@ -46,6 +46,8 @@ public abstract class Condition {
     @Getter private List<Cloud> candidateClouds;
     @Getter private List<Cloud> goodFitClouds;
     @Getter private double rSquare;
+    @Getter private double velocity;
+    @Getter private double differencesStandardDeviation;
     @Getter private RegressionDebug regressionDebug;
 
     protected Filters filters;
@@ -90,6 +92,8 @@ public abstract class Condition {
 
             this.regression = result.getValue();
             this.regressionSlope  = result.getSlope();
+            this.velocity = result.getVelocity();
+            this.differencesStandardDeviation = result.getDifferencesStandardDeviation();
             this.rSquare = result.getRSquare();
             this.regressionDebug = result.getRegressionDebug();
         }

@@ -1,13 +1,13 @@
 package org.ksapala.rainaproximator.aproximation.scan.imageoperator;
 
+import org.ksapala.rainaproximator.aproximation.angle.Angle;
+
 public abstract class ImageCalculator {
 
-	double alpha;
-	double alphaRadians;
-	
-	public ImageCalculator(double alpha) {
-	    this.alpha = alpha;
-	    this.alphaRadians = Math.toRadians(alpha);
+	protected final Angle angle;
+
+	public ImageCalculator(Angle angle) {
+        this.angle = angle;
     }
 	
 	public abstract double getX(int index);

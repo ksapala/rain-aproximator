@@ -1,32 +1,28 @@
 package org.ksapala.rainaproximator.aproximation.scan.imageoperator;
 
+import org.ksapala.rainaproximator.aproximation.angle.Angle;
+
 public class ImageOperator {
 
-	private boolean alphaW;
-	private boolean alphaE;
-	private boolean alphaN;
-	private double alpha;
+	private Angle angle;
 	private int samplesCount;
 	
 	public ImageOperator(double alpha, int samplesCount) {
-	    this.alpha = alpha;
+	    this.angle = new Angle(alpha);
 		this.samplesCount = samplesCount;
-        this.alphaE = alpha >= 45 && alpha < 135;
-        this.alphaN = alpha >= 315 || alpha < 45;
-	    this.alphaW = alpha >= 225 && alpha < 315;
 	}
 	
 	public ImageIterator getImageIterator() {
-		if (this.alphaN || this.alphaE) {
+		if (angle.isN() || angle.isE()) {
 			return new ImageIteratorPlus(this.samplesCount);
 		}
 		return new ImageIteratorMinus(this.samplesCount);
 	}
 	public ImageCalculator getImageCalculator() {
-		if (this.alphaW || this.alphaE) {
-			return new ImageCalculatorAlphaWE(this.alpha);
+		if (angle.isW() || angle.isE()) {
+			return new ImageCalculatorAlphaWE(angle);
 		}
-		return new ImageCalculatorAlphaNS(this.alpha);
+		return new ImageCalculatorAlphaNS(angle);
 	}
 	
 }
