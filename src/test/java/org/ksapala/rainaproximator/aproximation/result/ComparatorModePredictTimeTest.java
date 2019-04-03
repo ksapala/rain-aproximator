@@ -23,11 +23,11 @@ public class ComparatorModePredictTimeTest {
 
     private Aproximation create(AproximationResultType type, String time) {
         return new Aproximation(0, new AproximationResult(type,
-                TimeUtils.parseInTest(time, configuration)), new Accuracy(1.0, 0));
+                TimeUtils.parseInTest(time, configuration)), new Accuracy(1.0, 0, 0, 10));
     }
 
     private Aproximation create(AproximationResultType type) {
-        return new Aproximation(0, new AproximationResult(type), new Accuracy(1.0, 0));
+        return new Aproximation(0, new AproximationResult(type), new Accuracy(1.0, 0, 0, 10));
     }
 
     @Test

@@ -59,8 +59,8 @@ public class RegressionCalculator {
         double rSquare = simpleRegression.getRSquare();
         double velocity = regressionSlope / 1000 / 60;
 
-        RegressionDebug regressionDebug = RegressionDebug.of(standardDeviation, differencesStandardDeviation, regressionSlope, rSquare, velocity, points);
-        return new RegressionResult(regression, regressionSlope, rSquare, velocity, differencesStandardDeviation, regressionDebug);
+        RegressionDebug regressionDebug = RegressionDebug.of(standardDeviation, differencesStandardDeviation, regressionSlope, rSquare, velocity, points.size());
+        return new RegressionResult(regression, regressionSlope, rSquare, velocity, differencesStandardDeviation, points.size(), regressionDebug);
 	}
 
     /**

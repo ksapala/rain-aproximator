@@ -22,8 +22,8 @@ public class RegressionDebug {
 
 
     public static RegressionDebug of(double standardDeviation, double differencesStandardDeviation, double regressionSlope,
-                                     double rSquare, double velocity, List<RegressionPoint> points) {
-        return new RegressionDebug(standardDeviation, differencesStandardDeviation, regressionSlope, velocity, rSquare, points.size());
+                                     double rSquare, double velocity, int pointsCount) {
+        return new RegressionDebug(standardDeviation, differencesStandardDeviation, regressionSlope, velocity, rSquare, pointsCount);
     }
 
 }

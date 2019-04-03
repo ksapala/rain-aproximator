@@ -217,7 +217,8 @@ public class RainAproximator {
 			}
 		}
 
-        Accuracy accuracy = Accuracy.of(condition.getRSquare(), angle, condition.getVelocity(), condition.getDifferencesStandardDeviation());
+        Accuracy accuracy = Accuracy.of(condition.getRSquare(), angle, condition.getVelocity(),
+                condition.getDifferencesStandardDeviation(), condition.getPointsCount());
 
         Debug debug = new Debug();
         debug.setClouds(clouds);

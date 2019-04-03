@@ -22,16 +22,50 @@ public class ComparatorModeAccuracyTest {
     private Configuration configuration;
 
     private Aproximation create(AproximationResultType type, double rSquare, String time) {
-        return new Aproximation(0, new AproximationResult(type,
-                TimeUtils.parseInTest(time, configuration)), new Accuracy(rSquare, 0));
+        AproximationResult aproximationResult = new AproximationResult(type, TimeUtils.parseInTest(time, configuration));
+        return create(aproximationResult, rSquare, 2);
+    }
+
+    private Aproximation create(AproximationResultType type, double rSquare, int pointsCount) {
+        AproximationResult aproximationResult = new AproximationResult(type);
+        return create(aproximationResult, rSquare, pointsCount);
     }
 
     private Aproximation create(AproximationResultType type, double rSquare) {
-        return new Aproximation(0, new AproximationResult(type), new Accuracy(rSquare, 0));
+        AproximationResult aproximationResult = new AproximationResult(type);
+        return create(aproximationResult, rSquare, 2);
+    }
+
+    private Aproximation create(AproximationResult aproximationResult, double rSquare, int pointsCount) {
+        Accuracy accuracy = new Accuracy(rSquare, 0, 0, pointsCount);
+        return new Aproximation(0, aproximationResult, accuracy);
     }
 
     @Test
-	public void testCompare() {
+    public void shouldCompareAccuracyParameters() {
+        // given
+        List<Aproximation> results = new ArrayList<>();
+        results.add(create(AproximationResultType.SUN_UNKNOWN,1.0,1));
+        results.add(create(AproximationResultType.SUN_UNKNOWN,0.8,10));
+        results.add(create(AproximationResultType.SUN_UNKNOWN,0.9,10));
+        results.add(create(AproximationResultType.SUN_UNKNOWN,1.0,2));
+        results.add(create(AproximationResultType.SUN_UNKNOWN,1.0,3));
+
+        // when
+        results.sort(Comparators.modeAccuracy());
+
+        // than
+        assertEquals(create(AproximationResultType.SUN_UNKNOWN, 1.0, 3), results.get(0));
+        assertEquals(create(AproximationResultType.SUN_UNKNOWN, 0.9, 10), results.get(1));
+        assertEquals(create(AproximationResultType.SUN_UNKNOWN, 0.8, 10), results.get(2));
+        assertEquals(create(AproximationResultType.SUN_UNKNOWN, 1.0, 1), results.get(3));
+        assertEquals(create(AproximationResultType.SUN_UNKNOWN, 1.0, 2), results.get(4));
+
+    }
+
+    @Test
+	public void testCompareOnlyRSquare() {
+        // given
 		List<Aproximation> results = new ArrayList<>();
 		results.add(create(AproximationResultType.SUN_UNKNOWN,0.9));
         results.add(create(AproximationResultType.SUN_UNSURE,0.9));
@@ -46,8 +80,10 @@ public class ComparatorModeAccuracyTest {
         results.add(create(AproximationResultType.RAIN_AT_TIME,0.8, "28/04/2015 18:00"));
         results.add(create(AproximationResultType.RAIN_AT_TIME,0.9, "28/04/2015 11:00"));
 
+        // when
         results.sort(Comparators.modeAccuracy());
 
+        // than
         assertEquals(create(AproximationResultType.RAIN_AT_TIME,0.9, "28/04/2015 11:00"), results.get(0));
         assertEquals(create(AproximationResultType.RAIN_AT_TIME,0.8, "28/04/2015 18:00"), results.get(1));
         assertEquals(create(AproximationResultType.RAIN_AT_TIME,0.7, "28/04/2015 12:00"), results.get(2));

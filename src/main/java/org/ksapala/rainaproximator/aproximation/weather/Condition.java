@@ -48,6 +48,7 @@ public abstract class Condition {
     @Getter private double rSquare;
     @Getter private double velocity;
     @Getter private double differencesStandardDeviation;
+    @Getter private int pointsCount;
     @Getter private RegressionDebug regressionDebug;
 
     protected Filters filters;
@@ -96,6 +97,7 @@ public abstract class Condition {
             this.differencesStandardDeviation = result.getDifferencesStandardDeviation();
             this.rSquare = result.getRSquare();
             this.regressionDebug = result.getRegressionDebug();
+            this.pointsCount = result.getPointsCount();
         }
         return this.regression;
     }
