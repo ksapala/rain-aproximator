@@ -3,7 +3,7 @@ package org.ksapala.rainaproximator.aproximation.domainfilters;
 import org.junit.Test;
 import org.ksapala.rainaproximator.aproximation.cloud.Distance;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionPoint;
-import org.ksapala.rainaproximator.aproximation.structure.RegressionPointStructure;
+import org.ksapala.rainaproximator.aproximation.regression.RegressionPointStructure;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 

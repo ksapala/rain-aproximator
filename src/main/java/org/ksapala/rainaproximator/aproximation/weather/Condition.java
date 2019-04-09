@@ -9,7 +9,7 @@ import org.ksapala.rainaproximator.aproximation.regression.RegressionCalculator;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionPoint;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionResult;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionTimeFactory;
-import org.ksapala.rainaproximator.aproximation.structure.RegressionPointStructure;
+import org.ksapala.rainaproximator.aproximation.regression.RegressionPointStructure;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.utils.LoggingUtils;
 import org.ksapala.rainaproximator.utils.TimeUtils;

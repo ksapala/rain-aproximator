@@ -30,29 +30,28 @@ public class RainAproximatorController {
     }
 
     // debug
-
     @GetMapping(path = "/aproximateKrk")
     public AproximationBean aproximateKrk() {
-        Mode mode = new Mode(Mode.NAME_AROUND_FINAL, Mode.COMPARE_ACCURACY);
+        Mode mode = new Mode(Mode.NAME_FULL, Mode.COMPARE_ACCURACY);
         return rainAproximatorService.aproximateDebug(KRK_LATITUDE, KRK_LONGITUDE, 0, mode);
+    }
+
+    @GetMapping(path = "/aproximateKrk/{mode}")
+    public AproximationBean aproximateKrk(@PathVariable String mode) {
+        Mode modeObject = new Mode(mode, Mode.COMPARE_ACCURACY);
+        return rainAproximatorService.aproximateDebug(KRK_LATITUDE, KRK_LONGITUDE, 0, modeObject);
+    }
+
+    @GetMapping(path = "/aproximateKrk/{mode}/{angle}")
+    public AproximationBean aproximateKrk(@PathVariable String mode, @PathVariable int angle) {
+        Mode modeObject = new Mode(mode, Mode.COMPARE_ACCURACY);
+        return rainAproximatorService.aproximateDebug(KRK_LATITUDE, KRK_LONGITUDE, angle, modeObject);
     }
 
     @GetMapping(path = "/aproximateKrkTime")
     public AproximationBean aproximateKrkTime() {
-        Mode mode = new Mode(Mode.NAME_AROUND_FINAL, Mode.COMPARE_TIME);
+        Mode mode = new Mode(Mode.NAME_FULL, Mode.COMPARE_TIME);
         return rainAproximatorService.aproximateDebug(KRK_LATITUDE, KRK_LONGITUDE, 0, mode);
-    }
-
-    @GetMapping(path = "/aproximateKrkAround")
-    public AproximationBean aproximateKrkAround() {
-        Mode mode = new Mode(Mode.NAME_AROUND, Mode.COMPARE_ACCURACY);
-        return rainAproximatorService.aproximateDebug(KRK_LATITUDE, KRK_LONGITUDE, 0, mode);
-    }
-
-    @GetMapping(path = "/aproximateKrk/{angle}")
-    public AproximationBean aproximateKrk(@PathVariable int angle) {
-        Mode mode = new Mode(Mode.NAME_STRAIGHT, Mode.COMPARE_ACCURACY);
-        return rainAproximatorService.aproximateDebug(KRK_LATITUDE, KRK_LONGITUDE, angle, mode);
     }
 
     @GetMapping(path = "/scan")
@@ -60,6 +59,15 @@ public class RainAproximatorController {
         return scanService.scan();
     }
 
+
+    // lambda
+    @GetMapping(path = "/scanAndAproximate")
+    public AproximationBean scanAndAproximate() {
+        scan();
+        return aproximateKrk();
+    }
+
+    // hello
     @GetMapping(path = "/hello")
     public Object hello() {
         return helloService.hello();

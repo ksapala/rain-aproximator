@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.IntStream;
 
 @Component
 public class RainAproximator {
@@ -64,7 +65,10 @@ public class RainAproximator {
 
 		Aproximation aproximation;
 
-        if (Mode.NAME_AROUND.equals(mode.getName())) {
+        if (Mode.NAME_FULL.equals(mode.getName())) {
+            aproximation = aproximateFull(scan, x, y, mode);
+
+        } else if (Mode.NAME_AROUND.equals(mode.getName())) {
             aproximation = aproximateAround(scan, x, y, mode);
 
         } else if (Mode.NAME_AROUND_FINAL.equals(mode.getName())) {
@@ -86,6 +90,20 @@ public class RainAproximator {
         aproximation.getAproximationResult().getDebug().setPerformance(Long.toString(duration));
 		return aproximation;
     }
+
+    /**
+     *
+     * @param scan
+     * @param x
+     * @param y
+     * @param mode
+     * @return
+     */
+    private Aproximation aproximateFull(Scan scan, double x, double y, Mode mode) {
+	    int[] fullAngles = IntStream.range(0, 360).toArray();
+        return aproximateAngles(scan, mode, x, y, fullAngles);
+    }
+
 
     /**
      *

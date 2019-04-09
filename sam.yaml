@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS Serverless Spring Boot 2 API - org.ksapala.rainaproximator
+Globals:
+  Api:
+    EndpointConfiguration: REGIONAL
+
+Resources:
+  HelloFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: org.ksapala.rainaproximator.aws.LambdaHandler::handleRequest
+      Runtime: java8
+      CodeUri: build/distributions/rain-aproximator-0.0.1-SNAPSHOT.zip
+      MemorySize: 512
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 60
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: any
+
+Outputs:
+  HelloApi:
+    Description: URL for application
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/aproximateKrk'
+    Export:
+      Name: RainAproximatorApi

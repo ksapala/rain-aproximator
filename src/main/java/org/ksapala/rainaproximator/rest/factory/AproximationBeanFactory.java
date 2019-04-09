@@ -70,4 +70,5 @@ public class AproximationBeanFactory {
                 Locale.getDefault());
         return new AproximationBean("", null, info, null, null);
     }
+
 }

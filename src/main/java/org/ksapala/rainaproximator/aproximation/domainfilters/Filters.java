@@ -3,7 +3,7 @@ package org.ksapala.rainaproximator.aproximation.domainfilters;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.ksapala.rainaproximator.aproximation.cloud.Cloud;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionPoint;
-import org.ksapala.rainaproximator.aproximation.structure.RegressionPointStructure;
+import org.ksapala.rainaproximator.aproximation.regression.RegressionPointStructure;
 import org.ksapala.rainaproximator.configuration.Configuration;
 
 import java.util.*;
