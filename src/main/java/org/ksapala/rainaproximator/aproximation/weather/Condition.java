@@ -35,9 +35,9 @@ public abstract class Condition {
     private final Logger logger = LoggerFactory.getLogger(Condition.class);
 
     private static final int REGRESSION_NOT_SET = -1;
-	private static final int ZERO_DISTANCE = 0;
-	
-	private List<Cloud> clouds;
+	private static final int ZERO_DISTANCE = 0;;
+
+    private List<Cloud> clouds;
 
     private double regression = REGRESSION_NOT_SET;
     private double regressionSlope;
@@ -53,12 +53,14 @@ public abstract class Condition {
 
     protected Filters filters;
 
-    private RegressionTimeFactory regressionTimeFactory;
+    private final Configuration.Algorithm algorithmConfiguration;
+    private final RegressionTimeFactory regressionTimeFactory;
 
     public Condition(List<Cloud> clouds, RegressionTimeFactory regressionTimeFactory, Configuration.Algorithm algorithmConfiguration) {
         this.clouds = clouds;
         this.regressionTimeFactory = regressionTimeFactory;
         this.filters = new Filters(algorithmConfiguration);
+        this.algorithmConfiguration = algorithmConfiguration;
     }
 
     public abstract String getName();
@@ -88,7 +90,7 @@ public abstract class Condition {
                     .map(RegressionPointStructure::getRegressionPoint)
                     .collect(Collectors.toList());
 
-            RegressionCalculator calculator = new RegressionCalculator(goodFitPoints);
+            RegressionCalculator calculator = new RegressionCalculator(goodFitPoints, algorithmConfiguration);
             RegressionResult result = calculator.calculate(ZERO_DISTANCE);
 
             this.regression = result.getValue();
@@ -110,7 +112,7 @@ public abstract class Condition {
     public boolean isRegressionForPast() {
         if (this.regressionForPast == null) {
             double regression = getRegression();
-            LocalDateTime date = TimeUtils.millisToLocalDateAndTime((long) regression);
+            LocalDateTime date = TimeUtils.millisToDate((long) regression);
             this.regressionForPast = date.isBefore(now());
         }
         return this.regressionForPast;

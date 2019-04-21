@@ -60,7 +60,7 @@
         </root>
 
         <!-- LOG "org.ksapala*" at DEBUG level -->
-        <logger name="org.ksapala" level="debug" additivity="false">
+        <logger name="org.ksapala" level="info" additivity="false">
             <!--<appender-ref ref="RollingFile" />-->
             <appender-ref ref="Console" />
         </logger>

@@ -23,7 +23,7 @@ public class AproximationResult {
     }
 
 	public AproximationResult(AproximationResultType type, double predictTime) {
-	    this(type, TimeUtils.millisToLocalDateAndTime((long) predictTime));
+	    this(type, TimeUtils.millisToDate((long) predictTime));
     }
 
 	public AproximationResult(AproximationResultType type) {

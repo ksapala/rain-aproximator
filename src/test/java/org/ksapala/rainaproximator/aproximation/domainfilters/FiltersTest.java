@@ -1,11 +1,15 @@
 package org.ksapala.rainaproximator.aproximation.domainfilters;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.ksapala.rainaproximator.aproximation.cloud.Distance;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionPoint;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionPointStructure;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,6 +17,8 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class FiltersTest {
 
     @Autowired
@@ -20,7 +26,8 @@ public class FiltersTest {
 
     private Filters filters;
 
-    public FiltersTest() {
+    @Before
+    public void setUp() {
         this.filters = new Filters(configuration.getAlgorithm());
     }
 

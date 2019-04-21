@@ -45,21 +45,24 @@ public class Accuracy implements Comparable<Accuracy>{
     // 1.0(3) 0.9, 0.8, 0.7, 1.0(2), 1.0(2)
     @Override
     public int compareTo(Accuracy other) {
-        boolean firstInnacurate = this.rSquare == 1 && this.poinsCount < 3;
-        boolean secondInnacurate = other.rSquare == 1 && other.poinsCount < 3;
-
-        if (firstInnacurate && !secondInnacurate) {
-            return 1;
-        }
-        if (!firstInnacurate && secondInnacurate) {
-            return -1;
-        }
+//        boolean firstInnacurate = this.poinsCount < 3 && !Double.isNaN(this.rSquare);
+//        boolean secondInnacurate = other.poinsCount < 3 && !Double.isNaN(other.rSquare);
+//
+//        if (firstInnacurate && secondInnacurate) {
+//            return 0;
+//        }
+//        if (firstInnacurate && !secondInnacurate) {
+//            return 1;
+//        }
+//        if (!firstInnacurate && secondInnacurate) {
+//            return -1;
+//        }
         return -Double.compare(this.rSquare, other.rSquare);
     }
 
     @Override
     public String toString() {
-        return Double.toString(rSquare);
+        return "rSquare: " + Double.toString(rSquare);
     }
 
     @Override

@@ -57,6 +57,9 @@ public class RainAproximator {
      * @return
      */
 	public Aproximation aproximate(Scan scan, double latitude, double longitude, int angle, Mode mode) {
+        logger.info("Aproximation start. Scan: " + scan.getLastMapTime() + " Location: (" + latitude * 100 / 100 + ", " +
+                + longitude * 100 / 100 + ") Angle: " + angle + " Mode: " + mode.getName());
+
 		long start = System.currentTimeMillis();
 		double[] convert = this.coordinatesConverter.convert(latitude, longitude);
 		

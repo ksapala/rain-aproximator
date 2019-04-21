@@ -23,11 +23,11 @@ public class TimeUtils {
 	public TimeUtils() {
 	}
 
-    public static long localDateAndTimeToMillis(LocalDateTime time) {
+    public static long dateToMillis(LocalDateTime time) {
         return time.toInstant(ZoneOffset.UTC).toEpochMilli();
     }
 
-    public static LocalDateTime millisToLocalDateAndTime(long millis) {
+    public static LocalDateTime millisToDate(long millis) {
         return LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneOffset.UTC);
     }
 

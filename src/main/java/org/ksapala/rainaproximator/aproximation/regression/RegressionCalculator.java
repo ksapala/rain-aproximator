@@ -4,13 +4,15 @@ package org.ksapala.rainaproximator.aproximation.regression;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 import org.ksapala.rainaproximator.aproximation.debug.RegressionDebug;
+import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.utils.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.function.IntUnaryOperator;
 import java.util.stream.IntStream;
 
 /**
@@ -26,13 +28,15 @@ public class RegressionCalculator {
     private final Logger logger = LoggerFactory.getLogger(RegressionCalculator.class);
 
     private List<RegressionPoint> points;
+    private Configuration.Algorithm algorithmConfiguration;
 
     /**
 	 *
      * @param points
      */
-	public RegressionCalculator(List<RegressionPoint> points) {
+	public RegressionCalculator(List<RegressionPoint> points, Configuration.Algorithm algorithmConfiguration) {
         this.points = points;
+        this.algorithmConfiguration = algorithmConfiguration;
     }
 
     /**
@@ -80,11 +84,34 @@ public class RegressionCalculator {
     double getDifferencesStandardDeviation(List<RegressionPoint> regressionPoints) {
         DescriptiveStatistics statistics = new DescriptiveStatistics();
         int[] differences = IntStream.range(0, regressionPoints.size() - 1)
-                .map(i -> regressionPoints.get(i + 1).getDistance().getValue() - regressionPoints.get(i).getDistance().getValue())
+                .map(new CountDifferenceStandardDeviation(regressionPoints))
                 .toArray();
 
         Arrays.stream(differences).forEach(statistics::addValue);
         return statistics.getStandardDeviation();
+    }
+
+    /**
+     *
+     */
+    class CountDifferenceStandardDeviation implements IntUnaryOperator {
+
+        private List<RegressionPoint> regressionPoints;
+
+        public CountDifferenceStandardDeviation(List<RegressionPoint> regressionPoints) {
+            this.regressionPoints = regressionPoints;
+        }
+
+        @Override
+        public int applyAsInt(int operand) {
+            RegressionPoint regressionPoint1 = regressionPoints.get(operand);
+            RegressionPoint regressionPoint2 = regressionPoints.get(operand + 1);
+
+            int differenceMinutes = (int) Duration.between(regressionPoint1.getTime(), regressionPoint2.getTime()).toMinutes();
+            int pointsTimeFactor = differenceMinutes / algorithmConfiguration.getRadarMapTimeIntevalMinutes();
+
+            return (regressionPoint2.getDistance().getValue() - regressionPoint1.getDistance().getValue()) / pointsTimeFactor;
+        }
     }
 
     /**
@@ -96,7 +123,7 @@ public class RegressionCalculator {
 		for (int i = 0; i < regressionPoints.size(); i++) {
 			RegressionPoint regressionPoint = regressionPoints.get(i);
 			data[i][0] = regressionPoint.getDistance().getValue();
-			data[i][1] = TimeUtils.localDateAndTimeToMillis(regressionPoint.getTime());
+			data[i][1] = TimeUtils.dateToMillis(regressionPoint.getTime());
 		}
 		return data;
 	}

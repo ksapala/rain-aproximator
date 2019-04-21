@@ -5,6 +5,7 @@ package org.ksapala.rainaproximator.aproximation.comparator;
 
 import org.ksapala.rainaproximator.aproximation.result.Aproximation;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 
 /**
@@ -20,7 +21,10 @@ public class Comparators {
 	}
 
     public static Comparator<Aproximation> modeAccuracy() {
-        return Comparators.byWeatherDominance().thenComparing(Comparators.byAccuracy());
+        return Comparators.isAccurate()
+                .thenComparing(Comparators.byWeatherDominance())
+                .thenComparing(Comparators.byAccuracy())
+                .thenComparing(Comparators.byPredictTime());
     }
 
     public static Comparator<Aproximation> modePredictTime() {
@@ -40,11 +44,22 @@ public class Comparators {
         );
     }
 
-    private static Comparator<Aproximation> byPredictTime() {
+    private static Comparator<Aproximation> isAccurate() {
         return Comparator.comparing(
-                a -> a.getAproximationResult().getPredictTime(),
+                a -> a.getAccuracy().getPoinsCount() < 3 && !Double.isNaN(a.getAccuracy().getRSquare()),
                 Comparator.naturalOrder()
         );
+    }
+
+    private static Comparator<Aproximation> byPredictTime() {
+        return (a1, a2) -> {
+            LocalDateTime predictTime1 = a1.getAproximationResult().getPredictTime();
+            LocalDateTime predictTime2 = a2.getAproximationResult().getPredictTime();
+            if (predictTime1 != null && predictTime2 != null) {
+                return predictTime1.compareTo(predictTime2);
+            }
+            return 0;
+        };
     }
 
 }

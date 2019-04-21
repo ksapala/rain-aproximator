@@ -1,17 +1,15 @@
 /**
  * 
  */
-package org.ksapala.rainaproximator.rest;
+package org.ksapala.rainaproximator.rest.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.json.JSONObject;
-import org.ksapala.rainaproximator.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 

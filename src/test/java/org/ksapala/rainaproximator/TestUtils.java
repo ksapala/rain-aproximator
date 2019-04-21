@@ -5,11 +5,13 @@ import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.utils.TimeUtils;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class TestUtils {
 
 
     private final static LocalDateTime dummyTime = LocalDateTime.now();
+    public static final String TIME_FORMAT = "dd/MM/yyyy HH:mm";
 
     private Configuration configuration;
 
@@ -53,12 +55,8 @@ public class TestUtils {
         return line;
     }
 
-    /**
-     *
-     * @param timeString
-     * @return
-     */
-    public LocalDateTime parseInTest(String timeString) {
-        return TimeUtils.parseInTest(timeString, configuration);
+    public static LocalDateTime parseInTest(String timeString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
+        return LocalDateTime.parse(timeString, formatter);
     }
 }

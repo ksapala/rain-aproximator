@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.ksapala.rainaproximator.TestUtils;
 import org.ksapala.rainaproximator.aproximation.cloud.Cloud;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionTimeFactory;
-import org.ksapala.rainaproximator.aproximation.weather.Rain;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +54,7 @@ public class ConditionTest {
         Rain rain = new Rain(clouds, regressionTimeFactory, configuration.getAlgorithm());
         LocalDateTime expectedTime = testUtils.parseInTest("04/02/2115 14:50");
 
-        assertEquals(expectedTime, TimeUtils.millisToLocalDateAndTime((long) rain.getRegression()));
+        assertEquals(expectedTime, TimeUtils.millisToDate((long) rain.getRegression()));
         assertFalse(rain.isRegressionNan());
         assertFalse(rain.isRegressionForPast());
         assertTrue(rain.isApproaching());
@@ -79,7 +78,7 @@ public class ConditionTest {
         Rain rain = new Rain(clouds, regressionTimeFactory, configuration.getAlgorithm());
         LocalDateTime expectedTime = testUtils.parseInTest("04/02/2115 14:45");
 
-        assertEquals(expectedTime, TimeUtils.millisToLocalDateAndTime((long) rain.getRegression()));
+        assertEquals(expectedTime, TimeUtils.millisToDate((long) rain.getRegression()));
         assertFalse(rain.isRegressionNan());
         assertFalse(rain.isRegressionForPast());
         assertTrue(rain.isApproaching());
@@ -103,7 +102,7 @@ public class ConditionTest {
         Rain rain = new Rain(clouds, regressionTimeFactory, configuration.getAlgorithm());
         LocalDateTime expectedTime = testUtils.parseInTest("04/02/2115 15:00");
 
-        assertEquals(expectedTime, TimeUtils.millisToLocalDateAndTime((long) rain.getRegression()));
+        assertEquals(expectedTime, TimeUtils.millisToDate((long) rain.getRegression()));
         assertFalse(rain.isRegressionNan());
         assertFalse(rain.isRegressionForPast());
         assertTrue(rain.isApproaching());
@@ -127,7 +126,7 @@ public class ConditionTest {
         Rain rain = new Rain(clouds, regressionTimeFactory, configuration.getAlgorithm());
         LocalDateTime expectedTime = testUtils.parseInTest("04/02/2115 14:45");
 
-        assertEquals(expectedTime, TimeUtils.millisToLocalDateAndTime((long) rain.getRegression()));
+        assertEquals(expectedTime, TimeUtils.millisToDate((long) rain.getRegression()));
         assertFalse(rain.isRegressionNan());
         assertFalse(rain.isRegressionForPast());
         assertTrue(rain.isApproaching());
@@ -145,7 +144,7 @@ public class ConditionTest {
         Rain rain = new Rain(clouds, regressionTimeFactory, configuration.getAlgorithm());
         LocalDateTime expectedTime = testUtils.parseInTest("04/02/2115 14:32");
 
-        assertEquals(expectedTime, TimeUtils.millisToLocalDateAndTime((long) rain.getRegression()));
+        assertEquals(expectedTime, TimeUtils.millisToDate((long) rain.getRegression()));
         assertFalse(rain.isRegressionNan());
         assertTrue(rain.isRegressionForPast());
         assertTrue(rain.isApproaching());

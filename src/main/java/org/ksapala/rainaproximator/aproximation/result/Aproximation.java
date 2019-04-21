@@ -26,6 +26,6 @@ public class Aproximation {
 
     @Override
     public String toString() {
-        return "Angle: " + angle + ". " + aproximationResult.toString();
+        return "Angle: " + angle + ". " + aproximationResult.toString() + " Accuracy: " + accuracy;
     }
 }

@@ -1,8 +1,18 @@
 /**
  * 
  */
-package org.ksapala.rainaproximator.rest;
+package org.ksapala.rainaproximator.rest.service;
 
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.GetObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.messaging.*;
 import org.ksapala.rainaproximator.aproximation.RainAproximator;
 import org.ksapala.rainaproximator.aproximation.result.Aproximation;
 import org.ksapala.rainaproximator.aproximation.scan.Scan;
@@ -17,6 +27,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 
 

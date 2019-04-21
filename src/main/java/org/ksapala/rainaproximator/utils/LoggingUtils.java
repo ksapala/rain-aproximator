@@ -12,6 +12,6 @@ public class LoggingUtils {
         if (Double.isNaN(milis)) {
             return Double.toString(milis);
         }
-        return TimeUtils.millisToLocalDateAndTime((long) milis).toString();
+        return TimeUtils.millisToDate((long) milis).toString();
     }
 }

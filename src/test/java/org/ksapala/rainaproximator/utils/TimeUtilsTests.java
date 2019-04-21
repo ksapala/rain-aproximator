@@ -25,11 +25,11 @@ public class TimeUtilsTests {
 
     @Test
     public void milisToLocalDateAndTime() {
-        assertEquals(TIME, TimeUtils.millisToLocalDateAndTime(MILLIS));
+        assertEquals(TIME, TimeUtils.millisToDate(MILLIS));
     }
 
     @Test
     public void localDateAndTimeToMilis() {
-        assertEquals(MILLIS, TimeUtils.localDateAndTimeToMillis(TIME));
+        assertEquals(MILLIS, TimeUtils.dateToMillis(TIME));
     }
 }

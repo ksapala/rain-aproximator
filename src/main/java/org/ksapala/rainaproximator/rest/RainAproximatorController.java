@@ -2,18 +2,24 @@ package org.ksapala.rainaproximator.rest;
 
 import org.ksapala.rainaproximator.configuration.Mode;
 import org.ksapala.rainaproximator.rest.bean.AproximationBean;
-import org.ksapala.rainaproximator.rest.bean.ScanResultBean;
+import org.ksapala.rainaproximator.rest.bean.ScanBean;
+import org.ksapala.rainaproximator.rest.debug.DebugConstants;
+import org.ksapala.rainaproximator.rest.service.FirebaseService;
+import org.ksapala.rainaproximator.rest.service.HelloService;
+import org.ksapala.rainaproximator.rest.service.RainAproximatorService;
+import org.ksapala.rainaproximator.rest.service.ScanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @RestController
+@EnableWebMvc
 public class RainAproximatorController {
 
-
-    private final double KRK_LATITUDE = 50.077452;
-    private final double KRK_LONGITUDE = 19.981147;
+    private final double KRK_LATITUDE = DebugConstants.KRK_LATITUDE;
+    private final double KRK_LONGITUDE = DebugConstants.KRK_LONGITUDE;
 
     @Autowired
     private RainAproximatorService rainAproximatorService;
@@ -55,16 +61,8 @@ public class RainAproximatorController {
     }
 
     @GetMapping(path = "/scan")
-    public ScanResultBean scan() {
+    public ScanBean scan() {
         return scanService.scan();
-    }
-
-
-    // lambda
-    @GetMapping(path = "/scanAndAproximate")
-    public AproximationBean scanAndAproximate() {
-        scan();
-        return aproximateKrk();
     }
 
     // hello

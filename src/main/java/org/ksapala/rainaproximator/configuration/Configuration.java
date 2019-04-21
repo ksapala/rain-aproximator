@@ -18,6 +18,7 @@ public class Configuration {
 
     @NotBlank private String userTimeFormat;
     @NotBlank private String testTimeFormat;
+    @NotBlank private String firebaseTopic;
 
     private Wind wind = new Wind();
     private Algorithm algorithm = new Algorithm();
@@ -38,6 +39,7 @@ public class Configuration {
         @NotEmpty private int[] aroundFinalAngles;
         @NotNull private int defaultWind;
         @NotNull private double goodFitExpandFactor;
+        @NotNull private int radarMapTimeIntevalMinutes;
 
         private Mode mode = new Mode();
         private Cloud cloud = new Cloud();

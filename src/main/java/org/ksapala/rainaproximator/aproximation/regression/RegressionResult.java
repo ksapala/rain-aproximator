@@ -31,7 +31,7 @@ public class RegressionResult {
     @Override
     public String toString() {
         return "RegressionResult {" +
-                "value=" + TimeUtils.millisToLocalDateAndTime((long) value) +
+                "value=" + TimeUtils.millisToDate((long) value) +
                 ", slope=" + slope +
                 ", rSquare=" + rSquare +
                 '}';

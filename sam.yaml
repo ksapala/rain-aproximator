@@ -6,14 +6,14 @@ Globals:
     EndpointConfiguration: REGIONAL
 
 Resources:
-  HelloFunction:
+  AproximateFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: org.ksapala.rainaproximator.aws.LambdaHandler::handleRequest
+      Handler: org.ksapala.rainaproximator.aws.ApiLambdaHandler::handleRequest
       Runtime: java8
       CodeUri: build/distributions/rain-aproximator-0.0.1-SNAPSHOT.zip
-      MemorySize: 512
-      Policies: AWSLambdaBasicExecutionRole
+      MemorySize: 2048
+      Policies: AWSLambdaExecute
       Timeout: 60
       Events:
         GetResource:
@@ -21,10 +21,24 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: any
+  ScanFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: org.ksapala.rainaproximator.aws.EventLambdaHandler::handleRequest
+      Runtime: java8
+      CodeUri: build/distributions/rain-aproximator-0.0.1-SNAPSHOT.zip
+      MemorySize: 2048
+      Policies: AWSLambdaExecute
+      Timeout: 60
+      Events:
+        ScanSchedule:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0/5 * ? * * *)
 
 Outputs:
-  HelloApi:
+  AproximateApi:
     Description: URL for application
     Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/aproximateKrk'
     Export:
-      Name: RainAproximatorApi
+      Name: AproximateApi

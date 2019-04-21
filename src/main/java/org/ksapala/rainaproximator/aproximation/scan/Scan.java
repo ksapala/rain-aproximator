@@ -10,6 +10,8 @@ import java.util.List;
 @Getter
 public class Scan {
 
+    public static final int CURRENT_MOMENT_HOURS_RANGE = 2;
+
     private List<ScannedMap> maps;
     private LocalDateTime lastMapTime;
 
@@ -18,7 +20,7 @@ public class Scan {
      * @return
      */
     public boolean isCurrentMoment() {
-        return lastMapTime.isAfter(LocalDateTime.now().minusHours(2));
+        return lastMapTime.isAfter(LocalDateTime.now().minusHours(CURRENT_MOMENT_HOURS_RANGE));
     }
 
     @Override

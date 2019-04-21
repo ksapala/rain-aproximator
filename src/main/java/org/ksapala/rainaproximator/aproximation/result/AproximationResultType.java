@@ -10,11 +10,11 @@ import java.util.Locale;
 public enum AproximationResultType {
 
 	RAIN_AT_TIME("AproximationResult.code.rain.at", 0),
-	SUN_AT_TIME("AproximationResult.code.sun.at", 1),
-	RAIN_UNSURE("AproximationResult.code.rain.unsure", 2),
-	SUN_UNSURE("AproximationResult.code.sun.unsure", 3),
-	RAIN_UNKNOWN("AproximationResult.code.rain.unknown", 4),
-	SUN_UNKNOWN("AproximationResult.code.sun.unknown", 5);
+	SUN_AT_TIME("AproximationResult.code.sun.at", 0),
+	RAIN_UNSURE("AproximationResult.code.rain.unsure", 1),
+	SUN_UNSURE("AproximationResult.code.sun.unsure", 1),
+	RAIN_UNKNOWN("AproximationResult.code.rain.unknown", 2),
+	SUN_UNKNOWN("AproximationResult.code.sun.unknown", 2);
 
 	private String code;
 	@Getter

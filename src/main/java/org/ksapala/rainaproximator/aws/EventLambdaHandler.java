@@ -5,18 +5,24 @@ import com.amazonaws.serverless.proxy.model.AwsProxyRequest;
 import com.amazonaws.serverless.proxy.model.AwsProxyResponse;
 import com.amazonaws.serverless.proxy.spring.SpringBootLambdaContainerHandler;
 import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
+import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.ksapala.rainaproximator.RainAproximatorApplication;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import org.ksapala.rainaproximator.rest.service.HelloService;
+import org.ksapala.rainaproximator.rest.service.RainTimerService;
+import org.ksapala.rainaproximator.rest.service.ScanService;
+import org.ksapala.rainaproximator.rest.bean.ScanBean;
+import org.ksapala.rainaproximator.utils.SpringBridge;
 
 /**
  * @author krzysztof
  */
-public class LambdaHandler implements RequestStreamHandler {
+public class EventLambdaHandler implements RequestHandler<AwsEventRequest, AwsEventResponse> {
+
+    private RainTimerService rainTimerService;
+    private HelloService helloService;
+
     private static SpringBootLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse> handler;
+
     static {
         try {
             handler = SpringBootLambdaContainerHandler.getAwsProxyHandler(RainAproximatorApplication.class, "lambda");
@@ -27,9 +33,12 @@ public class LambdaHandler implements RequestStreamHandler {
         }
     }
 
+
     @Override
-    public void handleRequest(InputStream inputStream, OutputStream outputStream, Context context)
-            throws IOException {
-        handler.proxyStream(inputStream, outputStream, context);
+    public AwsEventResponse handleRequest(AwsEventRequest input, Context context) {
+        rainTimerService = SpringBridge.getRainTimerService();
+        rainTimerService.scanAproximateAndNotify();
+        return new AwsEventResponse();
     }
+
 }

@@ -15,17 +15,15 @@ public class ScanComponent {
 
     private final Logger logger = LoggerFactory.getLogger(ScanComponent.class);
 
-    private Optional<Scan> scan;
+    private Scan scan;
 
     @Autowired
     private Scanner scanner;
 
     public ScanComponent() {
-        scan = Optional.empty();
     }
 
     @PostConstruct
-//    @Scheduled(cron = "0 0/5 * * * ?")
     public void scan() {
         try {
             doScan();
@@ -39,13 +37,13 @@ public class ScanComponent {
         logger.info("Starting to scan.");
 
         long start = System.currentTimeMillis();
-        scan = Optional.ofNullable(scanner.scan());
+        scan = scanner.scan();
         long end = System.currentTimeMillis();
 
         logger.info("Maps scanned successfully. Scan time: " + (end - start));
     }
 
     public Optional<Scan> getScan() {
-        return scan;
+        return Optional.ofNullable(scan);
     }
 }
