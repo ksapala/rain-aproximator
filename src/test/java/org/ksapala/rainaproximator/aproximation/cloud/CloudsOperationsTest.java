@@ -35,16 +35,16 @@ public class CloudsOperationsTest {
     @Test
     public void filterForRainRegression() {
         List<Cloud> cloudLines = new ArrayList<>();
-        cloudLines.add(testUtils.cloud("###.....#########.........", "04/02/2115 13:00"));
-        cloudLines.add(testUtils.cloud("##....#########...........", "04/02/2115 13:10"));
-        cloudLines.add(testUtils.cloud("#...#########.............", "04/02/2115 13:20"));
-        cloudLines.add(testUtils.cloud("..#########...............", "04/02/2115 13:30"));
-        cloudLines.add(testUtils.cloud("#########.................", "04/02/2115 13:40"));
-        cloudLines.add(testUtils.cloud("#######...............####", "04/02/2115 13:50"));
-        cloudLines.add(testUtils.cloud("#####.............########", "04/02/2115 14:00"));
-        cloudLines.add(testUtils.cloud("###...........############", "04/02/2115 14:10"));
-        cloudLines.add(testUtils.cloud("..........################", "04/02/2115 14:20"));
-        cloudLines.add(testUtils.cloud("......####################", "04/02/2115 14:30"));
+        cloudLines.add(testUtils.cloud("###.....#########.........", "04-02-2115 13:00"));
+        cloudLines.add(testUtils.cloud("##....#########...........", "04-02-2115 13:10"));
+        cloudLines.add(testUtils.cloud("#...#########.............", "04-02-2115 13:20"));
+        cloudLines.add(testUtils.cloud("..#########...............", "04-02-2115 13:30"));
+        cloudLines.add(testUtils.cloud("#########.................", "04-02-2115 13:40"));
+        cloudLines.add(testUtils.cloud("#######...............####", "04-02-2115 13:50"));
+        cloudLines.add(testUtils.cloud("#####.............########", "04-02-2115 14:00"));
+        cloudLines.add(testUtils.cloud("###...........############", "04-02-2115 14:10"));
+        cloudLines.add(testUtils.cloud("..........################", "04-02-2115 14:20"));
+        cloudLines.add(testUtils.cloud("......####################", "04-02-2115 14:30"));
 
         List<Cloud> forRainRegression = filters.filterRainCandidates(cloudLines);
 
@@ -52,24 +52,24 @@ public class CloudsOperationsTest {
         Cloud first = forRainRegression.get(0);
         Cloud last = forRainRegression.get(4);
 
-        assertEquals(testUtils.cloud("#######...............####", "04/02/2115 13:50"), first);
-        assertEquals(testUtils.cloud("......####################", "04/02/2115 14:30"), last);
+        assertEquals(testUtils.cloud("#######...............####", "04-02-2115 13:50"), first);
+        assertEquals(testUtils.cloud("......####################", "04-02-2115 14:30"), last);
 
     }
 
     @Test
     public void filterForRainRegressionSecondRain() {
         List<Cloud> cloudLines = new ArrayList<>();
-        cloudLines.add(testUtils.cloud("###.....#########.........", "04/02/2115 13:00"));
-        cloudLines.add(testUtils.cloud("##....#########.......####", "04/02/2115 13:10"));
-        cloudLines.add(testUtils.cloud("#...#########.......######", "04/02/2115 13:20"));
-        cloudLines.add(testUtils.cloud("..#########.......########", "04/02/2115 13:30"));
-        cloudLines.add(testUtils.cloud("#########.......##########", "04/02/2115 13:40"));
-        cloudLines.add(testUtils.cloud("#######.......############", "04/02/2115 13:50"));
-        cloudLines.add(testUtils.cloud("#####.......##############", "04/02/2115 14:00"));
-        cloudLines.add(testUtils.cloud("###.......################", "04/02/2115 14:10"));
-        cloudLines.add(testUtils.cloud("........##################", "04/02/2115 14:20"));
-        cloudLines.add(testUtils.cloud("......####################", "04/02/2115 14:30"));
+        cloudLines.add(testUtils.cloud("###.....#########.........", "04-02-2115 13:00"));
+        cloudLines.add(testUtils.cloud("##....#########.......####", "04-02-2115 13:10"));
+        cloudLines.add(testUtils.cloud("#...#########.......######", "04-02-2115 13:20"));
+        cloudLines.add(testUtils.cloud("..#########.......########", "04-02-2115 13:30"));
+        cloudLines.add(testUtils.cloud("#########.......##########", "04-02-2115 13:40"));
+        cloudLines.add(testUtils.cloud("#######.......############", "04-02-2115 13:50"));
+        cloudLines.add(testUtils.cloud("#####.......##############", "04-02-2115 14:00"));
+        cloudLines.add(testUtils.cloud("###.......################", "04-02-2115 14:10"));
+        cloudLines.add(testUtils.cloud("........##################", "04-02-2115 14:20"));
+        cloudLines.add(testUtils.cloud("......####################", "04-02-2115 14:30"));
 
         List<Cloud> forRainRegression = filters.filterRainCandidates(cloudLines);
 
@@ -77,23 +77,23 @@ public class CloudsOperationsTest {
         Cloud first = forRainRegression.get(0);
         Cloud last = forRainRegression.get(5);
 
-        assertEquals(testUtils.cloud("#########.......##########", "04/02/2115 13:40"), first);
-        assertEquals(testUtils.cloud("......####################", "04/02/2115 14:30"), last);
+        assertEquals(testUtils.cloud("#########.......##########", "04-02-2115 13:40"), first);
+        assertEquals(testUtils.cloud("......####################", "04-02-2115 14:30"), last);
     }
 
     @Test
     public void filterForSunRegressionSecondRain() {
         List<Cloud> cloudLines = new ArrayList<>();
-        cloudLines.add(testUtils.cloud("...####...#########.....", "04/02/2115 13:00"));
-        cloudLines.add(testUtils.cloud("##....#########.......##", "04/02/2115 13:10"));
-        cloudLines.add(testUtils.cloud("#...#########.......####", "04/02/2115 13:20"));
-        cloudLines.add(testUtils.cloud("..#########.......######", "04/02/2115 13:30"));
-        cloudLines.add(testUtils.cloud("#######.......#########.", "04/02/2115 13:40"));
-        cloudLines.add(testUtils.cloud("....################....", "04/02/2115 13:50"));
-        cloudLines.add(testUtils.cloud("################........", "04/02/2115 14:00"));
-        cloudLines.add(testUtils.cloud("############............", "04/02/2115 14:10"));
-        cloudLines.add(testUtils.cloud("########................", "04/02/2115 14:20"));
-        cloudLines.add(testUtils.cloud("####....................", "04/02/2115 14:30"));
+        cloudLines.add(testUtils.cloud("...####...#########.....", "04-02-2115 13:00"));
+        cloudLines.add(testUtils.cloud("##....#########.......##", "04-02-2115 13:10"));
+        cloudLines.add(testUtils.cloud("#...#########.......####", "04-02-2115 13:20"));
+        cloudLines.add(testUtils.cloud("..#########.......######", "04-02-2115 13:30"));
+        cloudLines.add(testUtils.cloud("#######.......#########.", "04-02-2115 13:40"));
+        cloudLines.add(testUtils.cloud("....################....", "04-02-2115 13:50"));
+        cloudLines.add(testUtils.cloud("################........", "04-02-2115 14:00"));
+        cloudLines.add(testUtils.cloud("############............", "04-02-2115 14:10"));
+        cloudLines.add(testUtils.cloud("########................", "04-02-2115 14:20"));
+        cloudLines.add(testUtils.cloud("####....................", "04-02-2115 14:30"));
 
         List<Cloud> forSunRegression = filters.filterSunCandidates(cloudLines);
 
@@ -101,7 +101,7 @@ public class CloudsOperationsTest {
         Cloud first = forSunRegression.get(0);
         Cloud last = forSunRegression.get(4);
 
-        assertEquals(testUtils.cloud("....################....", "04/02/2115 13:50"), first);
-        assertEquals(testUtils.cloud("####....................", "04/02/2115 14:30"), last);
+        assertEquals(testUtils.cloud("....################....", "04-02-2115 13:50"), first);
+        assertEquals(testUtils.cloud("####....................", "04-02-2115 14:30"), last);
     }
 }

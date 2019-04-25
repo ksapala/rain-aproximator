@@ -37,7 +37,7 @@ public class ConditionTest {
     @Before
     public void setUp() {
         testUtils = new TestUtils(configuration);
-        LocalDateTime fixedTime = testUtils.parseInTest("04/02/2115 14:35");
+        LocalDateTime fixedTime = testUtils.parseInTest("04-02-2115 14:35");
         doReturn(fixedTime).when(regressionTimeFactory).now();
 
     }
@@ -45,14 +45,14 @@ public class ConditionTest {
     @Test
     public void getRegressionSimple() {
         List<Cloud> clouds = new ArrayList<>();
-        clouds.add(testUtils.cloud("..........###########.........", "04/02/2115 14:00"));
-        clouds.add(testUtils.cloud("........###########...........", "04/02/2115 14:10"));
-        clouds.add(testUtils.cloud("......###########.............", "04/02/2115 14:20"));
-        clouds.add(testUtils.cloud("....###########...............", "04/02/2115 14:30"));
+        clouds.add(testUtils.cloud("..........###########.........", "04-02-2115 14:00"));
+        clouds.add(testUtils.cloud("........###########...........", "04-02-2115 14:10"));
+        clouds.add(testUtils.cloud("......###########.............", "04-02-2115 14:20"));
+        clouds.add(testUtils.cloud("....###########...............", "04-02-2115 14:30"));
 
 
         Rain rain = new Rain(clouds, regressionTimeFactory, configuration.getAlgorithm());
-        LocalDateTime expectedTime = testUtils.parseInTest("04/02/2115 14:50");
+        LocalDateTime expectedTime = testUtils.parseInTest("04-02-2115 14:50");
 
         assertEquals(expectedTime, TimeUtils.millisToDate((long) rain.getRegression()));
         assertFalse(rain.isRegressionNan());
@@ -63,20 +63,20 @@ public class ConditionTest {
     @Test
     public void getRegressionSecondRain() {
         List<Cloud> clouds = new ArrayList<>();
-        clouds.add(testUtils.cloud("###.....#########.........", "04/02/2115 13:00"));
-        clouds.add(testUtils.cloud("##....#########...........", "04/02/2115 13:10"));
-        clouds.add(testUtils.cloud("#...#########.............", "04/02/2115 13:20"));
-        clouds.add(testUtils.cloud("..#########...............", "04/02/2115 13:30"));
-        clouds.add(testUtils.cloud("#########.................", "04/02/2115 13:40"));
-        clouds.add(testUtils.cloud("#######...............####", "04/02/2115 13:50"));
-        clouds.add(testUtils.cloud("#####.............########", "04/02/2115 14:00"));
-        clouds.add(testUtils.cloud("###...........############", "04/02/2115 14:10"));
-        clouds.add(testUtils.cloud("..........################", "04/02/2115 14:20"));
-        clouds.add(testUtils.cloud("......####################", "04/02/2115 14:30"));
+        clouds.add(testUtils.cloud("###.....#########.........", "04-02-2115 13:00"));
+        clouds.add(testUtils.cloud("##....#########...........", "04-02-2115 13:10"));
+        clouds.add(testUtils.cloud("#...#########.............", "04-02-2115 13:20"));
+        clouds.add(testUtils.cloud("..#########...............", "04-02-2115 13:30"));
+        clouds.add(testUtils.cloud("#########.................", "04-02-2115 13:40"));
+        clouds.add(testUtils.cloud("#######...............####", "04-02-2115 13:50"));
+        clouds.add(testUtils.cloud("#####.............########", "04-02-2115 14:00"));
+        clouds.add(testUtils.cloud("###...........############", "04-02-2115 14:10"));
+        clouds.add(testUtils.cloud("..........################", "04-02-2115 14:20"));
+        clouds.add(testUtils.cloud("......####################", "04-02-2115 14:30"));
 
 
         Rain rain = new Rain(clouds, regressionTimeFactory, configuration.getAlgorithm());
-        LocalDateTime expectedTime = testUtils.parseInTest("04/02/2115 14:45");
+        LocalDateTime expectedTime = testUtils.parseInTest("04-02-2115 14:45");
 
         assertEquals(expectedTime, TimeUtils.millisToDate((long) rain.getRegression()));
         assertFalse(rain.isRegressionNan());
@@ -87,20 +87,20 @@ public class ConditionTest {
     @Test
     public void getRegressionSecondLongRain() {
         List<Cloud> clouds = new ArrayList<>();
-        clouds.add(testUtils.cloud("###.....#########.........", "04/02/2115 13:00"));
-        clouds.add(testUtils.cloud("##....#########.......####", "04/02/2115 13:10"));
-        clouds.add(testUtils.cloud("#...#########.......######", "04/02/2115 13:20"));
-        clouds.add(testUtils.cloud("..#########.......########", "04/02/2115 13:30"));
-        clouds.add(testUtils.cloud("#########.......##########", "04/02/2115 13:40"));
-        clouds.add(testUtils.cloud("#######.......############", "04/02/2115 13:50"));
-        clouds.add(testUtils.cloud("#####.......##############", "04/02/2115 14:00"));
-        clouds.add(testUtils.cloud("###.......################", "04/02/2115 14:10"));
-        clouds.add(testUtils.cloud("........##################", "04/02/2115 14:20"));
-        clouds.add(testUtils.cloud("......####################", "04/02/2115 14:30"));
+        clouds.add(testUtils.cloud("###.....#########.........", "04-02-2115 13:00"));
+        clouds.add(testUtils.cloud("##....#########.......####", "04-02-2115 13:10"));
+        clouds.add(testUtils.cloud("#...#########.......######", "04-02-2115 13:20"));
+        clouds.add(testUtils.cloud("..#########.......########", "04-02-2115 13:30"));
+        clouds.add(testUtils.cloud("#########.......##########", "04-02-2115 13:40"));
+        clouds.add(testUtils.cloud("#######.......############", "04-02-2115 13:50"));
+        clouds.add(testUtils.cloud("#####.......##############", "04-02-2115 14:00"));
+        clouds.add(testUtils.cloud("###.......################", "04-02-2115 14:10"));
+        clouds.add(testUtils.cloud("........##################", "04-02-2115 14:20"));
+        clouds.add(testUtils.cloud("......####################", "04-02-2115 14:30"));
 
 
         Rain rain = new Rain(clouds, regressionTimeFactory, configuration.getAlgorithm());
-        LocalDateTime expectedTime = testUtils.parseInTest("04/02/2115 15:00");
+        LocalDateTime expectedTime = testUtils.parseInTest("04-02-2115 15:00");
 
         assertEquals(expectedTime, TimeUtils.millisToDate((long) rain.getRegression()));
         assertFalse(rain.isRegressionNan());
@@ -111,20 +111,20 @@ public class ConditionTest {
     @Test
     public void getRegressionSecondLongRainButFutureIsZero() {
         List<Cloud> clouds = new ArrayList<>();
-        clouds.add(testUtils.cloud("###.....##########........", "04/02/2115 13:00"));
-        clouds.add(testUtils.cloud("##....#########...........", "04/02/2115 13:10"));
-        clouds.add(testUtils.cloud("#...########..............", "04/02/2115 13:20"));
-        clouds.add(testUtils.cloud("..#######.................", "04/02/2115 13:30"));
-        clouds.add(testUtils.cloud("######....................", "04/02/2115 13:40"));
-        clouds.add(testUtils.cloud("......................####", "04/02/2115 13:50"));
-        clouds.add(testUtils.cloud("..................########", "04/02/2115 14:00"));
-        clouds.add(testUtils.cloud("..............############", "04/02/2115 14:10"));
-        clouds.add(testUtils.cloud("..........################", "04/02/2115 14:20"));
-        clouds.add(testUtils.cloud("......####################", "04/02/2115 14:30"));
+        clouds.add(testUtils.cloud("###.....##########........", "04-02-2115 13:00"));
+        clouds.add(testUtils.cloud("##....#########...........", "04-02-2115 13:10"));
+        clouds.add(testUtils.cloud("#...########..............", "04-02-2115 13:20"));
+        clouds.add(testUtils.cloud("..#######.................", "04-02-2115 13:30"));
+        clouds.add(testUtils.cloud("######....................", "04-02-2115 13:40"));
+        clouds.add(testUtils.cloud("......................####", "04-02-2115 13:50"));
+        clouds.add(testUtils.cloud("..................########", "04-02-2115 14:00"));
+        clouds.add(testUtils.cloud("..............############", "04-02-2115 14:10"));
+        clouds.add(testUtils.cloud("..........################", "04-02-2115 14:20"));
+        clouds.add(testUtils.cloud("......####################", "04-02-2115 14:30"));
 
 
         Rain rain = new Rain(clouds, regressionTimeFactory, configuration.getAlgorithm());
-        LocalDateTime expectedTime = testUtils.parseInTest("04/02/2115 14:45");
+        LocalDateTime expectedTime = testUtils.parseInTest("04-02-2115 14:45");
 
         assertEquals(expectedTime, TimeUtils.millisToDate((long) rain.getRegression()));
         assertFalse(rain.isRegressionNan());
@@ -135,14 +135,14 @@ public class ConditionTest {
     @Test
     public void getRegressionRainInTheMeantime() {
         List<Cloud> clouds = new ArrayList<>();
-        clouds.add(testUtils.cloud("................###########.....", "04/02/2115 14:00"));
-        clouds.add(testUtils.cloud("...........###########..........", "04/02/2115 14:10"));
-        clouds.add(testUtils.cloud("......###########...............", "04/02/2115 14:20"));
-        clouds.add(testUtils.cloud(".###########....................", "04/02/2115 14:30"));
+        clouds.add(testUtils.cloud("................###########.....", "04-02-2115 14:00"));
+        clouds.add(testUtils.cloud("...........###########..........", "04-02-2115 14:10"));
+        clouds.add(testUtils.cloud("......###########...............", "04-02-2115 14:20"));
+        clouds.add(testUtils.cloud(".###########....................", "04-02-2115 14:30"));
 
 
         Rain rain = new Rain(clouds, regressionTimeFactory, configuration.getAlgorithm());
-        LocalDateTime expectedTime = testUtils.parseInTest("04/02/2115 14:32");
+        LocalDateTime expectedTime = testUtils.parseInTest("04-02-2115 14:32");
 
         assertEquals(expectedTime, TimeUtils.millisToDate((long) rain.getRegression()));
         assertFalse(rain.isRegressionNan());

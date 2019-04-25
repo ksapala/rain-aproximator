@@ -12,12 +12,14 @@ import org.ksapala.rainaproximator.aproximation.weather.Condition;
 import org.ksapala.rainaproximator.aproximation.weather.Weather;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.configuration.Mode;
+import org.ksapala.rainaproximator.utils.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -242,6 +244,7 @@ public class RainAproximator {
                 condition.getDifferencesStandardDeviation(), condition.getPointsCount());
 
         Debug debug = new Debug();
+        debug.setGenerationTime(TimeUtils.timeToString(LocalDateTime.now(), Debug.TIME_FORMAT));
         debug.setClouds(clouds);
         debug.setAngle(Double.toString(angle));
         debug.addInfo(condition.getCandidateClouds(), "TAKEN");

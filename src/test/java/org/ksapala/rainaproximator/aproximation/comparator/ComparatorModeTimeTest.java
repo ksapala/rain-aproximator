@@ -19,7 +19,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class ComparatorModePredictTimeTest {
+public class ComparatorModeTimeTest {
 
     private Aproximation create(AproximationResultType type, String time) {
         return new Aproximation(0, new AproximationResult(type,
@@ -37,17 +37,17 @@ public class ComparatorModePredictTimeTest {
         results.add(create(AproximationResultType.SUN_UNSURE));
         results.add(create(AproximationResultType.RAIN_UNSURE));
 		results.add(create(AproximationResultType.RAIN_UNKNOWN));
-		results.add(create(AproximationResultType.SUN_AT_TIME,"28/04/2015 12:00"));
-		results.add(create(AproximationResultType.RAIN_AT_TIME,"28/04/2015 17:00"));
-		results.add(create(AproximationResultType.RAIN_AT_TIME,"28/04/2015 18:00"));
-		results.add(create(AproximationResultType.SUN_AT_TIME,"28/04/2015 11:00"));
+		results.add(create(AproximationResultType.SUN_AT_TIME,"28-04-2015 12:00"));
+		results.add(create(AproximationResultType.RAIN_AT_TIME,"28-04-2015 17:00"));
+		results.add(create(AproximationResultType.RAIN_AT_TIME,"28-04-2015 18:00"));
+		results.add(create(AproximationResultType.SUN_AT_TIME,"28-04-2015 11:00"));
 
 		results.sort(Comparators.modePredictTime());
 
-        assertEquals(create(AproximationResultType.SUN_AT_TIME, "28/04/2015 11:00"), results.get(0));
-        assertEquals(create(AproximationResultType.SUN_AT_TIME, "28/04/2015 12:00"), results.get(1));
-        assertEquals(create(AproximationResultType.RAIN_AT_TIME, "28/04/2015 17:00"), results.get(2));
-        assertEquals(create(AproximationResultType.RAIN_AT_TIME, "28/04/2015 18:00"), results.get(3));
+        assertEquals(create(AproximationResultType.SUN_AT_TIME, "28-04-2015 11:00"), results.get(0));
+        assertEquals(create(AproximationResultType.SUN_AT_TIME, "28-04-2015 12:00"), results.get(1));
+        assertEquals(create(AproximationResultType.RAIN_AT_TIME, "28-04-2015 17:00"), results.get(2));
+        assertEquals(create(AproximationResultType.RAIN_AT_TIME, "28-04-2015 18:00"), results.get(3));
 		assertEquals(create(AproximationResultType.RAIN_UNSURE), results.get(4));
 		assertEquals(create(AproximationResultType.SUN_UNSURE), results.get(5));
 		assertEquals(create(AproximationResultType.RAIN_UNKNOWN), results.get(6));

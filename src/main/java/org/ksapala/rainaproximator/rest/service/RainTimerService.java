@@ -2,6 +2,7 @@ package org.ksapala.rainaproximator.rest.service;
 
 import org.ksapala.rainaproximator.configuration.Mode;
 import org.ksapala.rainaproximator.rest.bean.AproximationBean;
+import org.ksapala.rainaproximator.rest.bean.Bu;
 import org.ksapala.rainaproximator.rest.bean.ScanBean;
 import org.ksapala.rainaproximator.rest.debug.DebugConstants;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public class RainTimerService {
     private ScanService scanService;
 
     @Autowired
-    private FirebaseService firebaseService;
+    private NotificationService notificationService;
 
     public void scanAproximateAndNotify() {
         logger.info("All operations start.");
@@ -34,7 +35,8 @@ public class RainTimerService {
         Mode mode = new Mode(Mode.NAME_FULL, Mode.COMPARE_ACCURACY);
         AproximationBean aproximationBean = rainAproximatorService.aproximateDebug(DebugConstants.KRK_LATITUDE, DebugConstants.KRK_LONGITUDE, 0, mode);
 
-        firebaseService.notify(aproximationBean);
+        notificationService.notify(aproximationBean, AproximationBean::isNotificationSuggested);
+
         logger.info("All operations end.");
     }
 }

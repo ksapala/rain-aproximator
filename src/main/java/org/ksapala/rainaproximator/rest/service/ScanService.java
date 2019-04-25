@@ -30,7 +30,7 @@ public class ScanService {
 
         if (scanComponent.getScan().isPresent()) {
             LocalDateTime lastMapTime = scanComponent.getScan().get().getLastMapTime();
-            return new ScanBean(true, lastMapTime.format(TimeUtils.getFormatter(configuration)));
+            return new ScanBean(true, TimeUtils.timeToString(lastMapTime, configuration));
         }
         return new ScanBean(false, null);
     }

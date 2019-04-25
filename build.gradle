@@ -65,4 +65,5 @@ dependencies {
     compile group: 'io.symphonia', name: 'lambda-logging', version: '1.0.3'
     compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.534'
     implementation 'com.google.firebase:firebase-admin:6.8.0'
+
 }

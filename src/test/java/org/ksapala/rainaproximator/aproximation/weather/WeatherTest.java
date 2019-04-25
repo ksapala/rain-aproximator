@@ -38,17 +38,17 @@ public class WeatherTest {
     @Before
     public void setUp() {
         testUtils = new TestUtils(configuration);
-        LocalDateTime fixedTime = testUtils.parseInTest("04/02/2115 14:35");
+        LocalDateTime fixedTime = testUtils.parseInTest("04-02-2115 14:35");
         doReturn(fixedTime).when(regressionTimeFactory).now();
     }
 
     @Test
     public void shouldCheckIsSun() {
         List<Cloud> clouds = new ArrayList<>();
-        clouds.add(testUtils.cloud("..........###########.........", "04/02/2115 14:00"));
-        clouds.add(testUtils.cloud("........###########...........", "04/02/2115 14:10"));
-        clouds.add(testUtils.cloud("......###########.............", "04/02/2115 14:20"));
-        clouds.add(testUtils.cloud("....###########...............", "04/02/2115 14:30"));
+        clouds.add(testUtils.cloud("..........###########.........", "04-02-2115 14:00"));
+        clouds.add(testUtils.cloud("........###########...........", "04-02-2115 14:10"));
+        clouds.add(testUtils.cloud("......###########.............", "04-02-2115 14:20"));
+        clouds.add(testUtils.cloud("....###########...............", "04-02-2115 14:30"));
 
         Weather weather = new Weather(clouds, regressionTimeFactory, configuration.getAlgorithm());
 
@@ -58,10 +58,10 @@ public class WeatherTest {
     @Test
     public void shouldCheckIsRain() {
         List<Cloud> clouds = new ArrayList<>();
-        clouds.add(testUtils.cloud("##########.........", "04/02/2115 14:00"));
-        clouds.add(testUtils.cloud("########...........", "04/02/2115 14:10"));
-        clouds.add(testUtils.cloud("######.............", "04/02/2115 14:20"));
-        clouds.add(testUtils.cloud("####...............", "04/02/2115 14:30"));
+        clouds.add(testUtils.cloud("##########.........", "04-02-2115 14:00"));
+        clouds.add(testUtils.cloud("########...........", "04-02-2115 14:10"));
+        clouds.add(testUtils.cloud("######.............", "04-02-2115 14:20"));
+        clouds.add(testUtils.cloud("####...............", "04-02-2115 14:30"));
 
         Weather weather = new Weather(clouds, regressionTimeFactory, configuration.getAlgorithm());
 
@@ -71,10 +71,10 @@ public class WeatherTest {
     @Test
     public void shouldCheckIsRainInMeantime() {
         List<Cloud> clouds = new ArrayList<>();
-        clouds.add(testUtils.cloud("................###########.....", "04/02/2115 14:00"));
-        clouds.add(testUtils.cloud("...........###########..........", "04/02/2115 14:10"));
-        clouds.add(testUtils.cloud("......###########...............", "04/02/2115 14:20"));
-        clouds.add(testUtils.cloud(".###########....................", "04/02/2115 14:30"));
+        clouds.add(testUtils.cloud("................###########.....", "04-02-2115 14:00"));
+        clouds.add(testUtils.cloud("...........###########..........", "04-02-2115 14:10"));
+        clouds.add(testUtils.cloud("......###########...............", "04-02-2115 14:20"));
+        clouds.add(testUtils.cloud(".###########....................", "04-02-2115 14:30"));
 
         Weather weather = new Weather(clouds, regressionTimeFactory, configuration.getAlgorithm());
 

@@ -21,6 +21,7 @@ import org.ksapala.rainaproximator.aproximation.wind.WindGetter;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.configuration.Mode;
 import org.ksapala.rainaproximator.rest.bean.AproximationBean;
+import org.ksapala.rainaproximator.rest.bean.Bu;
 import org.ksapala.rainaproximator.rest.factory.AproximationBeanFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,7 +104,7 @@ public class RainAproximatorService {
 
         Optional<Scan> scan = scanComponent.getScan();
 
-        if (!scan.isPresent()) { // TODO refactor optionals
+        if (!scan.isPresent()) {
             logger.warn("Missing scans.");
             return aproximationBeanFactory.createEmptyScanBean();
         }

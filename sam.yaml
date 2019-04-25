@@ -4,6 +4,10 @@ Description: AWS Serverless Spring Boot 2 API - org.ksapala.rainaproximator
 Globals:
   Api:
     EndpointConfiguration: REGIONAL
+  Function:
+    Environment:
+      Variables:
+        TZ: Europe/Warsaw
 
 Resources:
   AproximateFunction:

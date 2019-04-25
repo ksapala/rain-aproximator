@@ -11,14 +11,16 @@ import org.ksapala.rainaproximator.aproximation.cloud.CloudsOperationsTest;
 import org.ksapala.rainaproximator.aproximation.domainfilters.FiltersTest;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionCalculatorTest;
 import org.ksapala.rainaproximator.aproximation.comparator.ComparatorModeAccuracyTest;
-import org.ksapala.rainaproximator.aproximation.comparator.ComparatorModePredictTimeTest;
+import org.ksapala.rainaproximator.aproximation.comparator.ComparatorModeTimeTest;
 import org.ksapala.rainaproximator.aproximation.result.AccuracyTest;
 import org.ksapala.rainaproximator.aproximation.scan.LastRadarMapTimeParserTest;
 import org.ksapala.rainaproximator.aproximation.scan.ScannerTest;
 import org.ksapala.rainaproximator.aproximation.weather.ConditionTest;
 import org.ksapala.rainaproximator.aproximation.weather.WeatherTest;
 import org.ksapala.rainaproximator.aproximation.wind.WindGetterTest;
+import org.ksapala.rainaproximator.rest.factory.AproximationBeanFactoryTest;
 import org.ksapala.rainaproximator.rest.service.FirebaseServiceTest;
+import org.ksapala.rainaproximator.rest.service.NotificationServiceTest;
 import org.ksapala.rainaproximator.utils.TimeUtilsTests;
 
 @RunWith(Suite.class)
@@ -27,7 +29,7 @@ import org.ksapala.rainaproximator.utils.TimeUtilsTests;
         CloudsOperationsTest.class,
         CloudTest.class,
         ComparatorModeAccuracyTest.class,
-        ComparatorModePredictTimeTest.class,
+        ComparatorModeTimeTest.class,
         FiltersTest.class,
         RegressionCalculatorTest.class,
         AccuracyTest.class,
@@ -35,9 +37,11 @@ import org.ksapala.rainaproximator.utils.TimeUtilsTests;
         ScannerTest.class,
         ConditionTest.class,
         WeatherTest.class,
-        WindGetterTest.class,
+//        WindGetterTest.class,
         RainAproximatorTest.class,
         FirebaseServiceTest.class,
+        NotificationServiceTest.class,
+        AproximationBeanFactoryTest.class,
         TimeUtilsTests.class,
 })
 public class AllTests {

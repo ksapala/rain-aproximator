@@ -11,7 +11,7 @@ public class TestUtils {
 
 
     private final static LocalDateTime dummyTime = LocalDateTime.now();
-    public static final String TIME_FORMAT = "dd/MM/yyyy HH:mm";
+    public static final String TIME_FORMAT = "dd-MM-yyyy HH:mm";
 
     private Configuration configuration;
 

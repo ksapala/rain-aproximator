@@ -18,6 +18,7 @@ public class Configuration {
 
     @NotBlank private String userTimeFormat;
     @NotBlank private String testTimeFormat;
+    @NotBlank private String mobileTimeFormat;
     @NotBlank private String firebaseTopic;
 
     private Wind wind = new Wind();

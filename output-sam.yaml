@@ -4,13 +4,17 @@ Description: AWS Serverless Spring Boot 2 API - org.ksapala.rainaproximator
 Globals:
   Api:
     EndpointConfiguration: REGIONAL
+  Function:
+    Environment:
+      Variables:
+        TZ: Europe/Warsaw
 Resources:
   AproximateFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: org.ksapala.rainaproximator.aws.ApiLambdaHandler::handleRequest
       Runtime: java8
-      CodeUri: s3://rain-aproximator/a8da49b14d0a57ee90f054b2072673b5
+      CodeUri: s3://rain-aproximator/48fab069bb82e004903b0c8601f8b378
       MemorySize: 2048
       Policies: AWSLambdaExecute
       Timeout: 60
@@ -25,7 +29,7 @@ Resources:
     Properties:
       Handler: org.ksapala.rainaproximator.aws.EventLambdaHandler::handleRequest
       Runtime: java8
-      CodeUri: s3://rain-aproximator/a8da49b14d0a57ee90f054b2072673b5
+      CodeUri: s3://rain-aproximator/48fab069bb82e004903b0c8601f8b378
       MemorySize: 2048
       Policies: AWSLambdaExecute
       Timeout: 60

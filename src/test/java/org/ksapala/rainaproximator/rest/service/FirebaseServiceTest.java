@@ -15,6 +15,7 @@ import org.ksapala.rainaproximator.rest.bean.AproximationBean;
 import org.ksapala.rainaproximator.utils.TimeUtils;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -56,8 +57,9 @@ public class FirebaseServiceTest {
     public void shouldNotify() throws IOException, FirebaseMessagingException {
         // given
         AproximationBean aproximationBean = new AproximationBean("Deszcz testowy",
-                TimeUtils.timeToString(LocalDateTime.now().plusHours(1), configuration),
-                "", Accuracy.of(1.0, 0, 1, 1, 5), new Debug());
+            "Dziś", LocalDateTime.now().plusHours(1),
+                "", true, Accuracy.of(1.0, 0, 1, 1,
+                5), new Debug());
 
         // when
         String response = firebaseService.doNotify(aproximationBean, TOPIC_DEV);

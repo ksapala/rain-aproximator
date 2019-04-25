@@ -40,39 +40,39 @@ public class ComparatorModeAccuracyTest {
     public void testCompareRSquareAndWeatherDominance() {
         // given
         List<Aproximation> results = new ArrayList<>();
-        results.add(create(AproximationResultType.SUN_UNKNOWN, 0.9, 3));
-        results.add(create(AproximationResultType.SUN_UNSURE, 0.9, 3));
-        results.add(create(AproximationResultType.RAIN_UNSURE, 0.9, 3));
-        results.add(create(AproximationResultType.RAIN_UNKNOWN, 0.9, 3));
-        results.add(create(AproximationResultType.SUN_AT_TIME, 0.7, 3, "28/04/2015 12:00"));
-        results.add(create(AproximationResultType.SUN_AT_TIME, 1.0, 3, "28/04/2015 17:00"));
-        results.add(create(AproximationResultType.SUN_AT_TIME, 0.8, 3, "28/04/2015 18:00"));
-        results.add(create(AproximationResultType.SUN_AT_TIME, 0.9, 3, "28/04/2015 11:00"));
-        results.add(create(AproximationResultType.RAIN_AT_TIME, 0.7, 3, "28/04/2015 12:00"));
-        results.add(create(AproximationResultType.RAIN_AT_TIME, 1.0, 3, "28/04/2015 16:00"));
-        results.add(create(AproximationResultType.RAIN_AT_TIME, 0.8, 3, "28/04/2015 18:00"));
-        results.add(create(AproximationResultType.RAIN_AT_TIME, 0.9, 3, "28/04/2015 10:00"));
+        results.add(create(AproximationResultType.SUN_UNKNOWN, 0.9, 10));
+        results.add(create(AproximationResultType.SUN_UNSURE, 0.9, 10));
+        results.add(create(AproximationResultType.RAIN_UNSURE, 0.9, 10));
+        results.add(create(AproximationResultType.RAIN_UNKNOWN, 0.9, 10));
+        results.add(create(AproximationResultType.SUN_AT_TIME, 0.7, 10, "28-04-2015 12:00"));
+        results.add(create(AproximationResultType.SUN_AT_TIME, 1.0, 10, "28-04-2015 17:00"));
+        results.add(create(AproximationResultType.SUN_AT_TIME, 0.8, 10, "28-04-2015 18:00"));
+        results.add(create(AproximationResultType.SUN_AT_TIME, 0.9, 10, "28-04-2015 11:00"));
+        results.add(create(AproximationResultType.RAIN_AT_TIME, 0.7, 10, "28-04-2015 12:00"));
+        results.add(create(AproximationResultType.RAIN_AT_TIME, 1.0, 10, "28-04-2015 16:00"));
+        results.add(create(AproximationResultType.RAIN_AT_TIME, 0.8, 10, "28-04-2015 18:00"));
+        results.add(create(AproximationResultType.RAIN_AT_TIME, 0.9, 10, "28-04-2015 10:00"));
 
         // when
         results.sort(Comparators.modeAccuracy());
 
         // then
-        assertEquals(create(AproximationResultType.RAIN_AT_TIME, 1.0, 3, "28/04/2015 16:00"), results.get(0));
-        assertEquals(create(AproximationResultType.SUN_AT_TIME, 1.0, 3, "28/04/2015 17:00"), results.get(1));
+        assertEquals(create(AproximationResultType.RAIN_AT_TIME, 1.0, 10, "28-04-2015 16:00"), results.get(0));
+        assertEquals(create(AproximationResultType.SUN_AT_TIME, 1.0, 10, "28-04-2015 17:00"), results.get(1));
 
-        assertEquals(create(AproximationResultType.RAIN_AT_TIME, 0.9, 3, "28/04/2015 10:00"), results.get(2));
-        assertEquals(create(AproximationResultType.SUN_AT_TIME, 0.9, 3, "28/04/2015 11:00"), results.get(3));
+        assertEquals(create(AproximationResultType.RAIN_AT_TIME, 0.9, 10, "28-04-2015 10:00"), results.get(2));
+        assertEquals(create(AproximationResultType.SUN_AT_TIME, 0.9, 10, "28-04-2015 11:00"), results.get(3));
 
-        assertEquals(create(AproximationResultType.SUN_AT_TIME, 0.8, 3, "28/04/2015 18:00"), results.get(4));
-        assertEquals(create(AproximationResultType.RAIN_AT_TIME, 0.8, 3, "28/04/2015 18:00"), results.get(5));
+        assertEquals(create(AproximationResultType.SUN_AT_TIME, 0.8, 10, "28-04-2015 18:00"), results.get(4));
+        assertEquals(create(AproximationResultType.RAIN_AT_TIME, 0.8, 10, "28-04-2015 18:00"), results.get(5));
 
-        assertEquals(create(AproximationResultType.SUN_AT_TIME, 0.7, 3, "28/04/2015 12:00"), results.get(6));
-        assertEquals(create(AproximationResultType.RAIN_AT_TIME, 0.7, 3, "28/04/2015 12:00"), results.get(7));
+        assertEquals(create(AproximationResultType.SUN_AT_TIME, 0.7, 10, "28-04-2015 12:00"), results.get(6));
+        assertEquals(create(AproximationResultType.RAIN_AT_TIME, 0.7, 10, "28-04-2015 12:00"), results.get(7));
 
-        assertEquals(create(AproximationResultType.SUN_UNSURE, 0.9, 3), results.get(8));
-        assertEquals(create(AproximationResultType.RAIN_UNSURE, 0.9, 3), results.get(9));
-        assertEquals(create(AproximationResultType.SUN_UNKNOWN, 0.9, 3), results.get(10));
-        assertEquals(create(AproximationResultType.RAIN_UNKNOWN, 0.9, 3), results.get(11));
+        assertEquals(create(AproximationResultType.SUN_UNSURE, 0.9, 10), results.get(8));
+        assertEquals(create(AproximationResultType.RAIN_UNSURE, 0.9, 10), results.get(9));
+        assertEquals(create(AproximationResultType.SUN_UNKNOWN, 0.9, 10), results.get(10));
+        assertEquals(create(AproximationResultType.RAIN_UNKNOWN, 0.9, 10), results.get(11));
 
 
     }
@@ -106,44 +106,48 @@ public class ComparatorModeAccuracyTest {
         results.add(create(AproximationResultType.RAIN_UNKNOWN, Double.NaN, 0));
         results.add(create(AproximationResultType.RAIN_UNKNOWN, Double.NaN, 0));
         results.add(create(AproximationResultType.RAIN_UNKNOWN, Double.NaN, 0));
-        results.add(create(AproximationResultType.RAIN_AT_TIME, 1.0, 2, "28/04/2015 12:00"));
-        results.add(create(AproximationResultType.RAIN_AT_TIME, 0.9, 3, "28/04/2015 12:00"));
-        results.add(create(AproximationResultType.RAIN_AT_TIME, 1.0, 3, "28/04/2015 12:00"));
+        results.add(create(AproximationResultType.RAIN_AT_TIME, 1.0, 2, "28-04-2015 12:00"));
+        results.add(create(AproximationResultType.RAIN_AT_TIME, 1.0, 3, "28-04-2015 12:00"));
+        results.add(create(AproximationResultType.RAIN_AT_TIME, 0.9, 10, "28-04-2015 12:00"));
+        results.add(create(AproximationResultType.RAIN_AT_TIME, 1.0, 10, "28-04-2015 12:00"));
         results.add(create(AproximationResultType.RAIN_UNSURE, 1.0, 2));
-        results.add(create(AproximationResultType.RAIN_UNSURE, 0.9, 3));
         results.add(create(AproximationResultType.RAIN_UNSURE, 1.0, 3));
+        results.add(create(AproximationResultType.RAIN_UNSURE, 0.9, 10));
+        results.add(create(AproximationResultType.RAIN_UNSURE, 1.0, 10));
 
         // when
         results.sort(Comparators.modeAccuracy());
 
         // then
-        assertEquals(create(AproximationResultType.RAIN_AT_TIME, 1.0, 3, "28/04/2015 12:00"), results.get(0));
-        assertEquals(create(AproximationResultType.RAIN_AT_TIME, 0.9, 3, "28/04/2015 12:00"), results.get(1));
-        assertEquals(create(AproximationResultType.RAIN_UNSURE, 1.0, 3), results.get(2));
-        assertEquals(create(AproximationResultType.RAIN_UNSURE, 0.9, 3), results.get(3));
+        assertEquals(create(AproximationResultType.RAIN_AT_TIME, 1.0, 10, "28-04-2015 12:00"), results.get(0));
+        assertEquals(create(AproximationResultType.RAIN_AT_TIME, 0.9, 10, "28-04-2015 12:00"), results.get(1));
+        assertEquals(create(AproximationResultType.RAIN_UNSURE, 1.0, 10), results.get(2));
+        assertEquals(create(AproximationResultType.RAIN_UNSURE, 0.9, 10), results.get(3));
         assertEquals(create(AproximationResultType.RAIN_UNKNOWN, Double.NaN, 0), results.get(4));
         assertEquals(create(AproximationResultType.RAIN_UNKNOWN, Double.NaN, 0), results.get(5));
         assertEquals(create(AproximationResultType.RAIN_UNKNOWN, Double.NaN, 0), results.get(6));
-        assertEquals(create(AproximationResultType.RAIN_AT_TIME, 1.0, 2, "28/04/2015 12:00"), results.get(7));
-        assertEquals(create(AproximationResultType.RAIN_UNSURE, 1.0, 2), results.get(8));
+        assertEquals(create(AproximationResultType.RAIN_AT_TIME, 1.0, 3, "28-04-2015 12:00"), results.get(7));
+        assertEquals(create(AproximationResultType.RAIN_UNSURE, 1.0, 3), results.get(8));
+        assertEquals(create(AproximationResultType.RAIN_AT_TIME, 1.0, 2, "28-04-2015 12:00"), results.get(9));
+        assertEquals(create(AproximationResultType.RAIN_UNSURE, 1.0, 2), results.get(10));
     }
 
     @Test
     public void shouldCompareHeavyRainUnsure() {
         // given
         List<Aproximation> results = new ArrayList<>();
-        results.add(create(AproximationResultType.RAIN_AT_TIME, 0.6, 3, "28/04/2015 12:00"));
-        results.add(create(AproximationResultType.RAIN_UNSURE, 0.988, 3));
-        results.add(create(AproximationResultType.RAIN_UNSURE, 0.7, 3));
-        results.add(create(AproximationResultType.RAIN_UNSURE, 0.7, 3));
+        results.add(create(AproximationResultType.RAIN_AT_TIME, 0.6, 10, "28-04-2015 12:00"));
+        results.add(create(AproximationResultType.RAIN_UNSURE, 0.988, 10));
+        results.add(create(AproximationResultType.RAIN_UNSURE, 0.7, 10));
+        results.add(create(AproximationResultType.RAIN_UNSURE, 0.7, 10));
 
         // when
         results.sort(Comparators.modeAccuracy());
 
         // then
-        assertEquals(create(AproximationResultType.RAIN_AT_TIME, 0.6, 3, "28/04/2015 12:00"), results.get(0));
-        assertEquals(create(AproximationResultType.RAIN_UNSURE, 0.988, 3), results.get(1));
-        assertEquals(create(AproximationResultType.RAIN_UNSURE, 0.7, 3), results.get(2));
-        assertEquals(create(AproximationResultType.RAIN_UNSURE, 0.7, 3), results.get(3));
+        assertEquals(create(AproximationResultType.RAIN_AT_TIME, 0.6, 10, "28-04-2015 12:00"), results.get(0));
+        assertEquals(create(AproximationResultType.RAIN_UNSURE, 0.988, 10), results.get(1));
+        assertEquals(create(AproximationResultType.RAIN_UNSURE, 0.7, 10), results.get(2));
+        assertEquals(create(AproximationResultType.RAIN_UNSURE, 0.7, 10), results.get(3));
     }
 }

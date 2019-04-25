@@ -4,14 +4,20 @@ import lombok.Getter;
 import lombok.Setter;
 import org.ksapala.rainaproximator.aproximation.cloud.Cloud;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
 public class Debug {
 
+    public final static String TIME_FORMAT = "dd-MM-yyyy HH:mm";
+
     @Setter
     private String angle;
+
+    @Setter
+    private String generationTime;
 
     @Setter
     private String performance;

@@ -31,18 +31,13 @@ public class TimeUtils {
         return LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneOffset.UTC);
     }
 
-    public static DateTimeFormatter getFormatter(Configuration configuration) {
-        return DateTimeFormatter.ofPattern(configuration.getUserTimeFormat());
-    }
-
     public static String timeToString(LocalDateTime time, Configuration configuration) {
-        DateTimeFormatter formatter = getFormatter(configuration);
-        return time.format(formatter);
+        return timeToString(time, configuration.getUserTimeFormat());
     }
 
-    public static LocalDateTime parseInTest(String timeString, Configuration configuration) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(configuration.getTestTimeFormat());
-        return LocalDateTime.parse(timeString, formatter);
+    public static String timeToString(LocalDateTime time, String pattern) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+        return time.format(formatter);
     }
 
 }

@@ -6,6 +6,7 @@ import org.ksapala.rainaproximator.utils.TimeUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Getter
 public class AproximationResult {
@@ -13,17 +14,17 @@ public class AproximationResult {
     private final String TO_STRING_PATTERN = "dd/MM/yyyy HH:mm";
 
 	private AproximationResultType type;
-	private LocalDateTime predictTime;
+	private LocalDateTime time;
     private String remark;
     private Debug debug;
 
-    public AproximationResult(AproximationResultType type, LocalDateTime predictTime) {
+    public AproximationResult(AproximationResultType type, LocalDateTime time) {
         this.type = type;
-        this.predictTime = predictTime;
+        this.time = time;
     }
 
-	public AproximationResult(AproximationResultType type, double predictTime) {
-	    this(type, TimeUtils.millisToDate((long) predictTime));
+	public AproximationResult(AproximationResultType type, double time) {
+	    this(type, TimeUtils.millisToDate((long) time));
     }
 
 	public AproximationResult(AproximationResultType type) {
@@ -31,14 +32,14 @@ public class AproximationResult {
     }
 
     public boolean isPredict() {
-	    return this.predictTime != null;
+	    return this.time != null;
     }
 
 	@Override
 	public String toString() {
         String timeString = "";
         if (isPredict()) {
-            timeString = this.predictTime.format(DateTimeFormatter.ofPattern(TO_STRING_PATTERN));
+            timeString = this.time.format(DateTimeFormatter.ofPattern(TO_STRING_PATTERN));
         }
 		return "Type: " + this.type.toString() + ", time: " + timeString + ", remark: " + this.remark;
 	}
@@ -51,11 +52,11 @@ public class AproximationResult {
 		if (object instanceof AproximationResult) {
 			AproximationResult other = (AproximationResult) object;
 			boolean typeEquals = this.type.equals(other.type);
-			if (this.predictTime == null && other.predictTime == null) {
+			if (this.time == null && other.time == null) {
 				return true;
 			}
-			if (this.predictTime != null) {
-				boolean predictTimeEquals = this.predictTime.equals(other.predictTime);
+			if (this.time != null) {
+				boolean predictTimeEquals = this.time.equals(other.time);
 				return typeEquals && predictTimeEquals;
 			}
 		}
@@ -68,5 +69,9 @@ public class AproximationResult {
 
     public void setDebug(Debug debug) {
         this.debug = debug;
+    }
+
+    public Optional<LocalDateTime> getTime() {
+        return Optional.ofNullable(time);
     }
 }
