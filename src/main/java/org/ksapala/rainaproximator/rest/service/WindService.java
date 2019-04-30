@@ -1,10 +1,11 @@
 /**
  * 
  */
-package org.ksapala.rainaproximator.aproximation.wind;
+package org.ksapala.rainaproximator.rest.service;
 
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.exception.AproximationException;
+import org.ksapala.rainaproximator.json.WeatherJson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,9 @@ import java.util.Optional;
  * 
  */
 @Component
-public class WindGetter {
+public class WindService {
 
-    private final Logger logger = LoggerFactory.getLogger(WindGetter.class);
+    private final Logger logger = LoggerFactory.getLogger(WindService.class);
 
     @Autowired
     private Configuration configuration;
@@ -31,7 +32,7 @@ public class WindGetter {
     /**
 	 * 
 	 */
-    public WindGetter() {
+    public WindService() {
     }
 
 	/**

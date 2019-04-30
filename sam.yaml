@@ -16,7 +16,7 @@ Resources:
       Handler: org.ksapala.rainaproximator.aws.ApiLambdaHandler::handleRequest
       Runtime: java8
       CodeUri: build/distributions/rain-aproximator-0.0.1-SNAPSHOT.zip
-      MemorySize: 2048
+      MemorySize: 2560
       Policies: AWSLambdaExecute
       Timeout: 60
       Events:
@@ -31,7 +31,7 @@ Resources:
       Handler: org.ksapala.rainaproximator.aws.EventLambdaHandler::handleRequest
       Runtime: java8
       CodeUri: build/distributions/rain-aproximator-0.0.1-SNAPSHOT.zip
-      MemorySize: 2048
+      MemorySize: 2560
       Policies: AWSLambdaExecute
       Timeout: 60
       Events:

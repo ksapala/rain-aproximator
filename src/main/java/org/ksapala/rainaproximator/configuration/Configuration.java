@@ -19,11 +19,11 @@ public class Configuration {
     @NotBlank private String userTimeFormat;
     @NotBlank private String testTimeFormat;
     @NotBlank private String mobileTimeFormat;
-    @NotBlank private String firebaseTopic;
 
     private Wind wind = new Wind();
     private Algorithm algorithm = new Algorithm();
     private Scanner scanner = new Scanner();
+    private Firebase firebase = new Firebase();
 
     @Getter
     @Setter
@@ -75,6 +75,17 @@ public class Configuration {
         @NotBlank private String lastRadarMapDateZone;
         @NotBlank private String lastRadarMapDateElementId;
         @NotNull private int radarMapTimeIntevalMinutes;
+    }
+
+    @Getter
+    @Setter
+    public class Firebase {
+
+        @NotBlank private String databaseUrl;
+        @NotBlank private String usersUrl;
+        @NotBlank private String messageData;
+        @NotBlank private String messageTag;
+        @NotBlank private String topic;
     }
 
 }

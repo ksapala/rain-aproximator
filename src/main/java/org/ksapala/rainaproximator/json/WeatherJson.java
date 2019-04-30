@@ -1,4 +1,4 @@
-package org.ksapala.rainaproximator.aproximation.wind;
+package org.ksapala.rainaproximator.json;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;

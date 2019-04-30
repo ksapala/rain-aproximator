@@ -8,14 +8,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ksapala.rainaproximator.aproximation.debug.Debug;
 import org.ksapala.rainaproximator.aproximation.result.Accuracy;
-import org.ksapala.rainaproximator.aproximation.scan.Scanner;
 import org.ksapala.rainaproximator.configuration.Configuration;
-import org.ksapala.rainaproximator.firebase.FirebaseApplications;
 import org.ksapala.rainaproximator.rest.bean.AproximationBean;
-import org.ksapala.rainaproximator.utils.TimeUtils;
+import org.ksapala.rainaproximator.rest.bean.User;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -25,6 +22,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -33,15 +31,13 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class FirebaseServiceTest {
-
-    public final String TOPIC_DEV = "rain-aproximator-dev";
+public class FirebaseMessagingServiceTest {
 
     @Autowired
-    private FirebaseService firebaseService;
+    private FirebaseMessagingService firebaseMessagingService;
 
     @Autowired
-    private Configuration configuration;
+    private FirebaseDatabaseService firebaseDatabaseService;
 
     @MockBean
     private AwsS3Service awsS3Service;
@@ -61,8 +57,11 @@ public class FirebaseServiceTest {
                 "", true, Accuracy.of(1.0, 0, 1, 1,
                 5), new Debug());
 
+        List<User> users = firebaseDatabaseService.getUsers();
+        User lastUser = users.get(1);
+
         // when
-        String response = firebaseService.doNotify(aproximationBean, TOPIC_DEV);
+        String response = firebaseMessagingService.doNotify(lastUser, aproximationBean);
 
         // then
         assertNotNull(FirebaseApp.getApps());

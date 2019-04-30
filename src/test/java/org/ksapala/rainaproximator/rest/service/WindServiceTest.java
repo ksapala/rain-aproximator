@@ -1,15 +1,11 @@
 /**
  * 
  */
-package org.ksapala.rainaproximator.aproximation.wind;
+package org.ksapala.rainaproximator.rest.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ksapala.rainaproximator.aproximation.scan.Scanner;
-import org.ksapala.rainaproximator.configuration.Configuration;
-import org.ksapala.rainaproximator.exception.AproximationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -27,17 +23,17 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class WindGetterTest {
+public class WindServiceTest {
 
     @Autowired
-    private WindGetter windGetter;
+    private WindService windService;
 
     @MockBean
     private Scanner scanner;
 
     @Test
 	public void testGetWindDirection() {
-        Optional<Integer> windDirection = windGetter.getWindDirection(20, 50);
+        Optional<Integer> windDirection = windService.getWindDirection(20, 50);
 
         if (windDirection.isPresent()) {
             assertTrue(windDirection.get() >= 0);

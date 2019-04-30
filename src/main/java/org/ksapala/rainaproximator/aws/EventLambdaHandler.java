@@ -37,7 +37,7 @@ public class EventLambdaHandler implements RequestHandler<AwsEventRequest, AwsEv
     @Override
     public AwsEventResponse handleRequest(AwsEventRequest input, Context context) {
         rainTimerService = SpringBridge.getRainTimerService();
-        rainTimerService.scanAproximateAndNotify();
+        rainTimerService.aproximateForUsers();
         return new AwsEventResponse();
     }
 

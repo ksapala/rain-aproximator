@@ -59,7 +59,7 @@ public class RainAproximator {
      * @return
      */
 	public Aproximation aproximate(Scan scan, double latitude, double longitude, int angle, Mode mode) {
-        logger.info("Aproximation start. Scan: " + scan.getLastMapTime() + " Location: (" + latitude * 100 / 100 + ", " +
+        logger.debug("Aproximation start. Scan: " + scan.getLastMapTime() + " Location: (" + latitude * 100 / 100 + ", " +
                 + longitude * 100 / 100 + ") Angle: " + angle + " Mode: " + mode.getName());
 
 		long start = System.currentTimeMillis();
@@ -93,6 +93,8 @@ public class RainAproximator {
 
 		logger.debug("[performance] Aproximation time: " + duration);
         aproximation.getAproximationResult().getDebug().setPerformance(Long.toString(duration));
+        aproximation.getAproximationResult().getDebug().setLatitude(latitude);
+        aproximation.getAproximationResult().getDebug().setLongitude(longitude);
 		return aproximation;
     }
 

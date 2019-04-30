@@ -4,7 +4,6 @@ import org.ksapala.rainaproximator.configuration.Mode;
 import org.ksapala.rainaproximator.rest.bean.AproximationBean;
 import org.ksapala.rainaproximator.rest.bean.ScanBean;
 import org.ksapala.rainaproximator.rest.debug.DebugConstants;
-import org.ksapala.rainaproximator.rest.service.FirebaseService;
 import org.ksapala.rainaproximator.rest.service.HelloService;
 import org.ksapala.rainaproximator.rest.service.RainAproximatorService;
 import org.ksapala.rainaproximator.rest.service.ScanService;

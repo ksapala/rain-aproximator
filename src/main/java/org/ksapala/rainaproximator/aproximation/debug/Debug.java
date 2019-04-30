@@ -17,6 +17,12 @@ public class Debug {
     private String angle;
 
     @Setter
+    private double latitude;
+
+    @Setter
+    private double longitude;
+
+    @Setter
     private String generationTime;
 
     @Setter

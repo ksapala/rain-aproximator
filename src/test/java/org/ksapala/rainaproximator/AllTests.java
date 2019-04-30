@@ -17,9 +17,10 @@ import org.ksapala.rainaproximator.aproximation.scan.LastRadarMapTimeParserTest;
 import org.ksapala.rainaproximator.aproximation.scan.ScannerTest;
 import org.ksapala.rainaproximator.aproximation.weather.ConditionTest;
 import org.ksapala.rainaproximator.aproximation.weather.WeatherTest;
-import org.ksapala.rainaproximator.aproximation.wind.WindGetterTest;
 import org.ksapala.rainaproximator.rest.factory.AproximationBeanFactoryTest;
-import org.ksapala.rainaproximator.rest.service.FirebaseServiceTest;
+import org.ksapala.rainaproximator.rest.service.FirebaseDatabaseServiceTest;
+import org.ksapala.rainaproximator.rest.service.FirebaseMessagingService;
+import org.ksapala.rainaproximator.rest.service.FirebaseMessagingServiceTest;
 import org.ksapala.rainaproximator.rest.service.NotificationServiceTest;
 import org.ksapala.rainaproximator.utils.TimeUtilsTests;
 
@@ -39,7 +40,8 @@ import org.ksapala.rainaproximator.utils.TimeUtilsTests;
         WeatherTest.class,
 //        WindGetterTest.class,
         RainAproximatorTest.class,
-        FirebaseServiceTest.class,
+        FirebaseDatabaseServiceTest.class,
+        FirebaseMessagingServiceTest.class,
         NotificationServiceTest.class,
         AproximationBeanFactoryTest.class,
         TimeUtilsTests.class,
