@@ -14,7 +14,7 @@ Resources:
     Properties:
       Handler: org.ksapala.rainaproximator.aws.ApiLambdaHandler::handleRequest
       Runtime: java8
-      CodeUri: s3://rain-aproximator/cbfe1634a10e85f0343ba4b257debd91
+      CodeUri: s3://rain-aproximator/e544a7b355e931bcc03438cec31de92a
       MemorySize: 2560
       Policies: AWSLambdaExecute
       Timeout: 60
@@ -29,7 +29,7 @@ Resources:
     Properties:
       Handler: org.ksapala.rainaproximator.aws.EventLambdaHandler::handleRequest
       Runtime: java8
-      CodeUri: s3://rain-aproximator/cbfe1634a10e85f0343ba4b257debd91
+      CodeUri: s3://rain-aproximator/e544a7b355e931bcc03438cec31de92a
       MemorySize: 2560
       Policies: AWSLambdaExecute
       Timeout: 60
