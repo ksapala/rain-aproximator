@@ -9,8 +9,6 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.ksapala.rainaproximator.RainAproximatorApplication;
 import org.ksapala.rainaproximator.rest.service.HelloService;
 import org.ksapala.rainaproximator.rest.service.RainTimerService;
-import org.ksapala.rainaproximator.rest.service.ScanService;
-import org.ksapala.rainaproximator.rest.bean.ScanBean;
 import org.ksapala.rainaproximator.utils.SpringBridge;
 
 /**

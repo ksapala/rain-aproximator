@@ -4,7 +4,7 @@ import org.ksapala.rainaproximator.aproximation.angle.Angle;
 import org.ksapala.rainaproximator.aproximation.cloud.Cloud;
 import org.ksapala.rainaproximator.aproximation.cloud.CloudBuilder;
 import org.ksapala.rainaproximator.aproximation.debug.Debug;
-import org.ksapala.rainaproximator.aproximation.regression.RegressionTimeFactory;
+import org.ksapala.rainaproximator.utils.TimeFactory;
 import org.ksapala.rainaproximator.aproximation.result.*;
 import org.ksapala.rainaproximator.aproximation.scan.Scan;
 import org.ksapala.rainaproximator.aproximation.scan.converter.CoordinatesConverter;
@@ -35,7 +35,7 @@ public class RainAproximator {
     private MessageSource messageSource;
 
     @Autowired
-    private RegressionTimeFactory regressionTimeFactory;
+    private TimeFactory timeFactory;
 
     private final Configuration.Algorithm algorithmConfiguration;
 	private CoordinatesConverter coordinatesConverter;
@@ -206,7 +206,7 @@ public class RainAproximator {
      * @return
      */
 	Aproximation aproximate(List<Cloud> clouds, int angle) {
-        Weather weather = new Weather(clouds, regressionTimeFactory, algorithmConfiguration);
+        Weather weather = new Weather(clouds, timeFactory, algorithmConfiguration);
 
         boolean isSun = weather.isSun();
 
@@ -227,7 +227,7 @@ public class RainAproximator {
 			if (regressionNan) {
 				aproximationResult = new AproximationResult(AproximationResultType.RAIN_UNKNOWN);
 			} else if (regressionForPast) {
-				aproximationResult = new AproximationResult(AproximationResultType.RAIN_UNSURE);
+				aproximationResult = new AproximationResult(AproximationResultType.RAIN_GOES_AWAY);
 			} else {
 				aproximationResult = new AproximationResult(AproximationResultType.RAIN_AT_TIME, regression);
 			}
@@ -236,7 +236,7 @@ public class RainAproximator {
 			if (regressionNan) {
 				aproximationResult = new AproximationResult(AproximationResultType.SUN_UNKNOWN);
 			} else if (regressionForPast) {
-				aproximationResult = new AproximationResult(AproximationResultType.SUN_UNSURE);
+				aproximationResult = new AproximationResult(AproximationResultType.SUN_GOES_AWAY);
 			} else {
 				aproximationResult = new AproximationResult(AproximationResultType.SUN_AT_TIME, regression);
 			}

@@ -1,4 +1,4 @@
-package org.ksapala.rainaproximator.rest.bean;
+package org.ksapala.rainaproximator.rest.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

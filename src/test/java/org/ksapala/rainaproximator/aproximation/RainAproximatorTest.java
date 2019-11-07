@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ksapala.rainaproximator.TestUtils;
 import org.ksapala.rainaproximator.aproximation.cloud.Cloud;
-import org.ksapala.rainaproximator.aproximation.regression.RegressionTimeFactory;
+import org.ksapala.rainaproximator.utils.TimeFactory;
 import org.ksapala.rainaproximator.aproximation.result.AproximationResult;
 import org.ksapala.rainaproximator.aproximation.result.AproximationResultType;
 import org.ksapala.rainaproximator.configuration.Configuration;
@@ -33,7 +33,7 @@ public class RainAproximatorTest {
     private RainAproximator rainAproximator;
 
     @SpyBean
-    private RegressionTimeFactory regressionTimeFactory;
+    private TimeFactory timeFactory;
 
     private TestUtils testUtils;
 
@@ -41,8 +41,8 @@ public class RainAproximatorTest {
     @Before
 	public void setUp() {
         testUtils = new TestUtils(configuration);
-        LocalDateTime fixedTime = TestUtils.parseInTest("04-02-2115 14:00");
-        doReturn(fixedTime).when(regressionTimeFactory).now();
+        LocalDateTime fixedTime = TestUtils.time("04-02-2115 14:00");
+        doReturn(fixedTime).when(timeFactory).now();
 
 	}
 
@@ -63,12 +63,12 @@ public class RainAproximatorTest {
 		Cloud cloud4 = testUtils.stringToCloud("......###########.........");
 		Cloud cloud5 = testUtils.stringToCloud("....###########...........");
 
-		cloud1.setTime(TestUtils.parseInTest("04-02-2115 13:15"));
-		cloud2.setTime(TestUtils.parseInTest("04-02-2115 13:25"));
-		cloud3.setTime(TestUtils.parseInTest("04-02-2115 13:35"));
-		cloud4.setTime(TestUtils.parseInTest("04-02-2115 13:45"));
-		cloud5.setTime(TestUtils.parseInTest("04-02-2115 13:55"));
-		LocalDateTime expectedTime = TestUtils.parseInTest("04-02-2115 14:15");
+		cloud1.setTime(TestUtils.time("04-02-2115 13:15"));
+		cloud2.setTime(TestUtils.time("04-02-2115 13:25"));
+		cloud3.setTime(TestUtils.time("04-02-2115 13:35"));
+		cloud4.setTime(TestUtils.time("04-02-2115 13:45"));
+		cloud5.setTime(TestUtils.time("04-02-2115 13:55"));
+		LocalDateTime expectedTime = TestUtils.time("04-02-2115 14:15");
 
 		clouds.add(cloud1);
 		clouds.add(cloud2);
@@ -98,12 +98,12 @@ public class RainAproximatorTest {
 		Cloud cloud4 = testUtils.stringToCloud("##########.............");
 		Cloud cloud5 = testUtils.stringToCloud("######.................");
 
-		cloud1.setTime(TestUtils.parseInTest("04-02-2115 13:15"));
-		cloud2.setTime(TestUtils.parseInTest("04-02-2115 13:25"));
-		cloud3.setTime(TestUtils.parseInTest("04-02-2115 13:35"));
-		cloud4.setTime(TestUtils.parseInTest("04-02-2115 13:45"));
-		cloud5.setTime(TestUtils.parseInTest("04-02-2115 13:55"));
-        LocalDateTime expectedTime = TestUtils.parseInTest("04-02-2115 14:10");
+		cloud1.setTime(TestUtils.time("04-02-2115 13:15"));
+		cloud2.setTime(TestUtils.time("04-02-2115 13:25"));
+		cloud3.setTime(TestUtils.time("04-02-2115 13:35"));
+		cloud4.setTime(TestUtils.time("04-02-2115 13:45"));
+		cloud5.setTime(TestUtils.time("04-02-2115 13:55"));
+        LocalDateTime expectedTime = TestUtils.time("04-02-2115 14:10");
 
 		clouds.add(cloud1);
 		clouds.add(cloud2);
@@ -134,11 +134,11 @@ public class RainAproximatorTest {
 		Cloud cloud4 = testUtils.stringToCloud("...................");
 		Cloud cloud5 = testUtils.stringToCloud("...................");
 
-		cloud1.setTime(TestUtils.parseInTest("04-02-2115 13:15"));
-		cloud2.setTime(TestUtils.parseInTest("04-02-2115 13:25"));
-		cloud3.setTime(TestUtils.parseInTest("04-02-2115 13:35"));
-		cloud4.setTime(TestUtils.parseInTest("04-02-2115 13:45"));
-		cloud5.setTime(TestUtils.parseInTest("04-02-2115 13:55"));
+		cloud1.setTime(TestUtils.time("04-02-2115 13:15"));
+		cloud2.setTime(TestUtils.time("04-02-2115 13:25"));
+		cloud3.setTime(TestUtils.time("04-02-2115 13:35"));
+		cloud4.setTime(TestUtils.time("04-02-2115 13:45"));
+		cloud5.setTime(TestUtils.time("04-02-2115 13:55"));
 
 		clouds.add(cloud1);
 		clouds.add(cloud2);
@@ -166,11 +166,11 @@ public class RainAproximatorTest {
 		Cloud cloud4 = testUtils.stringToCloud("###################");
 		Cloud cloud5 = testUtils.stringToCloud("###################");
 
-		cloud1.setTime(TestUtils.parseInTest("04-02-2115 13:15"));
-		cloud2.setTime(TestUtils.parseInTest("04-02-2115 13:25"));
-		cloud3.setTime(TestUtils.parseInTest("04-02-2115 13:35"));
-		cloud4.setTime(TestUtils.parseInTest("04-02-2115 13:45"));
-		cloud5.setTime(TestUtils.parseInTest("04-02-2115 13:55"));
+		cloud1.setTime(TestUtils.time("04-02-2115 13:15"));
+		cloud2.setTime(TestUtils.time("04-02-2115 13:25"));
+		cloud3.setTime(TestUtils.time("04-02-2115 13:35"));
+		cloud4.setTime(TestUtils.time("04-02-2115 13:45"));
+		cloud5.setTime(TestUtils.time("04-02-2115 13:55"));
 
 		clouds.add(cloud1);
 		clouds.add(cloud2);
@@ -198,11 +198,11 @@ public class RainAproximatorTest {
 		Cloud cloud4 = testUtils.stringToCloud("###############....");
 		Cloud cloud5 = testUtils.stringToCloud("#################..");
 
-		cloud1.setTime(TestUtils.parseInTest("04-02-2115 13:15"));
-		cloud2.setTime(TestUtils.parseInTest("04-02-2115 13:25"));
-		cloud3.setTime(TestUtils.parseInTest("04-02-2115 13:35"));
-		cloud4.setTime(TestUtils.parseInTest("04-02-2115 13:45"));
-		cloud5.setTime(TestUtils.parseInTest("04-02-2115 13:55"));
+		cloud1.setTime(TestUtils.time("04-02-2115 13:15"));
+		cloud2.setTime(TestUtils.time("04-02-2115 13:25"));
+		cloud3.setTime(TestUtils.time("04-02-2115 13:35"));
+		cloud4.setTime(TestUtils.time("04-02-2115 13:45"));
+		cloud5.setTime(TestUtils.time("04-02-2115 13:55"));
 
 
 		clouds.add(cloud1);
@@ -215,7 +215,7 @@ public class RainAproximatorTest {
 		assertNotNull(aproximationResult);
 
 		AproximationResultType actualType = aproximationResult.getType();
-		AproximationResultType expectedType = AproximationResultType.SUN_UNSURE;
+		AproximationResultType expectedType = AproximationResultType.SUN_GOES_AWAY;
         Optional<LocalDateTime> actualTime = aproximationResult.getTime();
 
 		assertFalse(actualTime.isPresent());

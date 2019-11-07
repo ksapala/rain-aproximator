@@ -2,7 +2,6 @@ package org.ksapala.rainaproximator;
 
 import org.ksapala.rainaproximator.aproximation.cloud.Cloud;
 import org.ksapala.rainaproximator.configuration.Configuration;
-import org.ksapala.rainaproximator.utils.TimeUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -35,7 +34,7 @@ public class TestUtils {
      */
     public Cloud cloud(String cloudString, String timeString) {
         Cloud cloud = stringToCloud(cloudString);
-        cloud.setTime(parseInTest(timeString));
+        cloud.setTime(time(timeString));
         return cloud;
     }
 
@@ -55,7 +54,7 @@ public class TestUtils {
         return line;
     }
 
-    public static LocalDateTime parseInTest(String timeString) {
+    public static LocalDateTime time(String timeString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
         return LocalDateTime.parse(timeString, formatter);
     }

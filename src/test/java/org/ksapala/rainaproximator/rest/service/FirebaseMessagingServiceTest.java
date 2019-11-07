@@ -8,9 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ksapala.rainaproximator.aproximation.debug.Debug;
 import org.ksapala.rainaproximator.aproximation.result.Accuracy;
-import org.ksapala.rainaproximator.configuration.Configuration;
-import org.ksapala.rainaproximator.rest.bean.AproximationBean;
-import org.ksapala.rainaproximator.rest.bean.User;
+import org.ksapala.rainaproximator.rest.answer.AproximationAnswer;
+import org.ksapala.rainaproximator.rest.user.User;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -52,16 +51,17 @@ public class FirebaseMessagingServiceTest {
     @Test
     public void shouldNotify() throws IOException, FirebaseMessagingException {
         // given
-        AproximationBean aproximationBean = new AproximationBean("Deszcz testowy",
+        AproximationAnswer aproximationAnswer = new AproximationAnswer("Deszcz testowy",
             "Dziś", LocalDateTime.now().plusHours(1),
                 "", true, Accuracy.of(1.0, 0, 1, 1,
                 5), new Debug());
 
         List<User> users = firebaseDatabaseService.getUsers();
-        User lastUser = users.get(1);
+
+        User lastUser = users.get(0); // this depends how many users is un firebase db
 
         // when
-        String response = firebaseMessagingService.doNotify(lastUser, aproximationBean);
+        String response = firebaseMessagingService.doNotify(lastUser, aproximationAnswer);
 
         // then
         assertNotNull(FirebaseApp.getApps());

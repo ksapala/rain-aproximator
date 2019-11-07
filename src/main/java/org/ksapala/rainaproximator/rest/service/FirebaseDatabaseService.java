@@ -1,7 +1,7 @@
 package org.ksapala.rainaproximator.rest.service;
 
 import org.ksapala.rainaproximator.configuration.Configuration;
-import org.ksapala.rainaproximator.rest.bean.User;
+import org.ksapala.rainaproximator.rest.user.User;
 import org.ksapala.rainaproximator.json.UserJson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

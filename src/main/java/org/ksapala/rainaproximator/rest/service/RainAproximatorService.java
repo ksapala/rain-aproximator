@@ -7,8 +7,8 @@ import org.ksapala.rainaproximator.aproximation.scan.Scan;
 import org.ksapala.rainaproximator.aproximation.scan.ScanComponent;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.configuration.Mode;
-import org.ksapala.rainaproximator.rest.bean.AproximationBean;
-import org.ksapala.rainaproximator.rest.factory.AproximationBeanFactory;
+import org.ksapala.rainaproximator.rest.answer.AproximationAnswer;
+import org.ksapala.rainaproximator.rest.answer.AproximationAnswerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class RainAproximatorService {
     private ScanComponent scanComponent;
 
     @Autowired
-    private AproximationBeanFactory aproximationBeanFactory;
+    private AproximationAnswerFactory aproximationAnswerFactory;
 
     @Autowired
     private RainAproximator rainAproximator;
@@ -46,7 +46,7 @@ public class RainAproximatorService {
      * @param longitude
      * @return
      */
-    public AproximationBean aproximate(double latitude, double longitude) {
+    public AproximationAnswer aproximate(double latitude, double longitude) {
         return aproximate(latitude, longitude, 0, null);
     }
 
@@ -57,7 +57,7 @@ public class RainAproximatorService {
      * @param mode
      * @return
      */
-    public AproximationBean aproximateDebug(double latitude, double longitude, int angle, Mode mode) {
+    public AproximationAnswer aproximateDebug(double latitude, double longitude, int angle, Mode mode) {
         return aproximate(latitude, longitude, angle, mode);
     }
 
@@ -68,12 +68,12 @@ public class RainAproximatorService {
      * @param mode
      * @return
      */
-    public AproximationBean aproximate(double latitude, double longitude, int angle, Mode mode) {
+    public AproximationAnswer aproximate(double latitude, double longitude, int angle, Mode mode) {
         try {
             return doAproximate(latitude, longitude, angle, mode);
         } catch (Exception e) {
             logger.error("Exception while invoking Rain Aproximation Rest Service.", e);
-            return aproximationBeanFactory.createFriendlyErrorBean();
+            return aproximationAnswerFactory.createFriendlyErrorBean();
         }
     }
 
@@ -84,20 +84,20 @@ public class RainAproximatorService {
      * @param mode
      * @return
      */
-    public AproximationBean doAproximate(double latitude, double longitude, int angle, Mode mode) {
+    public AproximationAnswer doAproximate(double latitude, double longitude, int angle, Mode mode) {
 
         Optional<Scan> scan = scanComponent.getScan();
 
         if (!scan.isPresent()) {
             logger.warn("Missing scans.");
-            return aproximationBeanFactory.createEmptyScanBean();
+            return aproximationAnswerFactory.createEmptyScanBean();
         }
 
         Mode aproximationMode = Optional.ofNullable(mode)
                 .orElse(new Mode(configuration.getAlgorithm().getMode()));
 
         Aproximation aproximation = rainAproximator.aproximate(scan.get(), latitude, longitude, angle, aproximationMode);
-        return aproximationBeanFactory.createBean(aproximation);
+        return aproximationAnswerFactory.createAproximationAnswer(aproximation);
     }
 
 }

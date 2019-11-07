@@ -1,8 +1,8 @@
 package org.ksapala.rainaproximator.rest;
 
 import org.ksapala.rainaproximator.configuration.Mode;
-import org.ksapala.rainaproximator.rest.bean.AproximationBean;
-import org.ksapala.rainaproximator.rest.bean.ScanBean;
+import org.ksapala.rainaproximator.rest.answer.AproximationAnswer;
+import org.ksapala.rainaproximator.rest.answer.ScanAnswer;
 import org.ksapala.rainaproximator.rest.debug.DebugConstants;
 import org.ksapala.rainaproximator.rest.service.HelloService;
 import org.ksapala.rainaproximator.rest.service.RainAproximatorService;
@@ -30,37 +30,37 @@ public class RainAproximatorController {
     private HelloService helloService;
 
     @GetMapping(path = "/aproximate/{latitude}/{longitude}")
-    public AproximationBean aproximate(@PathVariable double latitude, @PathVariable double longitude) {
+    public AproximationAnswer aproximate(@PathVariable double latitude, @PathVariable double longitude) {
         return rainAproximatorService.aproximate(latitude, longitude);
     }
 
     // debug
     @GetMapping(path = "/aproximateKrk")
-    public AproximationBean aproximateKrk() {
+    public AproximationAnswer aproximateKrk() {
         Mode mode = new Mode(Mode.NAME_FULL, Mode.COMPARE_ACCURACY);
         return rainAproximatorService.aproximateDebug(KRK_LATITUDE, KRK_LONGITUDE, 0, mode);
     }
 
     @GetMapping(path = "/aproximateKrk/{mode}")
-    public AproximationBean aproximateKrk(@PathVariable String mode) {
+    public AproximationAnswer aproximateKrk(@PathVariable String mode) {
         Mode modeObject = new Mode(mode, Mode.COMPARE_ACCURACY);
         return rainAproximatorService.aproximateDebug(KRK_LATITUDE, KRK_LONGITUDE, 0, modeObject);
     }
 
     @GetMapping(path = "/aproximateKrk/{mode}/{angle}")
-    public AproximationBean aproximateKrk(@PathVariable String mode, @PathVariable int angle) {
+    public AproximationAnswer aproximateKrk(@PathVariable String mode, @PathVariable int angle) {
         Mode modeObject = new Mode(mode, Mode.COMPARE_ACCURACY);
         return rainAproximatorService.aproximateDebug(KRK_LATITUDE, KRK_LONGITUDE, angle, modeObject);
     }
 
     @GetMapping(path = "/aproximateKrkTime")
-    public AproximationBean aproximateKrkTime() {
+    public AproximationAnswer aproximateKrkTime() {
         Mode mode = new Mode(Mode.NAME_FULL, Mode.COMPARE_TIME);
         return rainAproximatorService.aproximateDebug(KRK_LATITUDE, KRK_LONGITUDE, 0, mode);
     }
 
     @GetMapping(path = "/scan")
-    public ScanBean scan() {
+    public ScanAnswer scan() {
         return scanService.scan();
     }
 

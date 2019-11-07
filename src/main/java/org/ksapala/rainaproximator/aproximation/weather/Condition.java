@@ -8,7 +8,7 @@ import org.ksapala.rainaproximator.aproximation.domainfilters.Filters;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionCalculator;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionPoint;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionResult;
-import org.ksapala.rainaproximator.aproximation.regression.RegressionTimeFactory;
+import org.ksapala.rainaproximator.utils.TimeFactory;
 import org.ksapala.rainaproximator.aproximation.regression.RegressionPointStructure;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.utils.LoggingUtils;
@@ -54,11 +54,11 @@ public abstract class Condition {
     protected Filters filters;
 
     private final Configuration.Algorithm algorithmConfiguration;
-    private final RegressionTimeFactory regressionTimeFactory;
+    private final TimeFactory timeFactory;
 
-    public Condition(List<Cloud> clouds, RegressionTimeFactory regressionTimeFactory, Configuration.Algorithm algorithmConfiguration) {
+    public Condition(List<Cloud> clouds, TimeFactory timeFactory, Configuration.Algorithm algorithmConfiguration) {
         this.clouds = clouds;
-        this.regressionTimeFactory = regressionTimeFactory;
+        this.timeFactory = timeFactory;
         this.filters = new Filters(algorithmConfiguration);
         this.algorithmConfiguration = algorithmConfiguration;
     }
@@ -124,7 +124,7 @@ public abstract class Condition {
     }
 
     private LocalDateTime now() {
-        return this.regressionTimeFactory.now();
+        return this.timeFactory.now();
     }
 
     public void log() {

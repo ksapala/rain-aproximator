@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.messaging.*;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.ksapala.rainaproximator.firebase.FirebaseApplications;
-import org.ksapala.rainaproximator.rest.bean.AproximationBean;
-import org.ksapala.rainaproximator.rest.bean.User;
+import org.ksapala.rainaproximator.rest.answer.AproximationAnswer;
+import org.ksapala.rainaproximator.rest.user.User;
 import org.ksapala.rainaproximator.utils.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,9 +35,9 @@ public class FirebaseMessagingService {
     public FirebaseMessagingService() {
     }
 
-    public void notify(User user, AproximationBean aproximationBean) {
+    public void notify(User user, AproximationAnswer aproximationAnswer) {
         try {
-            doNotify(user, aproximationBean);
+            doNotify(user, aproximationAnswer);
 //        } catch (FirebaseMessagingException fme) {
 //            logger.error("fme.", fme);
 //            fme.getErrorCode()
@@ -47,10 +47,10 @@ public class FirebaseMessagingService {
         }
     }
 
-    String doNotify(User user, AproximationBean aproximationBean) throws FirebaseMessagingException, IOException {
-        Notification notification = buildNotification(aproximationBean);
+    String doNotify(User user, AproximationAnswer aproximationAnswer) throws FirebaseMessagingException, IOException {
+        Notification notification = buildNotification(aproximationAnswer);
 
-        String aproximationBeanString = objectMapper.writeValueAsString(aproximationBean);
+        String aproximationAnswerString = objectMapper.writeValueAsString(aproximationAnswer);
         Message message = Message.builder()
                 .setAndroidConfig(
                         AndroidConfig.builder()
@@ -59,7 +59,7 @@ public class FirebaseMessagingService {
                                                 .setTag(configuration.getFirebase().getMessageTag())
                                                 .build())
                                 .build())
-                .putData(configuration.getFirebase().getMessageData(), aproximationBeanString)
+                .putData(configuration.getFirebase().getMessageData(), aproximationAnswerString)
                 .setNotification(notification)
                 .setToken(user.getId())
                 .build();
@@ -67,12 +67,12 @@ public class FirebaseMessagingService {
         return firebaseApplications.getFirebaseMessaging().send(message);
     }
 
-    private Notification buildNotification(AproximationBean aproximationBean) {
-        if (aproximationBean.getDay().isEmpty()) {
-            return new Notification(aproximationBean.getInfo(), aproximationBean.getTime().toString());
+    private Notification buildNotification(AproximationAnswer aproximationAnswer) {
+        if (aproximationAnswer.getDay().isEmpty()) {
+            return new Notification(aproximationAnswer.getInfo(), aproximationAnswer.getTime().toString());
         }
-        String time = TimeUtils.timeToString(aproximationBean.getTime(), configuration.getMobileTimeFormat());
-        return new Notification(aproximationBean.getInfo(), aproximationBean.getDay() + " " + time);
+        String time = TimeUtils.timeToString(aproximationAnswer.getTime(), configuration.getMobileTimeFormat());
+        return new Notification(aproximationAnswer.getInfo(), aproximationAnswer.getDay() + " " + time);
     }
 
 }

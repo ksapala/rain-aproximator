@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ksapala.rainaproximator.TestUtils;
 import org.ksapala.rainaproximator.aproximation.cloud.Cloud;
-import org.ksapala.rainaproximator.aproximation.regression.RegressionTimeFactory;
+import org.ksapala.rainaproximator.utils.TimeFactory;
 import org.ksapala.rainaproximator.configuration.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,15 +31,15 @@ public class WeatherTest {
     private Configuration configuration;
 
     @SpyBean
-    private RegressionTimeFactory regressionTimeFactory;
+    private TimeFactory timeFactory;
 
     private TestUtils testUtils;
 
     @Before
     public void setUp() {
         testUtils = new TestUtils(configuration);
-        LocalDateTime fixedTime = testUtils.parseInTest("04-02-2115 14:35");
-        doReturn(fixedTime).when(regressionTimeFactory).now();
+        LocalDateTime fixedTime = testUtils.time("04-02-2115 14:35");
+        doReturn(fixedTime).when(timeFactory).now();
     }
 
     @Test
@@ -50,7 +50,7 @@ public class WeatherTest {
         clouds.add(testUtils.cloud("......###########.............", "04-02-2115 14:20"));
         clouds.add(testUtils.cloud("....###########...............", "04-02-2115 14:30"));
 
-        Weather weather = new Weather(clouds, regressionTimeFactory, configuration.getAlgorithm());
+        Weather weather = new Weather(clouds, timeFactory, configuration.getAlgorithm());
 
         assertTrue(weather.isSun());
     }
@@ -63,7 +63,7 @@ public class WeatherTest {
         clouds.add(testUtils.cloud("######.............", "04-02-2115 14:20"));
         clouds.add(testUtils.cloud("####...............", "04-02-2115 14:30"));
 
-        Weather weather = new Weather(clouds, regressionTimeFactory, configuration.getAlgorithm());
+        Weather weather = new Weather(clouds, timeFactory, configuration.getAlgorithm());
 
         assertFalse(weather.isSun());
     }
@@ -76,7 +76,7 @@ public class WeatherTest {
         clouds.add(testUtils.cloud("......###########...............", "04-02-2115 14:20"));
         clouds.add(testUtils.cloud(".###########....................", "04-02-2115 14:30"));
 
-        Weather weather = new Weather(clouds, regressionTimeFactory, configuration.getAlgorithm());
+        Weather weather = new Weather(clouds, timeFactory, configuration.getAlgorithm());
 
         assertFalse(weather.isSun());
     }

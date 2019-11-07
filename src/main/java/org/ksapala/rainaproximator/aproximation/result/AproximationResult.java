@@ -1,5 +1,8 @@
 package org.ksapala.rainaproximator.aproximation.result;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.ksapala.rainaproximator.aproximation.debug.Debug;
 import org.ksapala.rainaproximator.utils.TimeUtils;
@@ -9,6 +12,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Getter
+@Builder
+@EqualsAndHashCode
+@AllArgsConstructor
 public class AproximationResult {
 
     private final String TO_STRING_PATTERN = "dd/MM/yyyy HH:mm";
@@ -42,25 +48,6 @@ public class AproximationResult {
             timeString = this.time.format(DateTimeFormatter.ofPattern(TO_STRING_PATTERN));
         }
 		return "Type: " + this.type.toString() + ", time: " + timeString + ", remark: " + this.remark;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object object) {
-		if (object instanceof AproximationResult) {
-			AproximationResult other = (AproximationResult) object;
-			boolean typeEquals = this.type.equals(other.type);
-			if (this.time == null && other.time == null) {
-				return true;
-			}
-			if (this.time != null) {
-				boolean predictTimeEquals = this.time.equals(other.time);
-				return typeEquals && predictTimeEquals;
-			}
-		}
-		return false;
 	}
 
     public void setRemark(String remark) {

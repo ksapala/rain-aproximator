@@ -41,6 +41,7 @@ public class Configuration {
         @NotNull private int defaultWind;
         @NotNull private double goodFitExpandFactor;
         @NotNull private int radarMapTimeIntevalMinutes;
+        @NotNull private int notificationSugestedMinutes;
 
         private Mode mode = new Mode();
         private Cloud cloud = new Cloud();

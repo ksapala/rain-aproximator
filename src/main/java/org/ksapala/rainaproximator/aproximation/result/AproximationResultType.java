@@ -11,8 +11,8 @@ public enum AproximationResultType {
 
 	RAIN_AT_TIME("AproximationResult.code.rain.at", 0),
 	SUN_AT_TIME("AproximationResult.code.sun.at", 0),
-	RAIN_UNSURE("AproximationResult.code.rain.unsure", 1),
-	SUN_UNSURE("AproximationResult.code.sun.unsure", 1),
+	RAIN_GOES_AWAY("AproximationResult.code.rain.goes.away", 1),
+	SUN_GOES_AWAY("AproximationResult.code.sun.goes.away", 1),
 	RAIN_UNKNOWN("AproximationResult.code.rain.unknown", 2),
 	SUN_UNKNOWN("AproximationResult.code.sun.unknown", 2);
 

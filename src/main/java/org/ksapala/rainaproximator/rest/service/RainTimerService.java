@@ -1,10 +1,8 @@
 package org.ksapala.rainaproximator.rest.service;
 
-import org.ksapala.rainaproximator.configuration.Mode;
-import org.ksapala.rainaproximator.rest.bean.AproximationBean;
-import org.ksapala.rainaproximator.rest.bean.ScanBean;
-import org.ksapala.rainaproximator.rest.bean.User;
-import org.ksapala.rainaproximator.rest.debug.DebugConstants;
+import org.ksapala.rainaproximator.rest.answer.AproximationAnswer;
+import org.ksapala.rainaproximator.rest.answer.ScanAnswer;
+import org.ksapala.rainaproximator.rest.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +34,7 @@ public class RainTimerService {
         logger.info("All operations start.");
         long start = System.currentTimeMillis();
 
-        ScanBean scan = scanService.scan();
+        ScanAnswer scan = scanService.scan();
 
         List<User> users = firebaseDatabaseService.getUsers();
 
@@ -49,7 +47,7 @@ public class RainTimerService {
 
     private void aproximateForUser(User user) {
         logger.info("Aproximating for user: " + user);
-        AproximationBean aproximationBean = rainAproximatorService.aproximate(user.getLatitude(), user.getLongitude());
-        notificationService.notify(user, aproximationBean, AproximationBean::isNotificationSuggested);
+        AproximationAnswer aproximationAnswer = rainAproximatorService.aproximate(user.getLatitude(), user.getLongitude());
+        notificationService.notify(user, aproximationAnswer);
     }
 }

@@ -34,11 +34,11 @@ public class RegressionCalculatorTest {
     public void shouldGetDifferencesStandardDeviation() {
         // given
         List<RegressionPoint> regressionPoints = new ArrayList<>();
-        regressionPoints.add(new RegressionPoint(new Distance(5), TestUtils.parseInTest("04-02-2115 12:00")));
-        regressionPoints.add(new RegressionPoint(new Distance(5), TestUtils.parseInTest("04-02-2115 12:10")));
-        regressionPoints.add(new RegressionPoint(new Distance(6), TestUtils.parseInTest("04-02-2115 12:20")));
-        regressionPoints.add(new RegressionPoint(new Distance(8), TestUtils.parseInTest("04-02-2115 12:30")));
-        regressionPoints.add(new RegressionPoint(new Distance(10), TestUtils.parseInTest("04-02-2115 12:40")));
+        regressionPoints.add(new RegressionPoint(new Distance(5), TestUtils.time("04-02-2115 12:00")));
+        regressionPoints.add(new RegressionPoint(new Distance(5), TestUtils.time("04-02-2115 12:10")));
+        regressionPoints.add(new RegressionPoint(new Distance(6), TestUtils.time("04-02-2115 12:20")));
+        regressionPoints.add(new RegressionPoint(new Distance(8), TestUtils.time("04-02-2115 12:30")));
+        regressionPoints.add(new RegressionPoint(new Distance(10), TestUtils.time("04-02-2115 12:40")));
         RegressionCalculator regressionCalculator = new RegressionCalculator(regressionPoints, configuration.getAlgorithm());
 
         // when
@@ -52,11 +52,11 @@ public class RegressionCalculatorTest {
     public void shouldGetDifferencesStandardDeviationMinusDifferences() {
         // given
         List<RegressionPoint> regressionPoints = new ArrayList<>();
-        regressionPoints.add(new RegressionPoint(new Distance(5), TestUtils.parseInTest("04-02-2115 12:00")));
-        regressionPoints.add(new RegressionPoint(new Distance(3), TestUtils.parseInTest("04-02-2115 12:10")));
-        regressionPoints.add(new RegressionPoint(new Distance(6), TestUtils.parseInTest("04-02-2115 12:20")));
-        regressionPoints.add(new RegressionPoint(new Distance(8), TestUtils.parseInTest("04-02-2115 12:30")));
-        regressionPoints.add(new RegressionPoint(new Distance(10), TestUtils.parseInTest("04-02-2115 12:40")));
+        regressionPoints.add(new RegressionPoint(new Distance(5), TestUtils.time("04-02-2115 12:00")));
+        regressionPoints.add(new RegressionPoint(new Distance(3), TestUtils.time("04-02-2115 12:10")));
+        regressionPoints.add(new RegressionPoint(new Distance(6), TestUtils.time("04-02-2115 12:20")));
+        regressionPoints.add(new RegressionPoint(new Distance(8), TestUtils.time("04-02-2115 12:30")));
+        regressionPoints.add(new RegressionPoint(new Distance(10), TestUtils.time("04-02-2115 12:40")));
         RegressionCalculator regressionCalculator = new RegressionCalculator(regressionPoints, configuration.getAlgorithm());
 
         // when
@@ -70,10 +70,10 @@ public class RegressionCalculatorTest {
     public void shouldGetDifferencesStandardDeviationDoubleTimeInterval() {
         // given
         List<RegressionPoint> regressionPoints = new ArrayList<>();
-        regressionPoints.add(new RegressionPoint(new Distance(2), TestUtils.parseInTest("04-02-2115 12:00")));
-        regressionPoints.add(new RegressionPoint(new Distance(4), TestUtils.parseInTest("04-02-2115 12:10")));
-        regressionPoints.add(new RegressionPoint(new Distance(6), TestUtils.parseInTest("04-02-2115 12:20")));
-        regressionPoints.add(new RegressionPoint(new Distance(10), TestUtils.parseInTest("04-02-2115 12:40")));
+        regressionPoints.add(new RegressionPoint(new Distance(2), TestUtils.time("04-02-2115 12:00")));
+        regressionPoints.add(new RegressionPoint(new Distance(4), TestUtils.time("04-02-2115 12:10")));
+        regressionPoints.add(new RegressionPoint(new Distance(6), TestUtils.time("04-02-2115 12:20")));
+        regressionPoints.add(new RegressionPoint(new Distance(10), TestUtils.time("04-02-2115 12:40")));
         RegressionCalculator regressionCalculator = new RegressionCalculator(regressionPoints, configuration.getAlgorithm());
 
         // when
@@ -87,10 +87,10 @@ public class RegressionCalculatorTest {
     public void shouldGetDifferencesStandardDeviationDoubleTimeIntervalComplex() {
         // given
         List<RegressionPoint> regressionPoints = new ArrayList<>();
-        regressionPoints.add(new RegressionPoint(new Distance(2), TestUtils.parseInTest("04-02-2115 12:00")));
-        regressionPoints.add(new RegressionPoint(new Distance(4), TestUtils.parseInTest("04-02-2115 12:10")));
-        regressionPoints.add(new RegressionPoint(new Distance(6), TestUtils.parseInTest("04-02-2115 12:20")));
-        regressionPoints.add(new RegressionPoint(new Distance(12), TestUtils.parseInTest("04-02-2115 12:40")));
+        regressionPoints.add(new RegressionPoint(new Distance(2), TestUtils.time("04-02-2115 12:00")));
+        regressionPoints.add(new RegressionPoint(new Distance(4), TestUtils.time("04-02-2115 12:10")));
+        regressionPoints.add(new RegressionPoint(new Distance(6), TestUtils.time("04-02-2115 12:20")));
+        regressionPoints.add(new RegressionPoint(new Distance(12), TestUtils.time("04-02-2115 12:40")));
         RegressionCalculator regressionCalculator = new RegressionCalculator(regressionPoints, configuration.getAlgorithm());
 
         // when

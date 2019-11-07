@@ -2,8 +2,8 @@ package org.ksapala.rainaproximator.rest.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.ksapala.rainaproximator.rest.bean.AproximationBean;
-import org.ksapala.rainaproximator.rest.bean.User;
+import org.ksapala.rainaproximator.rest.answer.AproximationAnswer;
+import org.ksapala.rainaproximator.rest.user.User;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,28 +26,28 @@ public class NotificationServiceTest {
     @Test
     public void shouldNotify() {
         // given
-        AproximationBean aproximationBean = new AproximationBean(NotificationServiceTest.class.toString(), "day",
+        AproximationAnswer aproximationAnswer = new AproximationAnswer(NotificationServiceTest.class.toString(), "day",
                 null, "",true, null, null);
         User dummyUser = new User("dummy", 0, 0);
 
         // when
-        notificationService.notify(dummyUser, aproximationBean, AproximationBean::isNotificationSuggested);
+        notificationService.notify(dummyUser, aproximationAnswer);
 
         // then
-        Mockito.verify(firebaseService, Mockito.times(1)).notify(dummyUser, aproximationBean);
+        Mockito.verify(firebaseService, Mockito.times(1)).notify(dummyUser, aproximationAnswer);
     }
 
     @Test
     public void shouldNotNotify() {
         // given
-        AproximationBean aproximationBean = new AproximationBean(NotificationServiceTest.class.toString(), "day",
+        AproximationAnswer aproximationAnswer = new AproximationAnswer(NotificationServiceTest.class.toString(), "day",
                 null, "",false, null, null);
         User dummyUser = new User("dummy", 0, 0);
 
         // when
-        notificationService.notify(dummyUser, aproximationBean, AproximationBean::isNotificationSuggested);
+        notificationService.notify(dummyUser, aproximationAnswer);
 
         // then
-        Mockito.verify(firebaseService, Mockito.never()).notify(dummyUser, aproximationBean);
+        Mockito.verify(firebaseService, Mockito.never()).notify(dummyUser, aproximationAnswer);
     }
 }
